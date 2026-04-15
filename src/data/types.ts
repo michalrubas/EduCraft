@@ -48,6 +48,14 @@ export interface ShopItem {
   rarity: ItemRarity
 }
 
+export interface WheelReward {
+  label: string
+  diamonds?: number
+  emeralds?: number
+  stars?: number
+  itemId?: string
+}
+
 export type Screen = 'home' | 'game' | 'reward' | 'shop' | 'profile'
 
 export interface GameState {
@@ -66,6 +74,12 @@ export interface GameState {
   sessionsPlayed: number
   muted: boolean
   setMuted: (muted: boolean) => void
+  wheelSpinsToday: number
+  totalCorrectSession: number
+  wheelPending: boolean
+  triggerWheel: () => void
+  dismissWheel: () => void
+  collectWheelReward: (reward: WheelReward) => void
   // actions
   navigateTo: (screen: Screen) => void
   enterWorld: (worldId: string) => void

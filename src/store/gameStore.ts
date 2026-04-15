@@ -5,6 +5,8 @@ import { GameState, Screen, ShopItem } from '../data/types'
 import { COMBO_REWARDS, SHOWCASE_SLOTS, getComboLevel } from '../data/config'
 import { WORLDS } from '../data/worlds'
 import { setMuted as setMutedSound } from '../audio/sounds'
+import { SHOP_ITEMS } from '../data/shopItems'
+import { WheelReward } from '../data/types'
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -23,6 +25,9 @@ export const useGameStore = create<GameState>()(
       totalAttempts: 0,
       sessionsPlayed: 0,
       muted: false,
+      wheelSpinsToday: 0,
+      totalCorrectSession: 0,
+      wheelPending: false,
 
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
 
@@ -44,6 +49,7 @@ export const useGameStore = create<GameState>()(
           stars: s.stars + Math.round((base.stars ?? 0) * multiplier),
           totalCorrect: s.totalCorrect + 1,
           totalAttempts: s.totalAttempts + 1,
+          totalCorrectSession: s.totalCorrectSession + 1,
           currentScreen: 'reward',
         })
       },
@@ -56,6 +62,32 @@ export const useGameStore = create<GameState>()(
       setMuted: (muted: boolean) => {
         set({ muted })
         setMutedSound(muted)
+      },
+
+      triggerWheel: () => set({ wheelPending: true }),
+
+      dismissWheel: () => set(s => ({
+        wheelPending: false,
+        wheelSpinsToday: s.wheelSpinsToday + 1,
+      })),
+
+      collectWheelReward: (reward: WheelReward) => {
+        const s = get()
+        let resolvedItemId: string | undefined
+        if (reward.itemId === 'random') {
+          const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id))
+          if (available.length > 0) {
+            resolvedItemId = available[Math.floor(Math.random() * available.length)].id
+          }
+        }
+        set(prev => ({
+          diamonds: prev.diamonds + (reward.diamonds ?? 0),
+          emeralds: prev.emeralds + (reward.emeralds ?? 0),
+          stars: prev.stars + (reward.stars ?? 0),
+          ownedItems: resolvedItemId ? [...prev.ownedItems, resolvedItemId] : prev.ownedItems,
+          wheelPending: false,
+          wheelSpinsToday: prev.wheelSpinsToday + 1,
+        }))
       },
 
       buyItem: (item: ShopItem) => {

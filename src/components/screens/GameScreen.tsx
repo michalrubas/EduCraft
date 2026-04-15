@@ -6,12 +6,14 @@ import { HUD } from '../hud/HUD'
 import { TaskRenderer } from '../tasks/TaskRenderer'
 import { PixelButton } from '../ui/PixelButton'
 import { playSound } from '../../audio/sounds'
-import { getComboLevel } from '../../data/config'
+import { getComboLevel, REWARD_SCREEN_DURATION } from '../../data/config'
 import { useAdaptiveDifficulty } from '../../hooks/useAdaptiveDifficulty'
 import { getWorld } from '../../data/worlds'
+import { LuckyWheel } from '../ui/LuckyWheel'
+import { shouldTriggerWheel } from '../../hooks/useLuckyWheel'
 
 export function GameScreen() {
-  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo } = useGameStore()
+  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, triggerWheel, collectWheelReward } = useGameStore()
   const worldId = currentWorldId ?? 'forest'
   const world = getWorld(worldId)
   const { adaptedRange, recordCorrect, recordIncorrect } = useAdaptiveDifficulty(
@@ -36,6 +38,11 @@ export function GameScreen() {
       else playSound.correct()
       answerCorrect(worldId)
       recordCorrect()
+      const newSession = totalCorrectSession + 1
+      const newCombo = combo + 1
+      if (shouldTriggerWheel(newSession, wheelSpinsToday, newCombo === 10)) {
+        setTimeout(triggerWheel, REWARD_SCREEN_DURATION + 200)
+      }
     } else {
       playSound.wrong()
       answerIncorrect()
@@ -72,6 +79,9 @@ export function GameScreen() {
           onAnswer={handleAnswer}
         />
       </motion.div>
+      {wheelPending && (
+        <LuckyWheel onCollect={collectWheelReward} />
+      )}
     </div>
   )
 }
