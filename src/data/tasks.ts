@@ -2,10 +2,10 @@
 import { Task, TaskType, Biome } from './types'
 
 const BIOME_OBJECTS: Record<Biome, string[]> = {
-  forest: ['🌿', '🍄', '🌸', '🐛', '🌻', '🍀'],
-  cave:   ['💎', '🔥', '⛏️', '🪨', '🦇', '🕯️'],
-  snow:   ['❄️', '⛄', '🎿', '🌨️', '🐧', '🏔️'],
-  nether: ['💀', '🔴', '⚡', '🌋', '👹', '🔮'],
+  forest: ['🌾', '🪵', '🍎', '🐑', '🐄', '🍄'],   // wheat, log, apple, sheep, cow, mushroom
+  cave:   ['💎', '⛏️', '🪨', '🥇', '🦇', '🪔'],   // diamond, pickaxe, stone, gold, bat, lantern
+  snow:   ['🧊', '❄️', '🐺', '🐟', '⛄', '🎣'],    // ice, snowflake, wolf, fish, snowman, rod
+  nether: ['🔥', '💀', '🧱', '⚡', '🌋', '🐷'],    // fire, skull, brick, blaze, lava, piglin
 }
 
 function ri(min: number, max: number): number {
@@ -125,7 +125,7 @@ export function generateDragDropTask(range: [number, number], biome: string): Ta
   const target = ri(min, max)
   const objs = BIOME_OBJECTS[biome as Biome] ?? BIOME_OBJECTS.forest
   const obj = objs[ri(0, objs.length - 1)]
-  const poolSize = Math.min(target + 3, max + 3)
+  const poolSize = Math.min(target + 2, 8)
   return {
     id: uid(),
     type: 'dragDrop',

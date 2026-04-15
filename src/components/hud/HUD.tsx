@@ -10,9 +10,9 @@ export function HUD() {
   return (
     <>
       <div className="hud">
-        <span className="hud-currency">💎<span>{diamonds}</span></span>
-        <span className="hud-currency">💚<span>{emeralds}</span></span>
-        {stars > 0 && <span className="hud-currency">⭐<span>{stars}</span></span>}
+        <span className="hud-currency">🪙<span>{diamonds}</span></span>
+        <span className="hud-currency">💎<span>{emeralds}</span></span>
+        {stars > 0 && <span className="hud-currency">🌑<span>{stars}</span></span>}
         {info.label && (
           <span className="hud-combo" style={{ color: info.color }}>{info.label}</span>
         )}

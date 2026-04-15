@@ -113,29 +113,50 @@ export function LuckyWheel({ onCollect }: Props) {
         >
           {spinning ? '...' : '🎡 TOČIT!'}
         </motion.button>
-      ) : (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}
-        >
-          <p style={{ fontSize: 18, color: '#ffd700', fontFamily: 'inherit' }}>
-            {WHEEL_REWARDS[resultIdx].label}
-          </p>
-          <motion.button
-            whileTap={{ scale: 0.93 }}
-            onClick={() => onCollect(WHEEL_REWARDS[resultIdx!])}
-            style={{
-              padding: '14px 32px', fontSize: 12,
-              background: '#7a5c00', border: '3px solid #ffd700',
-              borderRadius: 6, color: '#ffd700', cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
+      ) : (() => {
+        const r = WHEEL_REWARDS[resultIdx!]
+        const bigIcon = r.diamonds ? '🪙' : r.emeralds ? '💎' : r.stars ? '🌑' : '🎁'
+        const rewardText = r.diamonds ? `+${r.diamonds} 🪙` : r.emeralds ? `+${r.emeralds} 💎` : r.stars ? `+${r.stars} 🌑` : '🎁 Překvapení!'
+        return (
+          <motion.div
+            initial={{ scale: 0, y: 30 }}
+            animate={{ scale: 1, y: 0 }}
+            transition={{ type: 'spring', stiffness: 360, damping: 22 }}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}
           >
-            ✓ VZÍT ODMĚNU
-          </motion.button>
-        </motion.div>
-      )}
+            <motion.div
+              style={{ fontSize: 72, lineHeight: 1, filter: 'drop-shadow(0 0 24px #ffd700)' }}
+              animate={{ rotate: [0, -12, 12, -6, 6, 0] }}
+              transition={{ delay: 0.25, duration: 0.55 }}
+            >
+              {bigIcon}
+            </motion.div>
+            <motion.p
+              style={{ fontSize: 30, fontWeight: 800, color: '#ffd700', fontFamily: 'inherit', textAlign: 'center', letterSpacing: 2 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+            >
+              {rewardText}
+            </motion.p>
+            <motion.button
+              whileTap={{ scale: 0.93 }}
+              onClick={() => onCollect(r)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.35 }}
+              style={{
+                padding: '14px 36px', fontSize: 14, fontWeight: 800,
+                background: '#7a5c00', border: '3px solid #ffd700',
+                borderRadius: 6, color: '#ffd700', cursor: 'pointer',
+                fontFamily: 'inherit',
+              }}
+            >
+              ✓ VZÍT ODMĚNU
+            </motion.button>
+          </motion.div>
+        )
+      })()}
     </motion.div>
   )
 }

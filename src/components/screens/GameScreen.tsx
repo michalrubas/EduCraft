@@ -10,10 +10,11 @@ import { getComboLevel, COMBO_THRESHOLDS, REWARD_SCREEN_DURATION } from '../../d
 import { useAdaptiveDifficulty } from '../../hooks/useAdaptiveDifficulty'
 import { getWorld } from '../../data/worlds'
 import { LuckyWheel } from '../ui/LuckyWheel'
+import { MysteryChest } from '../ui/MysteryChest'
 import { shouldTriggerWheel } from '../../hooks/useLuckyWheel'
 
 export function GameScreen() {
-  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, triggerWheel, collectWheelReward } = useGameStore()
+  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, triggerWheel, collectWheelReward, chestPending, triggerChest, collectChestReward } = useGameStore()
   const worldId = currentWorldId ?? 'forest'
   const world = getWorld(worldId)
   const { adaptedRange, recordCorrect, recordIncorrect } = useAdaptiveDifficulty(
@@ -23,19 +24,33 @@ export function GameScreen() {
   const shakeControls = useAnimation()
   const hasAnswered = useRef(false)
   const [seriesComplete, setSeriesComplete] = useState(false)
+  // Capture whether this mount is a series-end (combo=10) before any reset
+  const isSeriesEndRef = useRef(combo >= COMBO_THRESHOLDS.mania)
 
-  // Show "serie hotova" overlay when mounting back from reward with combo at mania
+  // Series-end: show overlay (if no wheel coming), then navigate home
   useEffect(() => {
-    if (combo >= COMBO_THRESHOLDS.mania) {
-      setSeriesComplete(true)
-      const t = setTimeout(() => {
-        setSeriesComplete(false)
-        resetCombo()
-      }, 2000)
-      return () => clearTimeout(t)
-    }
+    if (!isSeriesEndRef.current) return
+    if (wheelPending) return  // wheel will handle it
+    setSeriesComplete(true)
+    const t = setTimeout(() => {
+      setSeriesComplete(false)
+      resetCombo()
+      // Read current wheelPending — if wheel fired in the meantime, let it handle navigation
+      if (!useGameStore.getState().wheelPending) {
+        navigateTo('home')
+      }
+    }, 2000)
+    return () => clearTimeout(t)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally only on mount
+
+  function handleWheelCollect(reward: Parameters<typeof collectWheelReward>[0]) {
+    collectWheelReward(reward)
+    if (isSeriesEndRef.current) {
+      resetCombo()
+      navigateTo('home')
+    }
+  }
 
   useEffect(() => {
     hasAnswered.current = false
@@ -54,8 +69,11 @@ export function GameScreen() {
       recordCorrect()
       const newSession = totalCorrectSession + 1
       const newCombo = combo + 1
+      const delay = REWARD_SCREEN_DURATION + 200
       if (shouldTriggerWheel(newSession, wheelSpinsToday, newCombo === 10)) {
-        setTimeout(triggerWheel, REWARD_SCREEN_DURATION + 200)
+        setTimeout(triggerWheel, delay)
+      } else if (newSession % 15 === 0) {
+        setTimeout(triggerChest, delay)
       }
     } else {
       playSound.wrong()
@@ -95,7 +113,11 @@ export function GameScreen() {
       </motion.div>
 
       {wheelPending && (
-        <LuckyWheel onCollect={collectWheelReward} />
+        <LuckyWheel onCollect={handleWheelCollect} />
+      )}
+
+      {chestPending && (
+        <MysteryChest onCollect={collectChestReward} />
       )}
 
       <AnimatePresence>

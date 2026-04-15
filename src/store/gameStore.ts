@@ -28,6 +28,7 @@ export const useGameStore = create<GameState>()(
       wheelSpinsToday: 0,
       totalCorrectSession: 0,
       wheelPending: false,
+      chestPending: false,
 
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
 
@@ -87,6 +88,26 @@ export const useGameStore = create<GameState>()(
           ownedItems: resolvedItemId ? [...prev.ownedItems, resolvedItemId] : prev.ownedItems,
           wheelPending: false,
           wheelSpinsToday: prev.wheelSpinsToday + 1,
+        }))
+      },
+
+      triggerChest: () => set({ chestPending: true }),
+
+      collectChestReward: (reward: WheelReward) => {
+        const s = get()
+        let resolvedItemId: string | undefined
+        if (reward.itemId === 'random') {
+          const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id))
+          if (available.length > 0) {
+            resolvedItemId = available[Math.floor(Math.random() * available.length)].id
+          }
+        }
+        set(prev => ({
+          diamonds: prev.diamonds + (reward.diamonds ?? 0),
+          emeralds: prev.emeralds + (reward.emeralds ?? 0),
+          stars: prev.stars + (reward.stars ?? 0),
+          ownedItems: resolvedItemId ? [...prev.ownedItems, resolvedItemId] : prev.ownedItems,
+          chestPending: false,
         }))
       },
 

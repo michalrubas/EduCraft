@@ -15,7 +15,7 @@ export const COMBO_REWARDS: Record<ComboLevel, { diamonds: number; emeralds?: nu
 
 export const SHOWCASE_SLOTS = 8
 export const TASKS_BEFORE_EASY = 5
-export const REWARD_SCREEN_DURATION = 800
+export const REWARD_SCREEN_DURATION = 2000
 
 export function getComboLevel(combo: number): ComboLevel {
   if (combo >= COMBO_THRESHOLDS.mania) return 'mania'

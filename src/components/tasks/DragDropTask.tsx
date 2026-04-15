@@ -1,18 +1,19 @@
 import { useRef, useState } from 'react'
-import { motion, useAnimation, PanInfo } from 'framer-motion'
+import { motion, useAnimation, PanInfo, AnimatePresence } from 'framer-motion'
 import { Task } from '../../data/types'
 
 interface Props { task: Task; onAnswer: (a: number | string) => void }
 
 export function DragDropTask({ task, onAnswer }: Props) {
   const target = task.dragTarget ?? Number(task.correctAnswer)
-  const totalObjects = task.objects?.length ?? target + 3
-  const emoji = task.objects?.[0] ?? '⭐'
+  const totalObjects = task.objects?.length ?? target + 2
+  const emoji = task.objects?.[0] ?? '📦'
 
   const [sourceIds, setSourceIds] = useState<number[]>(() =>
     Array.from({ length: totalObjects }, (_, i) => i)
   )
   const [basketCount, setBasketCount] = useState(0)
+  const [readyToConfirm, setReadyToConfirm] = useState(false)
   const dropZoneRef = useRef<HTMLDivElement>(null)
   const basketControls = useAnimation()
 
@@ -23,7 +24,7 @@ export function DragDropTask({ task, onAnswer }: Props) {
   }
 
   async function handleDragEnd(id: number, _e: unknown, info: PanInfo) {
-    if (!isOverDropZone(info.point)) return
+    if (!isOverDropZone(info.point) || readyToConfirm) return
 
     const newBasket = basketCount + 1
     setSourceIds(ids => ids.filter(i => i !== id))
@@ -36,12 +37,17 @@ export function DragDropTask({ task, onAnswer }: Props) {
       })
       setSourceIds(Array.from({ length: totalObjects }, (_, i) => i))
       setBasketCount(0)
+      setReadyToConfirm(false)
       return
     }
 
     if (newBasket === target) {
-      setTimeout(() => onAnswer(newBasket), 300)
+      setReadyToConfirm(true)
     }
+  }
+
+  function handleConfirm() {
+    onAnswer(basketCount)
   }
 
   return (
@@ -68,6 +74,7 @@ export function DragDropTask({ task, onAnswer }: Props) {
         ref={dropZoneRef}
         className="drop-zone"
         animate={basketControls}
+        style={{ borderColor: readyToConfirm ? '#5dfc8c' : undefined }}
       >
         {Array.from({ length: basketCount }).map((_, i) => (
           <motion.span
@@ -83,6 +90,21 @@ export function DragDropTask({ task, onAnswer }: Props) {
           {basketCount} / {target}
         </span>
       </motion.div>
+
+      <AnimatePresence>
+        {readyToConfirm && (
+          <motion.button
+            className="pixel-btn primary big"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+            onClick={handleConfirm}
+          >
+            ✓ OK
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

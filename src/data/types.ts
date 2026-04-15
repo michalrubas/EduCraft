@@ -78,9 +78,12 @@ export interface GameState {
   wheelSpinsToday: number
   totalCorrectSession: number
   wheelPending: boolean
+  chestPending: boolean
   triggerWheel: () => void
   dismissWheel: () => void
   collectWheelReward: (reward: WheelReward) => void
+  triggerChest: () => void
+  collectChestReward: (reward: WheelReward) => void
   // actions
   navigateTo: (screen: Screen) => void
   enterWorld: (worldId: string) => void

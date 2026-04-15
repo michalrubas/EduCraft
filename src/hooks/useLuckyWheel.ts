@@ -4,10 +4,10 @@ import type { WheelReward } from '../data/types'
 export type { WheelReward }
 
 export const WHEEL_REWARDS: WheelReward[] = [
-  { label: '💎 +3',  diamonds: 3 },
-  { label: '💎 +6',  diamonds: 6 },
-  { label: '💚 +4',  emeralds: 4 },
-  { label: '⭐ +1',  stars: 1 },
+  { label: '🪙 +3',  diamonds: 3 },
+  { label: '🪙 +6',  diamonds: 6 },
+  { label: '💎 +4',  emeralds: 4 },
+  { label: '🌑 +1',  stars: 1 },
   { label: '🎁 Překvapení', itemId: 'random' },
 ]
 

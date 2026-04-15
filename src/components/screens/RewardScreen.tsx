@@ -1,5 +1,5 @@
 // src/components/screens/RewardScreen.tsx
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { getComboInfo } from '../../hooks/useCombo'
@@ -16,16 +16,23 @@ export function RewardScreen({ onDone }: Props) {
   const level = getComboLevel(combo)
   const rewards = COMBO_REWARDS[level]
 
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   useEffect(() => {
     playSound.reward()
-    const t = setTimeout(onDone, REWARD_SCREEN_DURATION)
-    return () => clearTimeout(t)
+    timerRef.current = setTimeout(onDone, REWARD_SCREEN_DURATION)
+    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
   }, [onDone])
 
+  function handleSkip() {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    onDone()
+  }
+
   const earnedParts = [
-    rewards.diamonds ? `+${rewards.diamonds} 💎` : '',
-    rewards.emeralds ? `+${rewards.emeralds} 💚` : '',
-    rewards.stars    ? `+${rewards.stars} ⭐` : '',
+    rewards.diamonds ? `+${rewards.diamonds} 🪙` : '',
+    rewards.emeralds ? `+${rewards.emeralds} 💎` : '',
+    rewards.stars    ? `+${rewards.stars} 🌑` : '',
   ].filter(Boolean).join('  ')
 
   return (
@@ -75,6 +82,17 @@ export function RewardScreen({ onDone }: Props) {
           {info.label}
         </motion.div>
       )}
+
+      <motion.button
+        className="pixel-btn"
+        onClick={handleSkip}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.35 }}
+        style={{ marginTop: 8 }}
+      >
+        Dál →
+      </motion.button>
     </motion.div>
   )
 }
