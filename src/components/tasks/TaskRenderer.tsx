@@ -1,0 +1,43 @@
+import { motion, AnimatePresence } from 'framer-motion'
+import { Task } from '../../data/types'
+import { CountingTask } from './CountingTask'
+import { TapNumberTask } from './TapNumberTask'
+import { CompareTask } from './CompareTask'
+import { MultiChoiceTask } from './MultiChoiceTask'
+import { MathTask } from './MathTask'
+import { FindTask } from './FindTask'
+import { DragDropTask } from './DragDropTask'
+
+interface Props {
+  task: Task
+  onAnswer: (answer: number | string) => void
+}
+
+export function TaskRenderer({ task, onAnswer }: Props) {
+  const inner = (() => {
+    switch (task.type) {
+      case 'counting':    return <CountingTask    task={task} onAnswer={onAnswer} />
+      case 'tapNumber':   return <TapNumberTask   task={task} onAnswer={onAnswer} />
+      case 'compare':     return <CompareTask     task={task} onAnswer={onAnswer} />
+      case 'multiChoice': return <MultiChoiceTask task={task} onAnswer={onAnswer} />
+      case 'math':        return <MathTask        task={task} onAnswer={onAnswer} />
+      case 'find':        return <FindTask        task={task} onAnswer={onAnswer} />
+      case 'dragDrop':    return <DragDropTask    task={task} onAnswer={onAnswer} />
+    }
+  })()
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={task.id}
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -40 }}
+        transition={{ duration: 0.2 }}
+        style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+      >
+        {inner}
+      </motion.div>
+    </AnimatePresence>
+  )
+}
