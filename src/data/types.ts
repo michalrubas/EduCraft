@@ -9,7 +9,7 @@ export type TaskType =
   | 'find'
   | 'math'
 
-export type Biome = 'forest' | 'cave' | 'snow' | 'nether'
+export type Biome = 'forest' | 'cave' | 'snow' | 'nether' | 'end'
 
 export interface World {
   id: string
