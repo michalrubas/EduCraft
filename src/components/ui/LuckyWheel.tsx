@@ -115,8 +115,8 @@ export function LuckyWheel({ onCollect }: Props) {
         </motion.button>
       ) : (() => {
         const r = WHEEL_REWARDS[resultIdx!]
-        const bigIcon = r.diamonds ? '🪙' : r.emeralds ? '💎' : r.stars ? '🌑' : '🎁'
-        const rewardText = r.diamonds ? `+${r.diamonds} 🪙` : r.emeralds ? `+${r.emeralds} 💎` : r.stars ? `+${r.stars} 🌑` : '🎁 Překvapení!'
+        const bigIcon = r.diamonds ? '💰' : r.emeralds ? '💎' : r.stars ? '⬛' : '🎁'
+        const rewardText = r.diamonds ? `+${r.diamonds} 💰` : r.emeralds ? `+${r.emeralds} 💎` : r.stars ? `+${r.stars} ⬛` : '🎁 Překvapení!'
         return (
           <motion.div
             initial={{ scale: 0, y: 30 }}

@@ -30,9 +30,9 @@ export function RewardScreen({ onDone }: Props) {
   }
 
   const earnedParts = [
-    rewards.diamonds ? `+${rewards.diamonds} 🪙` : '',
+    rewards.diamonds ? `+${rewards.diamonds} 💰` : '',
     rewards.emeralds ? `+${rewards.emeralds} 💎` : '',
-    rewards.stars    ? `+${rewards.stars} 🌑` : '',
+    rewards.stars    ? `+${rewards.stars} ⬛` : '',
   ].filter(Boolean).join('  ')
 
   return (

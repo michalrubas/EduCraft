@@ -21,9 +21,9 @@ const CHEST_TIERS: Record<ChestType, {
     color: '#cd7f32',
     bgColor: '#3d2010',
     rewards: [
-      { label: '🪙 +5',  diamonds: 5 },
-      { label: '🪙 +8',  diamonds: 8 },
-      { label: '🪙 +12', diamonds: 12 },
+      { label: '💰 +5',  diamonds: 5 },
+      { label: '💰 +8',  diamonds: 8 },
+      { label: '💰 +12', diamonds: 12 },
     ],
   },
   silver: {
@@ -31,7 +31,7 @@ const CHEST_TIERS: Record<ChestType, {
     color: '#c0c0c0',
     bgColor: '#1e2030',
     rewards: [
-      { label: '🪙 +20', diamonds: 20 },
+      { label: '💰 +20', diamonds: 20 },
       { label: '💎 +1',  emeralds: 1 },
       { label: '🎁 Předmět', itemId: 'random' },
     ],
@@ -43,7 +43,7 @@ const CHEST_TIERS: Record<ChestType, {
     rewards: [
       { label: '💎 +2',  emeralds: 2 },
       { label: '💎 +3',  emeralds: 3 },
-      { label: '🪙 +30', diamonds: 30 },
+      { label: '💰 +30', diamonds: 30 },
       { label: '🎁 Předmět', itemId: 'random' },
     ],
   },
@@ -53,8 +53,8 @@ const CHEST_TIERS: Record<ChestType, {
     bgColor: '#002028',
     rewards: [
       { label: '💎 +5',  emeralds: 5 },
-      { label: '🌑 +1',  stars: 1 },
-      { label: '🪙 +50', diamonds: 50 },
+      { label: '⬛ +1',  stars: 1 },
+      { label: '💰 +50', diamonds: 50 },
       { label: '🎁 Vzácný předmět', itemId: 'random' },
     ],
   },
@@ -94,7 +94,7 @@ export function MysteryChest({ onCollect }: Props) {
     }
   }
 
-  const bigIcon = reward?.diamonds ? '🪙' : reward?.emeralds ? '💎' : reward?.stars ? '🌑' : '🎁'
+  const bigIcon = reward?.diamonds ? '💰' : reward?.emeralds ? '💎' : reward?.stars ? '⬛' : '🎁'
 
   return (
     <motion.div

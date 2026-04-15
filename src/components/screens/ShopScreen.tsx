@@ -18,9 +18,9 @@ const CATEGORIES: { id: ItemCategory | 'all'; label: string }[] = [
 function costLabel(item: ShopItem): string {
   const { diamonds = 0, emeralds = 0, stars = 0 } = item.cost
   const parts: string[] = []
-  if (diamonds) parts.push(`🪙 ${diamonds}`)
+  if (diamonds) parts.push(`💰 ${diamonds}`)
   if (emeralds) parts.push(`💎 ${emeralds}`)
-  if (stars)    parts.push(`🌑 ${stars}`)
+  if (stars)    parts.push(`⬛ ${stars}`)
   return parts.join(' ')
 }
 
