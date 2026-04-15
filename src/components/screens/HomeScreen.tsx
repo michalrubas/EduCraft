@@ -27,9 +27,9 @@ export function HomeScreen() {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
+          alignContent: 'start',
           gap: '12px',
           padding: '12px',
-          flex: 1,
         }}
       >
         {WORLDS.map((world, i) => (

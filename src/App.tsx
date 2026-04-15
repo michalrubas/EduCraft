@@ -23,7 +23,7 @@ export default function App() {
   }, [navigateTo])
 
   return (
-    <div style={{ position: 'relative', height: '100dvh', overflow: 'hidden', maxWidth: 480, margin: '0 auto' }}>
+    <div style={{ position: 'relative', height: '100dvh', overflow: 'hidden', width: '100%' }}>
       <AnimatePresence mode="wait">
         {currentScreen === 'home' && (
           <motion.div key="home" className="screen" {...SLIDE}>
