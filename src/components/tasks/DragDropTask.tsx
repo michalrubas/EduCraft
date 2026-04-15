@@ -27,6 +27,11 @@ export function DragDropTask({ task, onAnswer }: Props) {
     setBasketCount(c => c + 1)
   }
 
+  function handleReset() {
+    setSourceIds(Array.from({ length: totalObjects }, (_, i) => i))
+    setBasketCount(0)
+  }
+
   return (
     <div className="task-area">
       <p className="task-question">{task.question}</p>
@@ -63,15 +68,26 @@ export function DragDropTask({ task, onAnswer }: Props) {
         </span>
       </div>
 
-      <motion.button
-        className="pixel-btn primary big"
-        disabled={basketCount === 0}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => onAnswer(basketCount)}
-        style={{ opacity: basketCount === 0 ? 0.4 : 1 }}
-      >
-        ✓ OK
-      </motion.button>
+      <div style={{ display: 'flex', gap: 10, width: '100%', maxWidth: 320 }}>
+        <motion.button
+          className="pixel-btn"
+          disabled={basketCount === 0}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleReset}
+          style={{ flex: 1, opacity: basketCount === 0 ? 0.4 : 1 }}
+        >
+          ↺ Znovu
+        </motion.button>
+        <motion.button
+          className="pixel-btn primary"
+          disabled={basketCount === 0}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => onAnswer(basketCount)}
+          style={{ flex: 2, opacity: basketCount === 0 ? 0.4 : 1 }}
+        >
+          ✓ OK
+        </motion.button>
+      </div>
     </div>
   )
 }

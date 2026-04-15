@@ -33,7 +33,7 @@ export const useGameStore = create<GameState>()(
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
 
       enterWorld: (worldId: string) =>
-        set({ currentWorldId: worldId, currentScreen: 'game' }),
+        set({ currentWorldId: worldId, currentScreen: 'game', wheelSpinsToday: 0, totalCorrectSession: 0 }),
 
       answerCorrect: (worldId: string) => {
         const s = get()
