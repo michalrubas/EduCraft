@@ -11,10 +11,11 @@ export interface UseTaskReturn {
   checkAnswer: (answer: number | string) => boolean
 }
 
-export function useTask(worldId: string): UseTaskReturn {
+export function useTask(worldId: string, rangeOverride?: [number, number]): UseTaskReturn {
   const world = getWorld(worldId)
   const taskCountRef = useRef(0)
   const lastTypeRef = useRef<TaskType | null>(null)
+  const effectiveRange = rangeOverride ?? world?.numberRange ?? [1, 5] as [number, number]
 
   const generateNext = useCallback((): Task => {
     if (!world) throw new Error(`World "${worldId}" not found`)
@@ -23,8 +24,8 @@ export function useTask(worldId: string): UseTaskReturn {
     // Every TASKS_BEFORE_EASY tasks, insert an easier one to prevent frustration
     if (taskCountRef.current % TASKS_BEFORE_EASY === 0) {
       const easyRange: [number, number] = [
-        world.numberRange[0],
-        Math.ceil((world.numberRange[0] + world.numberRange[1]) / 2),
+        effectiveRange[0],
+        Math.ceil((effectiveRange[0] + effectiveRange[1]) / 2),
       ]
       const easyTypes: TaskType[] = ['counting', 'tapNumber']
       const t = easyTypes[Math.floor(Math.random() * easyTypes.length)]
@@ -35,8 +36,8 @@ export function useTask(worldId: string): UseTaskReturn {
     const available = world.taskTypes.filter(t => t !== lastTypeRef.current)
     const chosen = available[Math.floor(Math.random() * available.length)]
     lastTypeRef.current = chosen
-    return TASK_GENERATORS[chosen](world.numberRange, world.biome)
-  }, [world, worldId])
+    return TASK_GENERATORS[chosen](effectiveRange, world.biome)
+  }, [world, worldId, effectiveRange])
 
   const [task, setTask] = useState<Task | null>(() =>
     world ? generateNext() : null
