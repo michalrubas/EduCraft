@@ -22,6 +22,7 @@ export interface World {
   comboMultiplier: number
   bgColor: string
   accentColor: string
+  story: string
 }
 
 export interface Task {
