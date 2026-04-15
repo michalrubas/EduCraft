@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { useTask } from '../../hooks/useTask'
@@ -12,6 +12,10 @@ export function GameScreen() {
   const { task, checkAnswer } = useTask(worldId)
   const shakeControls = useAnimation()
   const hasAnswered = useRef(false)
+
+  useEffect(() => {
+    hasAnswered.current = false
+  }, [task?.id])
 
   async function handleAnswer(answer: number | string) {
     if (hasAnswered.current) return
