@@ -52,11 +52,25 @@ export const WORLDS: World[] = [
     biome: 'nether',
     taskTypes: ['math', 'multiChoice', 'find', 'dragDrop'],
     numberRange: [1, 100],
-    unlockCost: 120,
+    unlockCost: 150,
     comboMultiplier: 2.0,
     bgColor: '#200005',
     accentColor: '#ff6b6b',
     story: 'Vstup do Netheru a znič mocného draka! Jen nejchytřejší přežijí.',
+  },
+    {
+    id: 'end',
+    name: 'End',
+    icon: '☢️',
+    blockColor: '#6e936e',   // netherrack dark red
+    biome: 'end',
+    taskTypes: ['math', 'multiChoice', 'find', 'dragDrop'],
+    numberRange: [50, 150],
+    unlockCost: 300,
+    comboMultiplier: 3.0,
+    bgColor: '#200005',
+    accentColor: '#607f81',
+    story: 'Vstup do Endu a znič mocného Ender draka! Jen nejchytřejší přežijí.',
   },
 ]
 

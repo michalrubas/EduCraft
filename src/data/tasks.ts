@@ -6,6 +6,7 @@ const BIOME_OBJECTS: Record<Biome, string[]> = {
   cave:   ['💎', '⛏️', '🪨', '🥇', '🦇', '🪔'],   // diamond, pickaxe, stone, gold, bat, lantern
   snow:   ['🧊', '❄️', '🐺', '🐟', '⛄', '🎣'],    // ice, snowflake, wolf, fish, snowman, rod
   nether: ['🔥', '💀', '🧱', '⚡', '🌋', '🐷'],    // fire, skull, brick, blaze, lava, piglin
+  end:    ['💹', '🔅', '❗️', '❓', '🔱', '⻰'], 
 }
 
 function ri(min: number, max: number): number {
