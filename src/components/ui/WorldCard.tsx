@@ -12,18 +12,26 @@ export function WorldCard({ world, unlocked, onPress }: Props) {
   return (
     <motion.div
       className={`world-card ${unlocked ? '' : 'locked'}`}
-      style={{ borderColor: unlocked ? world.accentColor : undefined }}
+      style={{ borderColor: unlocked ? world.accentColor : undefined, height: '100%' }}
       whileTap={{ scale: 0.96 }}
       onClick={onPress}
     >
       {!unlocked && <span className="lock-badge">🔒</span>}
-      <span className="world-icon">{world.icon}</span>
+
+      {/* Minecraft-style block face */}
+      <div
+        className="world-block"
+        style={{ background: unlocked ? world.blockColor : '#333' }}
+      >
+        <span className="world-block-icon">{world.icon}</span>
+      </div>
+
       <span className="world-name">{world.name}</span>
-      {!unlocked && (
-        <span className="world-cost">
-          💎 {world.unlockCost}
-        </span>
-      )}
+
+      {/* always reserve space at bottom — keeps all cards same height */}
+      <span className="world-cost" style={{ visibility: unlocked ? 'hidden' : 'visible' }}>
+        💎 {world.unlockCost}
+      </span>
     </motion.div>
   )
 }

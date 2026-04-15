@@ -21,6 +21,7 @@ export function HomeScreen() {
     <div className="screen" style={{ background: 'var(--mc-bg)' }}>
       <HUD />
       <div className="section-title">Vyber svět 🌍</div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -30,6 +31,7 @@ export function HomeScreen() {
           alignContent: 'start',
           gap: '12px',
           padding: '12px',
+          flex: 1,          // fills space → pushes nav to bottom
         }}
       >
         {WORLDS.map((world, i) => (
@@ -38,6 +40,7 @@ export function HomeScreen() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.08 }}
+            style={{ height: '100%' }}  // fills grid cell → equal card heights
           >
             <WorldCard
               world={world}

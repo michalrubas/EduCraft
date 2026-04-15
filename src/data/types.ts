@@ -15,6 +15,7 @@ export interface World {
   id: string
   name: string
   icon: string
+  blockColor: string
   biome: Biome
   taskTypes: TaskType[]
   numberRange: [number, number]

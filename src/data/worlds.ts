@@ -5,7 +5,8 @@ export const WORLDS: World[] = [
   {
     id: 'forest',
     name: 'Příroda',
-    icon: '🌱',
+    icon: '🌿',
+    blockColor: '#4a7c2f',   // grass block green
     biome: 'forest',
     taskTypes: ['counting', 'tapNumber', 'compare', 'multiChoice'],
     numberRange: [1, 5],
@@ -18,7 +19,8 @@ export const WORLDS: World[] = [
   {
     id: 'cave',
     name: 'Jeskyně',
-    icon: '🔥',
+    icon: '⛏️',
+    blockColor: '#5a5a5a',   // stone block grey
     biome: 'cave',
     taskTypes: ['counting', 'math', 'multiChoice', 'dragDrop'],
     numberRange: [1, 10],
@@ -30,8 +32,9 @@ export const WORLDS: World[] = [
   },
   {
     id: 'snow',
-    name: 'Sněžné království',
-    icon: '❄️',
+    name: 'Sněžné',
+    icon: '🧊',
+    blockColor: '#6aadcc',   // packed ice blue
     biome: 'snow',
     taskTypes: ['math', 'find', 'compare', 'dragDrop'],
     numberRange: [1, 10],
@@ -44,7 +47,8 @@ export const WORLDS: World[] = [
   {
     id: 'nether',
     name: 'Nether',
-    icon: '⚡',
+    icon: '🔥',
+    blockColor: '#7a1b1b',   // netherrack dark red
     biome: 'nether',
     taskTypes: ['math', 'multiChoice', 'find', 'dragDrop'],
     numberRange: [1, 20],

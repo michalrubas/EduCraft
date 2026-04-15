@@ -6,7 +6,8 @@
 button { color: inherit; font-family: inherit; }
 html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 body {
-  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
   background: #0d1b0f;
   color: #ffffff;
   -webkit-tap-highlight-color: transparent;
@@ -25,7 +26,7 @@ body {
   --mc-red:      #ff6b6b;
   --mc-text:     #ffffff;
   --mc-muted:    #8a9a8a;
-  --radius:      6px;
+  --radius:      3px;
   --hud-height:  56px;
 }
 
@@ -54,13 +55,14 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 14px 20px;
+  padding: 12px 18px;
   background: var(--mc-surface);
   border: 3px solid var(--mc-border);
   border-radius: var(--radius);
   color: var(--mc-text);
   font-family: inherit;
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: 800;
   line-height: 1;
   cursor: pointer;
   transition: border-color 0.1s, background 0.1s, transform 0.08s;
@@ -91,7 +93,7 @@ body {
 .pixel-btn.big {
   width: 100%;
   padding: 18px;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 /* ── HUD ── */
@@ -110,14 +112,15 @@ body {
 .hud-currency {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 11px;
+  gap: 5px;
+  font-size: 17px;
+  font-weight: 800;
   color: var(--mc-gold);
 }
-.hud-currency span { font-size: 9px; }
 .hud-combo {
   margin-left: auto;
-  font-size: 10px;
+  font-size: 15px;
+  font-weight: 800;
   color: var(--mc-green);
 }
 
@@ -137,8 +140,8 @@ body {
 .world-card {
   background: var(--mc-surface);
   border: 3px solid var(--mc-border);
-  border-radius: 8px;
-  padding: 20px 16px;
+  border-radius: 4px;
+  padding: 14px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -148,24 +151,43 @@ body {
   transition: border-color 0.15s, transform 0.1s;
 }
 .world-card:active { transform: scale(0.97); }
-.world-card.locked {
-  opacity: 0.55;
-  cursor: not-allowed;
+.world-card.locked { opacity: 0.60; cursor: not-allowed; }
+.world-card .lock-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 18px;
 }
-.world-card .world-icon { font-size: 40px; }
-.world-card .world-name { font-size: 10px; text-align: center; }
+
+/* Minecraft block face */
+.world-block {
+  width: 80px;
+  height: 80px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* simulate block shading: top-left lighter, bottom-right darker */
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,0.40),
+    inset  6px  6px 0 rgba(255,255,255,0.14);
+  border: 3px solid rgba(0,0,0,0.35);
+}
+.world-block-icon { font-size: 40px; line-height: 1; }
+
+.world-card .world-name {
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  line-height: 1.2;
+}
 .world-card .world-cost {
-  font-size: 9px;
+  font-size: 14px;
+  font-weight: 800;
   color: var(--mc-diamond);
   display: flex;
   align-items: center;
   gap: 4px;
-}
-.world-card .lock-badge {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 16px;
 }
 
 /* ── Task area ── */
@@ -324,7 +346,8 @@ body {
   position: absolute;
   bottom: 4px;
   right: 8px;
-  font-size: 9px;
+  font-size: 12px;
+  font-weight: 700;
   color: var(--mc-muted);
 }
 
@@ -413,7 +436,8 @@ body {
 .shop-tab {
   flex-shrink: 0;
   padding: 8px 12px;
-  font-size: 9px;
+  font-size: 13px;
+  font-weight: 800;
   background: var(--mc-surface);
   border: 2px solid var(--mc-border);
   border-radius: var(--radius) var(--radius) 0 0;
@@ -443,10 +467,10 @@ body {
 .shop-item-card.locked  { opacity: 0.45; cursor: not-allowed; }
 .shop-item-card.epic    { border-color: #9b59b6; }
 .shop-item-card.legendary { border-color: #ff6b35; }
-.shop-item-icon { font-size: 28px; display: block; margin-bottom: 6px; }
-.shop-item-name { font-size: 7px; color: var(--mc-muted); margin-bottom: 4px; }
-.shop-item-price { font-size: 8px; color: var(--mc-diamond); }
-.shop-item-owned { font-size: 8px; color: var(--mc-gold); }
+.shop-item-icon { font-size: 30px; display: block; margin-bottom: 6px; }
+.shop-item-name { font-size: 11px; font-weight: 800; color: var(--mc-muted); margin-bottom: 4px; }
+.shop-item-price { font-size: 12px; font-weight: 800; color: var(--mc-diamond); }
+.shop-item-owned { font-size: 12px; font-weight: 800; color: var(--mc-gold); }
 
 /* ── Showcase ── */
 .showcase-grid {
@@ -479,16 +503,17 @@ body {
   margin-bottom: 4px;
 }
 .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--mc-border), var(--mc-green)); }
-.progress-bar-label { font-size: 8px; color: var(--mc-muted); text-align: center; }
+.progress-bar-label { font-size: 13px; font-weight: 800; color: var(--mc-muted); text-align: center; }
 
 /* ── Profile ── */
 .stat-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 12px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--mc-border);
-  font-size: 10px;
+  font-size: 15px;
+  font-weight: 800;
 }
 .stat-row .label { color: var(--mc-muted); }
 .stat-row .value { color: var(--mc-gold); }
@@ -503,13 +528,14 @@ body {
   display: flex;
   justify-content: space-around;
   padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+  flex-shrink: 0;
 }
 .nav-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  font-size: 20px;
+  font-size: 22px;
   padding: 4px 20px;
   cursor: pointer;
   background: none;
@@ -520,13 +546,14 @@ body {
   touch-action: manipulation;
 }
 .nav-btn.active { color: var(--mc-green); }
-.nav-btn span { font-size: 7px; }
+.nav-btn span { font-size: 12px; font-weight: 800; }
 
 /* ── Section title ── */
 .section-title {
-  font-size: 11px;
+  font-size: 18px;
+  font-weight: 800;
   color: var(--mc-gold);
-  padding: 14px 12px 8px;
+  padding: 14px 12px 10px;
   border-bottom: 1px solid var(--mc-border);
 }
 
