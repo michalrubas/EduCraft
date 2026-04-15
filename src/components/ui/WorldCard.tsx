@@ -30,7 +30,7 @@ export function WorldCard({ world, unlocked, onPress }: Props) {
 
       {/* always reserve space at bottom — keeps all cards same height */}
       <span className="world-cost" style={{ visibility: unlocked ? 'hidden' : 'visible' }}>
-        💎 {world.unlockCost}
+        💰 {world.unlockCost}
       </span>
     </motion.div>
   )
