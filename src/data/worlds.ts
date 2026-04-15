@@ -50,7 +50,7 @@ export const WORLDS: World[] = [
     icon: '🔥',
     blockColor: '#7a1b1b',   // netherrack dark red
     biome: 'nether',
-    taskTypes: ['math', 'multiChoice', 'find', 'dragDrop'],
+    taskTypes: ['math', 'find', 'dragDrop'],
     numberRange: [1, 100],
     unlockCost: 150,
     comboMultiplier: 2.0,
@@ -62,9 +62,9 @@ export const WORLDS: World[] = [
     id: 'end',
     name: 'End',
     icon: '☢️',
-    blockColor: '#6e936e',   // netherrack dark red
+    blockColor: '#6e936e', 
     biome: 'end',
-    taskTypes: ['math', 'multiChoice', 'find', 'dragDrop'],
+    taskTypes: ['math', 'find', 'dragDrop'],
     numberRange: [50, 150],
     unlockCost: 300,
     comboMultiplier: 3.0,
