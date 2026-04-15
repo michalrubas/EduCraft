@@ -64,6 +64,8 @@ export interface GameState {
   totalCorrect: number
   totalAttempts: number
   sessionsPlayed: number
+  muted: boolean
+  setMuted: (muted: boolean) => void
   // actions
   navigateTo: (screen: Screen) => void
   enterWorld: (worldId: string) => void

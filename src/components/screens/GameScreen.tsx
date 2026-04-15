@@ -5,9 +5,11 @@ import { useTask } from '../../hooks/useTask'
 import { HUD } from '../hud/HUD'
 import { TaskRenderer } from '../tasks/TaskRenderer'
 import { PixelButton } from '../ui/PixelButton'
+import { playSound } from '../../audio/sounds'
+import { getComboLevel } from '../../data/config'
 
 export function GameScreen() {
-  const { currentWorldId, answerCorrect, answerIncorrect, navigateTo, resetCombo } = useGameStore()
+  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo } = useGameStore()
   const worldId = currentWorldId ?? 'forest'
   const { task, checkAnswer } = useTask(worldId)
   const shakeControls = useAnimation()
@@ -22,8 +24,13 @@ export function GameScreen() {
     hasAnswered.current = true
 
     if (checkAnswer(answer)) {
+      const level = getComboLevel(combo + 1)
+      if (level === 'mania') playSound.mania()
+      else if (level === 'fire' || level === 'doubleFire') playSound.combo()
+      else playSound.correct()
       answerCorrect(worldId)
     } else {
+      playSound.wrong()
       answerIncorrect()
       await shakeControls.start({
         x: [0, -12, 12, -10, 10, -6, 6, 0],

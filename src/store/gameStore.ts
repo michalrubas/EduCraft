@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware'
 import { GameState, Screen, ShopItem } from '../data/types'
 import { COMBO_REWARDS, SHOWCASE_SLOTS, getComboLevel } from '../data/config'
 import { WORLDS } from '../data/worlds'
+import { setMuted as setMutedSound } from '../audio/sounds'
 
 export const useGameStore = create<GameState>()(
   persist(
@@ -21,6 +22,7 @@ export const useGameStore = create<GameState>()(
       totalCorrect: 0,
       totalAttempts: 0,
       sessionsPlayed: 0,
+      muted: false,
 
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
 
@@ -50,6 +52,11 @@ export const useGameStore = create<GameState>()(
         set(s => ({ totalAttempts: s.totalAttempts + 1 })),
 
       resetCombo: () => set({ combo: 0 }),
+
+      setMuted: (muted: boolean) => {
+        set({ muted })
+        setMutedSound(muted)
+      },
 
       buyItem: (item: ShopItem) => {
         const s = get()

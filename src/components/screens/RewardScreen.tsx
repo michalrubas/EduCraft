@@ -5,6 +5,7 @@ import { useGameStore } from '../../store/gameStore'
 import { getComboInfo } from '../../hooks/useCombo'
 import { GemBurst } from '../ui/GemBurst'
 import { REWARD_SCREEN_DURATION, COMBO_REWARDS, getComboLevel } from '../../data/config'
+import { playSound } from '../../audio/sounds'
 
 interface Props {
   onDone: () => void
@@ -17,6 +18,7 @@ export function RewardScreen({ onDone }: Props) {
   const rewards = COMBO_REWARDS[level]
 
   useEffect(() => {
+    playSound.reward()
     const t = setTimeout(onDone, REWARD_SCREEN_DURATION)
     return () => clearTimeout(t)
   }, [onDone])

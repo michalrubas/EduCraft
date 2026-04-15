@@ -4,7 +4,7 @@ import { getComboInfo } from '../../hooks/useCombo'
 import { ComboBar } from './ComboBar'
 
 export function HUD() {
-  const { diamonds, emeralds, stars, combo } = useGameStore()
+  const { diamonds, emeralds, stars, combo, muted, setMuted } = useGameStore()
   const info = getComboInfo(combo)
 
   return (
@@ -16,6 +16,13 @@ export function HUD() {
         {info.label && (
           <span className="hud-combo" style={{ color: info.color }}>{info.label}</span>
         )}
+        <button
+          onClick={() => setMuted(!muted)}
+          style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, color: 'var(--mc-muted)' }}
+          aria-label={muted ? 'Zapnout zvuk' : 'Vypnout zvuk'}
+        >
+          {muted ? '🔇' : '🔊'}
+        </button>
       </div>
       <ComboBar combo={combo} />
     </>
