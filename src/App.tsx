@@ -1,6 +1,6 @@
 // src/App.tsx
 import { useCallback } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, type Transition } from 'framer-motion'
 import { useGameStore } from './store/gameStore'
 import { HomeScreen } from './components/screens/HomeScreen'
 import { GameScreen } from './components/screens/GameScreen'
@@ -12,7 +12,7 @@ const SLIDE = {
   initial:  { opacity: 0, x: 60 },
   animate:  { opacity: 1, x: 0  },
   exit:     { opacity: 0, x: -60 },
-  transition: { duration: 0.22, ease: 'easeInOut' },
+  transition: { duration: 0.22, ease: 'easeInOut' } as Transition,
 }
 
 export default function App() {

@@ -1,7 +1,7 @@
 // src/hooks/useLuckyWheel.ts
-import { WheelReward } from '../data/types'
+import type { WheelReward } from '../data/types'
 
-export { WheelReward }
+export type { WheelReward }
 
 export const WHEEL_REWARDS: WheelReward[] = [
   { label: '💎 +3',  diamonds: 3 },
