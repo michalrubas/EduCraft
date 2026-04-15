@@ -1,5 +1,5 @@
 /* src/styles.css */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@700;800&display=swap');
 
 /* ── Reset ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -179,9 +179,11 @@ body {
   gap: 20px;
 }
 .task-question {
-  font-size: 13px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
   text-align: center;
-  line-height: 1.8;
+  line-height: 1.4;
   color: var(--mc-gold);
 }
 
@@ -212,7 +214,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
   color: var(--mc-text);
   background: var(--mc-surface);
   border: 3px solid var(--mc-border);
@@ -260,7 +264,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
   color: var(--mc-text);
   background: var(--mc-surface);
   border: 3px solid var(--mc-border);
@@ -329,24 +335,70 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
   padding: 30px 20px;
 }
+.reward-check {
+  font-size: 80px;
+  line-height: 1;
+  filter: drop-shadow(0 0 24px #5dfc8c);
+}
 .reward-title {
-  font-size: 18px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
   color: var(--mc-green);
-  text-shadow: 0 0 20px var(--mc-green);
+  text-shadow: 0 0 24px var(--mc-green);
+  letter-spacing: 2px;
+}
+.reward-gems {
+  font-family: 'Nunito', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--mc-gold);
+  letter-spacing: 3px;
 }
 .reward-combo-label {
-  font-size: 12px;
-  padding: 8px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 8px 20px;
   border-radius: var(--radius);
   border: 2px solid currentColor;
 }
 .gem-burst-row {
   display: flex;
   gap: 12px;
+  font-size: 36px;
+}
+
+/* ── Series complete overlay ── */
+.series-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(13, 27, 15, 0.92);
+  z-index: 50;
+}
+.series-trophy { font-size: 80px; filter: drop-shadow(0 0 30px #ffd700); }
+.series-title {
+  font-family: 'Nunito', sans-serif;
   font-size: 32px;
+  font-weight: 800;
+  color: var(--mc-gold);
+  text-shadow: 0 0 20px var(--mc-gold);
+  text-align: center;
+}
+.series-sub {
+  font-family: 'Nunito', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--mc-green);
+  text-align: center;
 }
 
 /* ── Shop ── */

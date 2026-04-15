@@ -1,0 +1,39 @@
+- generic [ref=e5]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - text: 💎
+      - generic [ref=e8]: "10"
+    - generic [ref=e9]:
+      - text: 💚
+      - generic [ref=e10]: "0"
+    - button "Vypnout zvuk" [ref=e11] [cursor=pointer]: 🔊
+  - generic [ref=e13]: Vyber svět 🌍
+  - generic [ref=e14]:
+    - generic [ref=e16] [cursor=pointer]:
+      - generic [ref=e17]: 🌱
+      - generic [ref=e18]: Příroda
+    - generic [ref=e20]:
+      - generic [ref=e21]: 🔒
+      - generic [ref=e22]: 🔥
+      - generic [ref=e23]: Jeskyně
+      - generic [ref=e24]: 💎 30
+    - generic [ref=e26]:
+      - generic [ref=e27]: 🔒
+      - generic [ref=e28]: ❄️
+      - generic [ref=e29]: Sněžné království
+      - generic [ref=e30]: 💎 60
+    - generic [ref=e32]:
+      - generic [ref=e33]: 🔒
+      - generic [ref=e34]: ⚡
+      - generic [ref=e35]: Nether
+      - generic [ref=e36]: 💎 120
+  - generic [ref=e37]:
+    - button "🌍 Světy" [ref=e38] [cursor=pointer]:
+      - generic [ref=e39]: 🌍
+      - generic [ref=e40]: Světy
+    - button "🏪 Obchod" [ref=e41] [cursor=pointer]:
+      - generic [ref=e42]: 🏪
+      - generic [ref=e43]: Obchod
+    - button "👤 Profil" [ref=e44] [cursor=pointer]:
+      - generic [ref=e45]: 👤
+      - generic [ref=e46]: Profil

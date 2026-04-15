@@ -1,0 +1,62 @@
+- generic [ref=e170]:
+  - generic [ref=e171]:
+    - generic [ref=e172]:
+      - text: 💎
+      - generic [ref=e173]: "11"
+    - generic [ref=e174]:
+      - text: 💚
+      - generic [ref=e175]: "0"
+    - button "Vypnout zvuk" [ref=e176] [cursor=pointer]: 🔊
+  - generic [ref=e178]: 👤 Profil
+  - generic [ref=e179]:
+    - generic [ref=e180]:
+      - generic [ref=e181]: Správných odpovědí
+      - generic [ref=e182]: "1"
+    - generic [ref=e183]:
+      - generic [ref=e184]: Přesnost
+      - generic [ref=e185]: 100 %
+    - generic [ref=e186]:
+      - generic [ref=e187]: Nejlepší combo
+      - generic [ref=e188]: 🔥 1
+    - generic [ref=e189]:
+      - generic [ref=e190]: Odehraných sezení
+      - generic [ref=e191]: "0"
+    - generic [ref=e192]:
+      - generic [ref=e193]: Odemčené světy
+      - generic [ref=e194]: 1 / 4
+    - generic [ref=e195]:
+      - generic [ref=e196]: Sbírka
+      - generic [ref=e197]: 1 / 15
+    - generic [ref=e198]: 🖼️ Moje vitrína
+    - generic [ref=e199]:
+      - generic [ref=e200] [cursor=pointer]: "?"
+      - generic [ref=e201] [cursor=pointer]: "?"
+      - generic [ref=e202] [cursor=pointer]: "?"
+      - generic [ref=e203] [cursor=pointer]: "?"
+      - generic [ref=e204] [cursor=pointer]: "?"
+      - generic [ref=e205] [cursor=pointer]: "?"
+      - generic [ref=e206] [cursor=pointer]: "?"
+      - generic [ref=e207] [cursor=pointer]: "?"
+    - generic [ref=e208]: 🌍 Světy
+    - generic [ref=e209]:
+      - generic [ref=e210]: 🌱 Příroda
+      - generic [ref=e211]: ✓ Odemčeno
+    - generic [ref=e212]:
+      - generic [ref=e213]: 🔥 Jeskyně
+      - generic [ref=e214]: 🔒
+    - generic [ref=e215]:
+      - generic [ref=e216]: ❄️ Sněžné království
+      - generic [ref=e217]: 🔒
+    - generic [ref=e218]:
+      - generic [ref=e219]: ⚡ Nether
+      - generic [ref=e220]: 🔒
+  - generic [ref=e221]:
+    - button "🌍 Světy" [ref=e222] [cursor=pointer]:
+      - generic [ref=e223]: 🌍
+      - generic [ref=e224]: Světy
+    - button "🏪 Obchod" [ref=e225] [cursor=pointer]:
+      - generic [ref=e226]: 🏪
+      - generic [ref=e227]: Obchod
+    - button "👤 Profil" [ref=e228] [cursor=pointer]:
+      - generic [ref=e229]: 👤
+      - generic [ref=e230]: Profil

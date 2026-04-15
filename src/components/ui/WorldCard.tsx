@@ -13,8 +13,8 @@ export function WorldCard({ world, unlocked, onPress }: Props) {
     <motion.div
       className={`world-card ${unlocked ? '' : 'locked'}`}
       style={{ borderColor: unlocked ? world.accentColor : undefined }}
-      whileTap={unlocked ? { scale: 0.96 } : {}}
-      onClick={unlocked ? onPress : undefined}
+      whileTap={{ scale: 0.96 }}
+      onClick={onPress}
     >
       {!unlocked && <span className="lock-badge">🔒</span>}
       <span className="world-icon">{world.icon}</span>

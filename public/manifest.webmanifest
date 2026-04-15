@@ -1,6 +1,6 @@
 {
-  "name": "EduCraft",
-  "short_name": "EduCraft",
+  "name": "AdiCraft",
+  "short_name": "AdiCraft",
   "description": "Voxel math adventures for first-grade heroes.",
   "start_url": "/",
   "display": "standalone",

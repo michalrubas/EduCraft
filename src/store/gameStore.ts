@@ -121,6 +121,6 @@ export const useGameStore = create<GameState>()(
         return true
       },
     }),
-    { name: 'educraft-game-v1' }
+    { name: 'adicraft-game-v1' }
   )
 )

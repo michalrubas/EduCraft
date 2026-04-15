@@ -1,0 +1,16 @@
+- generic [ref=e73]:
+  - generic [ref=e74]:
+    - generic [ref=e75]:
+      - text: 💎
+      - generic [ref=e76]: "11"
+    - generic [ref=e77]:
+      - text: 💚
+      - generic [ref=e78]: "0"
+    - button "Vypnout zvuk" [ref=e79] [cursor=pointer]: 🔊
+  - button "← Domů" [ref=e83] [cursor=pointer]
+  - generic [ref=e86]:
+    - paragraph [ref=e87]: Které číslo je větší?
+    - generic [ref=e88]:
+      - generic [ref=e89] [cursor=pointer]: "4"
+      - generic [ref=e90]: VS
+      - generic [ref=e91] [cursor=pointer]: "5"
