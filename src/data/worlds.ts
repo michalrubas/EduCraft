@@ -9,7 +9,7 @@ export const WORLDS: World[] = [
     blockColor: '#4a7c2f',   // grass block green
     biome: 'forest',
     taskTypes: ['counting', 'tapNumber', 'compare', 'multiChoice'],
-    numberRange: [1, 5],
+    numberRange: [1, 10],
     unlockCost: 0,
     comboMultiplier: 1.0,
     bgColor: '#0d2010',
@@ -23,7 +23,7 @@ export const WORLDS: World[] = [
     blockColor: '#5a5a5a',   // stone block grey
     biome: 'cave',
     taskTypes: ['counting', 'math', 'multiChoice', 'dragDrop'],
-    numberRange: [1, 10],
+    numberRange: [1, 20],
     unlockCost: 30,
     comboMultiplier: 1.5,
     bgColor: '#1a0d00',
@@ -37,7 +37,7 @@ export const WORLDS: World[] = [
     blockColor: '#6aadcc',   // packed ice blue
     biome: 'snow',
     taskTypes: ['math', 'find', 'compare', 'dragDrop'],
-    numberRange: [1, 10],
+    numberRange: [1, 50],
     unlockCost: 60,
     comboMultiplier: 1.75,
     bgColor: '#0a1520',
@@ -51,7 +51,7 @@ export const WORLDS: World[] = [
     blockColor: '#7a1b1b',   // netherrack dark red
     biome: 'nether',
     taskTypes: ['math', 'multiChoice', 'find', 'dragDrop'],
-    numberRange: [1, 20],
+    numberRange: [1, 100],
     unlockCost: 120,
     comboMultiplier: 2.0,
     bgColor: '#200005',
