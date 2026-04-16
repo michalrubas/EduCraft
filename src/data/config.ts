@@ -17,11 +17,19 @@ export const SHOWCASE_SLOTS = 8
 export const TASKS_BEFORE_EASY = 5
 export const REWARD_SCREEN_DURATION = 2000
 
+// Pro renderování přes <Icon> — může být emoji nebo cesta k obrázku
 export const CURRENCY_ICONS = {
   diamonds: '💰',
   emeralds: '💎',
   //stars: '⬛',
   stars: '/assets/planets/planet1.png',
+}
+
+// Pro SVG text a string interpolaci — vždy emoji
+export const CURRENCY_EMOJI: Record<keyof typeof CURRENCY_ICONS, string> = {
+  diamonds: '💰',
+  emeralds: '💎',
+  stars: '⬛',
 }
 
 export function getComboLevel(combo: number): ComboLevel {

@@ -6,7 +6,7 @@ import { WHEEL_REWARDS } from '../../hooks/useLuckyWheel'
 import { playSound } from '../../audio/sounds'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
-import { CURRENCY_ICONS } from '../../data/config'
+import { CURRENCY_ICONS, CURRENCY_EMOJI } from '../../data/config'
 import { Icon } from './Icon'
 
 interface Props {
@@ -40,7 +40,7 @@ export function LuckyWheel({ onCollect }: Props) {
           const resolved = available[Math.floor(Math.random() * available.length)]
           picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
         } else {
-          picked = { ...picked, itemId: undefined, diamonds: 50, label: `${CURRENCY_ICONS.diamonds} +50 (Náhrada za vše)` }
+          picked = { ...picked, itemId: undefined, diamonds: 50, label: `${CURRENCY_EMOJI.diamonds} +50 (Náhrada za vše)` }
         }
       }
       setResultReward(picked)
