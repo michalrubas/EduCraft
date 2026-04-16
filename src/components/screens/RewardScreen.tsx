@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { getComboInfo } from '../../hooks/useCombo'
 import { REWARD_SCREEN_DURATION, COMBO_REWARDS, getComboLevel, CURRENCY_ICONS } from '../../data/config'
+import { Icon } from '../ui/Icon'
 import { playSound } from '../../audio/sounds'
 
 interface Props {
@@ -29,11 +30,11 @@ export function RewardScreen({ onDone }: Props) {
     onDone()
   }
 
-  const earnedParts = [
-    rewards.diamonds ? `+${rewards.diamonds} ${CURRENCY_ICONS.diamonds}` : '',
-    rewards.emeralds ? `+${rewards.emeralds} ${CURRENCY_ICONS.emeralds}` : '',
-    rewards.stars    ? `+${rewards.stars} ${CURRENCY_ICONS.stars}` : '',
-  ].filter(Boolean).join('  ')
+  const earnedParts: React.ReactNode[] = [
+    rewards.diamonds ? <span key="d" style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><Icon src={CURRENCY_ICONS.diamonds} size={18} />+{rewards.diamonds}</span> : null,
+    rewards.emeralds ? <span key="e" style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><Icon src={CURRENCY_ICONS.emeralds} size={18} />+{rewards.emeralds}</span> : null,
+    rewards.stars    ? <span key="s" style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}><Icon src={CURRENCY_ICONS.stars}    size={18} />+{rewards.stars}</span>    : null,
+  ].filter(Boolean)
 
   return (
     <motion.div
