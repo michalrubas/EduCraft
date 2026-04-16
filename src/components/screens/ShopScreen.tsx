@@ -5,6 +5,7 @@ import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 import { ShopItem, ItemCategory } from '../../data/types'
 import { CURRENCY_ICONS } from '../../data/config'
+import { Icon } from '../ui/Icon'
 import { HUD } from '../hud/HUD'
 
 const CATEGORIES: { id: ItemCategory | 'all'; label: string }[] = [
@@ -16,13 +17,15 @@ const CATEGORIES: { id: ItemCategory | 'all'; label: string }[] = [
   { id: 'rare',        label: '🌟 Vzácné'  },
 ]
 
-function costLabel(item: ShopItem): string {
+function CostLabel({ item }: { item: ShopItem }) {
   const { diamonds = 0, emeralds = 0, stars = 0 } = item.cost
-  const parts: string[] = []
-  if (diamonds) parts.push(`${CURRENCY_ICONS.diamonds} ${diamonds}`)
-  if (emeralds) parts.push(`${CURRENCY_ICONS.emeralds} ${emeralds}`)
-  if (stars)    parts.push(`${CURRENCY_ICONS.stars} ${stars}`)
-  return parts.join(' ')
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
+      {!!diamonds && <><Icon src={CURRENCY_ICONS.diamonds} size={14} />{diamonds}</>}
+      {!!emeralds && <><Icon src={CURRENCY_ICONS.emeralds} size={14} />{emeralds}</>}
+      {!!stars    && <><Icon src={CURRENCY_ICONS.stars}    size={14} />{stars}</>}
+    </span>
+  )
 }
 
 function canAfford(item: ShopItem, diamonds: number, emeralds: number, stars: number): boolean {
@@ -106,7 +109,7 @@ export function ShopScreen() {
                     <div className="shop-item-name">{item.name}</div>
                     {isOwned
                       ? <div className="shop-item-owned">✓ mám</div>
-                      : <div className="shop-item-price">{costLabel(item)}</div>
+                      : <div className="shop-item-price"><CostLabel item={item} /></div>
                     }
                   </motion.div>
                 )

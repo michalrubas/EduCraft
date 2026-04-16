@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion'
 import { World } from '../../data/types'
 import { CURRENCY_ICONS } from '../../data/config'
+import { Icon } from './Icon'
 
 interface Props {
   world: World
@@ -34,8 +35,9 @@ export function WorldCard({ world, unlocked, onPress }: Props) {
       <span className="world-name">{world.name}</span>
 
       {/* always reserve space at bottom — keeps all cards same height */}
-      <span className="world-cost" style={{ visibility: unlocked ? 'hidden' : 'visible' }}>
-        {world.unlockCurrency === 'emeralds' ? CURRENCY_ICONS.emeralds : world.unlockCurrency === 'stars' ? CURRENCY_ICONS.stars : CURRENCY_ICONS.diamonds} {world.unlockCost}
+      <span className="world-cost" style={{ visibility: unlocked ? 'hidden' : 'visible', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+        <Icon src={world.unlockCurrency === 'emeralds' ? CURRENCY_ICONS.emeralds : world.unlockCurrency === 'stars' ? CURRENCY_ICONS.stars : CURRENCY_ICONS.diamonds} size={16} />
+        {world.unlockCost}
       </span>
     </motion.div>
   )
