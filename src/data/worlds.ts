@@ -128,6 +128,39 @@ export const WORLDS: World[] = [
     accentColor: '#607f81',
     story: 'Poraz mocného Ender draka a staň se absolutním mistrem matematiky!',
   },
+  {
+    id: 'village',
+    name: 'Vesnice',
+    icon: '🏠',
+    blockColor: '#8b6914',
+    biome: 'village',
+    taskTypes: [
+      { type: 'missingLetter', weight: 3 },
+      { type: 'wordOrder', weight: 2 },
+    ],
+    unlockCost: 80,
+    comboMultiplier: 1.1,
+    bgColor: '#1a1005',
+    accentColor: '#f0c060',
+    story: 'Vesničané potřebují pomoc s dopisy! Sprav chyby v jejich zprávách.',
+  },
+  {
+    id: 'castle',
+    name: 'Hrad',
+    icon: '🏰',
+    blockColor: '#888888',
+    biome: 'castle',
+    taskTypes: [
+      { type: 'diacritics', weight: 3 },
+      { type: 'missingLetter', weight: 2 },
+      { type: 'wordOrder', weight: 1 },
+    ],
+    unlockCost: 200,
+    comboMultiplier: 1.4,
+    bgColor: '#0d0d14',
+    accentColor: '#a0a0ff',
+    story: 'Starý hrad skrývá tajné zprávy. Rozluštíš správný pravopis?',
+  },
 ]
 
 export function getWorld(id: string): World | undefined {

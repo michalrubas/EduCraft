@@ -7,6 +7,9 @@ import { MultiChoiceTask } from './MultiChoiceTask'
 import { MathTask } from './MathTask'
 import { FindTask } from './FindTask'
 import { DragDropTask } from './DragDropTask'
+import { MissingLetterTask } from './MissingLetterTask'
+import { DiacriticsTask }    from './DiacriticsTask'
+import { WordOrderTask }     from './WordOrderTask'
 
 interface Props {
   task: Task
@@ -23,7 +26,10 @@ export function TaskRenderer({ task, onAnswer }: Props) {
       case 'math':         return <MathTask        task={task} onAnswer={onAnswer} />
       case 'mathMultiply': return <MathTask        task={task} onAnswer={onAnswer} />
       case 'find':         return <FindTask        task={task} onAnswer={onAnswer} />
-      case 'dragDrop':     return <DragDropTask    task={task} onAnswer={onAnswer} />
+      case 'dragDrop':      return <DragDropTask      task={task} onAnswer={onAnswer} />
+      case 'missingLetter': return <MissingLetterTask task={task} onAnswer={onAnswer} />
+      case 'diacritics':    return <DiacriticsTask    task={task} onAnswer={onAnswer} />
+      case 'wordOrder':     return <WordOrderTask      task={task} onAnswer={onAnswer} />
     }
   })()
 

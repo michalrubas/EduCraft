@@ -1,13 +1,13 @@
 // src/store/gameStore.ts
 import { create } from 'zustand'
 import { persist, devtools } from 'zustand/middleware'
-import { GameState, Screen, ShopItem, MathSkillId } from '../data/types'
+import { GameState, Screen, ShopItem, MathSkillId, LangSkillId, SkillState } from '../data/types'
 import { COMBO_REWARDS, SHOWCASE_SLOTS, getComboLevel } from '../data/config'
 import { WORLDS } from '../data/worlds'
 import { setMuted as setMutedSound } from '../audio/sounds'
 import { SHOP_ITEMS } from '../data/shopItems'
 import { WheelReward } from '../data/types'
-import { createInitialProgress, checkUnlocks, updateMastery, applyMasteryDecay } from '../data/skills'
+import { createInitialProgress, checkUnlocks, updateMastery, applyMasteryDecay, LANG_SKILL_TREE } from '../data/skills'
 import { getLevelData, getLevelReward, BASE_XP_PER_ANSWER } from '../data/levels'
 import { checkNewBadges } from '../data/badges'
 import { playSound } from '../audio/sounds'
@@ -240,7 +240,7 @@ export const useGameStore = create<GameState>()(
         return true
       },
 
-      updateSkillMastery: (skillId: MathSkillId, isCorrect: boolean) => {
+      updateSkillMastery: (skillId: MathSkillId | LangSkillId, isCorrect: boolean) => {
         set(s => {
           const current = s.studentProgress[skillId]
           const updated = {
@@ -256,6 +256,18 @@ export const useGameStore = create<GameState>()(
         })
       },
     }),
-    { name: 'adicraft-game-v1' }
+    {
+      name: 'adicraft-game-v1',
+      version: 1,
+      migrate: (old: unknown) => {
+        const state = old as Record<string, unknown>
+        const existingProgress = (state.studentProgress ?? {}) as Record<string, SkillState>
+        const langDefaults: Record<string, SkillState> = {}
+        for (const skill of LANG_SKILL_TREE) {
+          langDefaults[skill.id] = { mastery: 0, unlocked: skill.prerequisites.length === 0, attempts: 0, lastPracticed: 0 }
+        }
+        return { ...state, studentProgress: { ...langDefaults, ...existingProgress } }
+      },
+    }
   ), { name: 'AdiCraft' })
 )
