@@ -74,6 +74,7 @@ export function GameScreen() {
       playSound.wrong()
       if (task?.skillId) updateSkillMastery(task.skillId, false)
       answerIncorrect()
+      resetCombo()
       await shakeControls.start({
         x: [0, -12, 12, -10, 10, -6, 6, 0],
         transition: { duration: 0.5 },
