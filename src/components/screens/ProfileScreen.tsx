@@ -4,10 +4,11 @@ import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 import { WORLDS } from '../../data/worlds'
 import { SKILL_TREE } from '../../data/skills'
+import { BADGES } from '../../data/badges'
 import { HUD } from '../hud/HUD'
 
 export function ProfileScreen() {
-  const { totalCorrect, totalAttempts, maxCombo, sessionsPlayed, unlockedWorlds, ownedItems, showcaseSlots, studentProgress, navigateTo, level, xp } = useGameStore()
+  const { totalCorrect, totalAttempts, maxCombo, sessionsPlayed, unlockedWorlds, ownedItems, showcaseSlots, studentProgress, navigateTo, level, xp, unlockedBadges } = useGameStore()
   const accuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0
 
   return (
@@ -47,6 +48,41 @@ export function ProfileScreen() {
                 transition={{ delay: slot * 0.04 }}
               >
                 {item ? item.icon : '?'}
+              </motion.div>
+            )
+          })}
+        </motion.div>
+
+        <div className="section-title" style={{ marginTop: 8 }}>🏅 Moje odznaky</div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, padding: '0 8px 16px' }}
+        >
+          {BADGES.map((b, i) => {
+            const unlocked = unlockedBadges.includes(b.id)
+            return (
+              <motion.div
+                key={b.id}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: i * 0.05 }}
+                style={{
+                  background: unlocked ? 'radial-gradient(circle, #fff7b0 0%, #ffd700 80%)' : 'rgba(255,255,255,0.05)',
+                  borderRadius: 12, padding: '12px 4px',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+                  opacity: unlocked ? 1 : 0.4,
+                  filter: unlocked ? 'drop-shadow(0 4px 8px rgba(255, 215, 0, 0.3))' : 'none',
+                  border: unlocked ? '2px solid #fff' : '2px solid transparent',
+                }}
+                title={b.description}
+              >
+                <div style={{ fontSize: 32, marginBottom: 4 }}>
+                  {unlocked ? b.icon : '🔒'}
+                </div>
+                <div style={{ fontSize: 10, fontWeight: 800, color: unlocked ? '#000' : '#888', lineHeight: 1.1, fontFamily: 'inherit' }}>
+                  {b.name}
+                </div>
               </motion.div>
             )
           })}

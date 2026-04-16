@@ -9,6 +9,8 @@ import { SHOP_ITEMS } from '../data/shopItems'
 import { WheelReward } from '../data/types'
 import { createInitialProgress, checkUnlocks, updateMastery } from '../data/skills'
 import { getLevelData, getLevelReward, BASE_XP_PER_ANSWER } from '../data/levels'
+import { checkNewBadges } from '../data/badges'
+import { playSound } from '../audio/sounds'
 
 export const useGameStore = create<GameState>()(
   devtools(
@@ -37,6 +39,8 @@ export const useGameStore = create<GameState>()(
       levelUpPending: false,
       studentProgress: createInitialProgress(),
       particles: [],
+      unlockedBadges: [],
+      badgePending: null,
 
       spawnParticles: (emoji, count, startX, startY) => {
         const newParticles = Array.from({ length: count }).map(() => ({
@@ -81,6 +85,7 @@ export const useGameStore = create<GameState>()(
           xp: nextXp,
           level: nextLevelData.level,
         })
+        get().checkBadges()
         return leveledUp
       },
 
@@ -120,6 +125,7 @@ export const useGameStore = create<GameState>()(
           wheelPending: false,
           wheelSpinsToday: prev.wheelSpinsToday + 1,
         }))
+        get().checkBadges()
       },
 
       triggerChest: () => set({ chestPending: true }),
@@ -142,11 +148,29 @@ export const useGameStore = create<GameState>()(
           ownedItems: resolvedItemId ? [...prev.ownedItems, resolvedItemId] : prev.ownedItems,
           chestPending: false,
         }))
+        get().checkBadges()
       },
 
       triggerLevelUp: () => set({ levelUpPending: true }),
 
       dismissLevelUp: () => set({ levelUpPending: false }),
+
+      checkBadges: () => {
+        const s = get()
+        const newBadges = checkNewBadges(s)
+        if (newBadges.length > 0) {
+          set({
+            unlockedBadges: [...s.unlockedBadges, ...newBadges.map(b => b.id)],
+            badgePending: s.badgePending || newBadges[0],
+          })
+          playSound.reward()
+        }
+      },
+
+      dismissBadge: () => {
+        set({ badgePending: null })
+        get().checkBadges() // Zkontrolujeme, jestli nečeká další odznak
+      },
 
       collectLevelUpReward: () => {
         const s = get()
@@ -169,6 +193,7 @@ export const useGameStore = create<GameState>()(
           stars: s.stars - stars,
           ownedItems: [...s.ownedItems, item.id],
         })
+        get().checkBadges()
         return true
       },
 
@@ -186,6 +211,7 @@ export const useGameStore = create<GameState>()(
           diamonds: s.diamonds - cost,
           unlockedWorlds: [...s.unlockedWorlds, worldId],
         })
+        get().checkBadges()
         return true
       },
 

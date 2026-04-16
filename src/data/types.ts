@@ -17,7 +17,7 @@ export type TaskType =
   | 'math'
   | 'mathMultiply'
 
-export type Biome = 'forest' | 'cave' | 'snow' | 'nether' | 'end'
+export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'nether' | 'end'
 
 // Typ úkolu s volitelnou vahou. Bez váhy = rovnoměrné rozdělení.
 // Příklad: { type: 'math', weight: 3 } znamená 3× vyšší šanci než typ s weight: 1.
@@ -57,6 +57,13 @@ export interface World {
   bgColor: string
   accentColor: string
   story: string
+}
+
+export interface Badge {
+  id: string
+  name: string
+  description: string
+  icon: string
 }
 
 export interface Task {
@@ -118,6 +125,9 @@ export interface GameState {
   levelUpPending: boolean
   studentProgress: StudentProgress
   particles: Particle[]
+  unlockedBadges: string[]
+  badgePending: Badge | null
+  
   spawnParticles: (emoji: string, count: number, startX: number, startY: number) => void
   removeParticle: (id: string) => void
   triggerWheel: () => void
@@ -128,6 +138,8 @@ export interface GameState {
   triggerLevelUp: () => void
   dismissLevelUp: () => void
   collectLevelUpReward: () => void
+  checkBadges: () => void
+  dismissBadge: () => void
   updateSkillMastery: (skillId: MathSkillId, isCorrect: boolean) => void
   // actions
   navigateTo: (screen: Screen) => void

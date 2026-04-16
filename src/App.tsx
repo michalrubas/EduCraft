@@ -11,6 +11,7 @@ import { ParticlesOverlay } from './components/ui/ParticlesOverlay'
 import { MysteryChest } from './components/ui/MysteryChest'
 import { LuckyWheel } from './components/ui/LuckyWheel'
 import { LevelUpOverlay } from './components/ui/LevelUpOverlay'
+import { BadgeOverlay } from './components/ui/BadgeOverlay'
 import { COMBO_THRESHOLDS } from './data/config'
 
 const SLIDE = {
@@ -21,7 +22,11 @@ const SLIDE = {
 }
 
 export default function App() {
-  const { currentScreen, currentWorldId, navigateTo, wheelPending, chestPending, levelUpPending, collectWheelReward, collectChestReward, combo, resetCombo } = useGameStore()
+  const { 
+    currentScreen, currentWorldId, navigateTo, 
+    wheelPending, chestPending, levelUpPending, badgePending, 
+    collectWheelReward, collectChestReward, combo, resetCombo 
+  } = useGameStore()
 
   const handleRewardDone = useCallback(() => {
     navigateTo('game')
@@ -69,6 +74,7 @@ export default function App() {
         {wheelPending && <LuckyWheel onCollect={handleWheelCollectGlobal} />}
         {chestPending && <MysteryChest onCollect={collectChestReward} />}
         {levelUpPending && <LevelUpOverlay />}
+        {badgePending && <BadgeOverlay />}
       </AnimatePresence>
     </div>
   )
