@@ -1,5 +1,5 @@
 // src/components/ui/MysteryChest.tsx
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { WheelReward } from '../../data/types'
 import { playSound } from '../../audio/sounds'
@@ -72,23 +72,27 @@ function pickChestType(): ChestType {
 
 export function MysteryChest({ onCollect }: Props) {
   const [chestType] = useState<ChestType>(pickChestType)
-  const [tapsLeft, setTapsLeft] = useState(() => Math.floor(Math.random() * 3) + 3) // 3–5
+  const tapsLeftRef = useRef(Math.floor(Math.random() * 3) + 3)
+  const [tapsLeft, setTapsLeft] = useState(tapsLeftRef.current)
   const [opened, setOpened] = useState(false)
   const [reward, setReward] = useState<WheelReward | null>(null)
   const controls = useAnimation()
   const tier = CHEST_TIERS[chestType]
 
-  async function handleTap() {
-    if (opened) return
+  function handleTap() {
+    if (opened || tapsLeftRef.current <= 0) return
     playSound.correct()
-    await controls.start({
+    controls.start({
       rotate: [-8, 8, -6, 6, -3, 0],
       y: [0, -14, 0],
       transition: { duration: 0.32 },
     })
-    const next = tapsLeft - 1
+    
+    tapsLeftRef.current -= 1
+    const next = tapsLeftRef.current
     setTapsLeft(next)
-    if (next <= 0) {
+    
+    if (next === 0) {
       let picked = tier.rewards[Math.floor(Math.random() * tier.rewards.length)]
       if (picked.itemId === 'random') {
         const s = useGameStore.getState()
@@ -137,12 +141,13 @@ export function MysteryChest({ onCollect }: Props) {
             animate={controls}
             onClick={handleTap}
             style={{
-              fontSize: 96, lineHeight: 1, cursor: 'pointer',
+              cursor: 'pointer',
               filter: `drop-shadow(0 0 24px ${tier.color})`,
               userSelect: 'none',
+              transformOrigin: 'center bottom',
             }}
           >
-            📦
+            <img src="/assets/items/bauzin.png" alt="Truhla" style={{ width: 140, height: 140, objectFit: 'contain' }} />
           </motion.div>
           <p style={{ fontSize: 22, fontWeight: 800, color: '#fff', fontFamily: 'inherit', textAlign: 'center' }}>
             Ťukni ještě <span style={{ color: tier.color }}>{tapsLeft}×</span>
