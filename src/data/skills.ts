@@ -408,7 +408,42 @@ export function createInitialProgress(): StudentProgress {
       mastery: 0,
       unlocked: skill.prerequisites.length === 0,
       attempts: 0,
+      lastPracticed: 0,
     } satisfies SkillState
   }
   return progress as StudentProgress
+}
+
+// ---------------------------------------------------------------------------
+// Křivka zapomínání (pasivní, bez notifikací)
+// ---------------------------------------------------------------------------
+// Mastery klesá o ~3 % za den bez praxe. Po 7 dnech: 0.85 → ~0.67 (zpět v ZPD).
+// Floor 0.05 — dítě nikdy nezapomene vše. Cap 30 dní — delší absence = stejný efekt.
+
+const DECAY_RATE = 0.97   // koeficient poklesu za den
+const DECAY_MAX_DAYS = 30 // maximální počet dní pro výpočet
+const DECAY_FLOOR = 0.05  // minimum mastery po poklesu
+
+export function applyMasteryDecay(progress: StudentProgress, now = Date.now()): StudentProgress {
+  const MS_PER_DAY = 86_400_000
+  let changed = false
+  const next = { ...progress }
+
+  for (const skillId of Object.keys(progress) as MathSkillId[]) {
+    const skill = progress[skillId]
+    if (!skill.unlocked) continue
+    const last = skill.lastPracticed ?? 0
+    if (last === 0) continue // nikdy necvičeno → žádný decay
+
+    const daysSince = Math.min(DECAY_MAX_DAYS, (now - last) / MS_PER_DAY)
+    if (daysSince < 0.5) continue // méně než 12 hodin → skip
+
+    const decayed = Math.max(DECAY_FLOOR, skill.mastery * Math.pow(DECAY_RATE, daysSince))
+    if (Math.abs(decayed - skill.mastery) > 0.001) {
+      next[skillId] = { ...skill, mastery: decayed }
+      changed = true
+    }
+  }
+
+  return changed ? next : progress
 }

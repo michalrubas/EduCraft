@@ -7,7 +7,7 @@ import { WORLDS } from '../data/worlds'
 import { setMuted as setMutedSound } from '../audio/sounds'
 import { SHOP_ITEMS } from '../data/shopItems'
 import { WheelReward } from '../data/types'
-import { createInitialProgress, checkUnlocks, updateMastery } from '../data/skills'
+import { createInitialProgress, checkUnlocks, updateMastery, applyMasteryDecay } from '../data/skills'
 import { getLevelData, getLevelReward, BASE_XP_PER_ANSWER } from '../data/levels'
 import { checkNewBadges } from '../data/badges'
 import { playSound } from '../audio/sounds'
@@ -41,6 +41,7 @@ export const useGameStore = create<GameState>()(
       particles: [],
       unlockedBadges: [],
       badgePending: null,
+      worldAccuracy: {} as Record<string, { correct: number; total: number }>,
 
       spawnParticles: (emoji, count, startX, startY) => {
         const newParticles = Array.from({ length: count }).map(() => ({
@@ -56,8 +57,23 @@ export const useGameStore = create<GameState>()(
 
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
 
-      enterWorld: (worldId: string) =>
-        set({ currentWorldId: worldId, currentScreen: 'game', wheelSpinsToday: 0, totalCorrectSession: 0 }),
+      enterWorld: (worldId: string) => {
+        const s = get()
+        const now = Date.now()
+        // Křivka zapomínání: jednou za sezení snížit mastery netrénovaných dovedností
+        const decayedProgress = applyMasteryDecay(s.studentProgress, now)
+        // Exponenciální fading paměti přesnosti: stará sezení mají 70 % váhy
+        const oldWa = s.worldAccuracy[worldId] ?? { correct: 0, total: 0 }
+        const fadedWa = { correct: Math.round(oldWa.correct * 0.7), total: Math.round(oldWa.total * 0.7) }
+        set({
+          currentWorldId: worldId,
+          currentScreen: 'game',
+          wheelSpinsToday: 0,
+          totalCorrectSession: 0,
+          studentProgress: decayedProgress,
+          worldAccuracy: { ...s.worldAccuracy, [worldId]: fadedWa },
+        })
+      },
 
       answerCorrect: (worldId: string) => {
         const s = get()
@@ -72,6 +88,7 @@ export const useGameStore = create<GameState>()(
         const nextLevelData = getLevelData(nextXp)
         const leveledUp = nextLevelData.level > s.level
 
+        const wa = s.worldAccuracy[worldId] ?? { correct: 0, total: 0 }
         set({
           combo: newCombo,
           maxCombo: Math.max(s.maxCombo, newCombo),
@@ -84,13 +101,21 @@ export const useGameStore = create<GameState>()(
           currentScreen: 'reward',
           xp: nextXp,
           level: nextLevelData.level,
+          worldAccuracy: { ...s.worldAccuracy, [worldId]: { correct: wa.correct + 1, total: wa.total + 1 } },
         })
         get().checkBadges()
         return leveledUp
       },
 
       answerIncorrect: () =>
-        set(s => ({ totalAttempts: s.totalAttempts + 1 })),
+        set(s => {
+          const worldId = s.currentWorldId
+          const wa = worldId ? (s.worldAccuracy[worldId] ?? { correct: 0, total: 0 }) : null
+          return {
+            totalAttempts: s.totalAttempts + 1,
+            ...(worldId && wa ? { worldAccuracy: { ...s.worldAccuracy, [worldId]: { correct: wa.correct, total: wa.total + 1 } } } : {}),
+          }
+        }),
 
       resetCombo: () => set({ combo: 0 }),
 
@@ -224,6 +249,7 @@ export const useGameStore = create<GameState>()(
               ...current,
               mastery: updateMastery(current.mastery, isCorrect),
               attempts: current.attempts + 1,
+              lastPracticed: Date.now(),
             },
           }
           return { studentProgress: checkUnlocks(updated) }

@@ -8,7 +8,9 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: 'axe',         name: 'Sekera',         icon: '🪓', category: 'weapon', cost: { diamonds: 25 }, rarity: 'common'    },
   { id: 'bow',         name: 'Luk',            icon: '🏹', category: 'weapon', cost: { emeralds: 15 }, rarity: 'rare'      },
   { id: 'trident',     name: 'Trojzubec',      icon: '🔱', category: 'weapon', cost: { diamonds: 60 }, rarity: 'epic'      },
-  { id: 'scary_face',  name: 'Scary Face',    icon: '🫥', category: 'weapon',   cost: { stars: 30, diamonds: 500 }, rarity: 'legendary' },
+  { id: 'scary_face',  name: 'Scary Face',    icon: '🫥', category: 'weapon',   cost: { stars: 30, diamonds: 500 }, rarity: 'legendary' }, 
+  { id: 'bow',         name: 'Kuš',           icon: '/assets/items/icons/bow_bronze_arrow.png', category: 'weapon',   cost: { stars: 100 }, rarity: 'epic' },
+
   // Armor
   { id: 'shield',      name: 'Štít',           icon: '🛡️', category: 'armor',  cost: { diamonds: 35 }, rarity: 'common'    },
   { id: 'helmet',      name: 'Přilba',         icon: '⛑️', category: 'armor',  cost: { diamonds: 40 }, rarity: 'rare'      },
