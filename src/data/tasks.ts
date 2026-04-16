@@ -10,7 +10,9 @@ const BIOME_OBJECTS: Record<Biome, string[]> = {
   jungle: ['🦜', '🍌', '🐒', '🐆', '🥭', '🐍'],
   tnt:    ['/assets/blocks/Tnt.PNG'], 
   nether: ['🔥', '💀', '🧱', '⚡', '🌋', '🐷'],
-  end:    ['💹', '🔅', '❗️', '❓', '🔱', '⻰'], 
+  end:    ['💹', '🔅', '❗️', '❓', '🔱', '⻰'],
+  village: ['🏠', '🌻', '🐓', '🌾', '🪵', '🐄'],
+  castle:  ['🏰', '⚔️', '🛡️', '🗝️', '👑', '🐉'],
 }
 
 function ri(min: number, max: number): number {
@@ -172,4 +174,8 @@ export const TASK_GENERATORS: Record<TaskType, TaskGenerator> = {
   find:          (r)    => generateFindTask(r),
   // mathMultiply se generuje přes skill systém v useTask; toto je fallback
   mathMultiply:  (r)    => generateMathTask(r),
+  // Lang task types are dispatched via generateLangTask() in useTask.ts — these are never called
+  missingLetter: () => { throw new Error('missingLetter: use generateLangTask()') },
+  diacritics:    () => { throw new Error('diacritics: use generateLangTask()') },
+  wordOrder:     () => { throw new Error('wordOrder: use generateLangTask()') },
 }
