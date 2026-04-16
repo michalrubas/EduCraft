@@ -8,8 +8,34 @@ export type TaskType =
   | 'dragDrop'
   | 'find'
   | 'math'
+  | 'mathMultiply'
 
 export type Biome = 'forest' | 'cave' | 'snow' | 'nether' | 'end'
+
+// Typ úkolu s volitelnou vahou. Bez váhy = rovnoměrné rozdělení.
+// Příklad: { type: 'math', weight: 3 } znamená 3× vyšší šanci než typ s weight: 1.
+export type TaskTypeEntry = TaskType | { type: TaskType; weight: number }
+
+export type MathSkillId =
+  // Sčítání / odčítání (task type: 'math')
+  | 'add_no_regroup'   // sčítání bez přechodu přes desítku  (2+3, 12+5)
+  | 'complements_10'   // doplňky do 10                       (3+7, 6+4)
+  | 'add_regroup'      // sčítání s přechodem přes desítku   (7+5, 17+8)
+  | 'sub_no_regroup'   // odčítání bez přechodu               (8-3, 15-4)
+  | 'sub_regroup'      // odčítání s přechodem                (12-7, 23-8)
+  | 'add_sub_mix'      // mix sčítání a odčítání
+  // Násobení (task type: 'mathMultiply')
+  | 'mul_easy'         // násobilka 2, 5, 10 (vzorová)
+  | 'mul_medium'       // násobilka 3, 4, 6  (odvozená)
+  | 'mul_hard'         // násobilka 7, 8, 9  (zpaměti)
+
+export interface SkillState {
+  mastery: number    // 0.0 – 1.0
+  unlocked: boolean
+  attempts: number
+}
+
+export type StudentProgress = Record<MathSkillId, SkillState>
 
 export interface World {
   id: string
@@ -17,7 +43,7 @@ export interface World {
   icon: string
   blockColor: string
   biome: Biome
-  taskTypes: TaskType[]
+  taskTypes: TaskTypeEntry[]
   numberRange: [number, number]
   unlockCost: number
   comboMultiplier: number
@@ -29,6 +55,7 @@ export interface World {
 export interface Task {
   id: string
   type: TaskType
+  skillId?: MathSkillId
   question: string
   visualCount?: number
   options?: number[]
@@ -79,11 +106,13 @@ export interface GameState {
   totalCorrectSession: number
   wheelPending: boolean
   chestPending: boolean
+  studentProgress: StudentProgress
   triggerWheel: () => void
   dismissWheel: () => void
   collectWheelReward: (reward: WheelReward) => void
   triggerChest: () => void
   collectChestReward: (reward: WheelReward) => void
+  updateSkillMastery: (skillId: MathSkillId, isCorrect: boolean) => void
   // actions
   navigateTo: (screen: Screen) => void
   enterWorld: (worldId: string) => void

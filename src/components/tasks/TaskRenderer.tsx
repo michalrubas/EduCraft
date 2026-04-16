@@ -20,9 +20,10 @@ export function TaskRenderer({ task, onAnswer }: Props) {
       case 'tapNumber':   return <TapNumberTask   task={task} onAnswer={onAnswer} />
       case 'compare':     return <CompareTask     task={task} onAnswer={onAnswer} />
       case 'multiChoice': return <MultiChoiceTask task={task} onAnswer={onAnswer} />
-      case 'math':        return <MathTask        task={task} onAnswer={onAnswer} />
-      case 'find':        return <FindTask        task={task} onAnswer={onAnswer} />
-      case 'dragDrop':    return <DragDropTask    task={task} onAnswer={onAnswer} />
+      case 'math':         return <MathTask        task={task} onAnswer={onAnswer} />
+      case 'mathMultiply': return <MathTask        task={task} onAnswer={onAnswer} />
+      case 'find':         return <FindTask        task={task} onAnswer={onAnswer} />
+      case 'dragDrop':     return <DragDropTask    task={task} onAnswer={onAnswer} />
     }
   })()
 

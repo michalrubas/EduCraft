@@ -1,9 +1,29 @@
 // src/hooks/useTask.ts
 import { useState, useCallback, useRef } from 'react'
-import { Task, TaskType } from '../data/types'
+import { Task, TaskType, TaskTypeEntry } from '../data/types'
 import { TASK_GENERATORS } from '../data/tasks'
 import { TASKS_BEFORE_EASY } from '../data/config'
 import { getWorld } from '../data/worlds'
+import { useGameStore } from '../store/gameStore'
+import { selectSkill, generateSkillTask } from '../data/skills'
+
+// Vybere typ úkolu podle vah. Typy bez váhy mají implicitně weight: 1.
+// Parametr `exclude` slouží k vynechání posledního typu (pro pestrost).
+function pickWeighted(entries: TaskTypeEntry[], exclude: TaskType | null): TaskType {
+  const weighted = entries.map(e =>
+    typeof e === 'string' ? { type: e, weight: 1 } : e
+  )
+  const available = exclude ? weighted.filter(e => e.type !== exclude) : weighted
+  const pool = available.length > 0 ? available : weighted  // fallback: ignoruj exclude
+
+  const total = pool.reduce((s, e) => s + e.weight, 0)
+  let r = Math.random() * total
+  for (const e of pool) {
+    r -= e.weight
+    if (r <= 0) return e.type
+  }
+  return pool[pool.length - 1].type
+}
 
 export interface UseTaskReturn {
   task: Task | null
@@ -13,6 +33,7 @@ export interface UseTaskReturn {
 
 export function useTask(worldId: string, rangeOverride?: [number, number]): UseTaskReturn {
   const world = getWorld(worldId)
+  const studentProgress = useGameStore(s => s.studentProgress)
   const taskCountRef = useRef(0)
   const lastTypeRef = useRef<TaskType | null>(null)
   const effectiveRange = rangeOverride ?? world?.numberRange ?? [1, 5] as [number, number]
@@ -32,12 +53,22 @@ export function useTask(worldId: string, rangeOverride?: [number, number]): UseT
       return TASK_GENERATORS[t](easyRange, world.biome)
     }
 
-    // Avoid repeating last type for variety
-    const available = world.taskTypes.filter(t => t !== lastTypeRef.current)
-    const chosen = available[Math.floor(Math.random() * available.length)]
+    // Vyber typ úkolu váženým výběrem; vyhni se opakování posledního typu
+    const chosen = pickWeighted(world.taskTypes, lastTypeRef.current)
     lastTypeRef.current = chosen
+
+    // Math tasks go through the skill system for personalized difficulty
+    if (chosen === 'math') {
+      const skillId = selectSkill(studentProgress, 'add_sub')
+      return generateSkillTask(skillId)
+    }
+    if (chosen === 'mathMultiply') {
+      const skillId = selectSkill(studentProgress, 'multiply')
+      return generateSkillTask(skillId)
+    }
+
     return TASK_GENERATORS[chosen](effectiveRange, world.biome)
-  }, [world, worldId, effectiveRange])
+  }, [world, worldId, effectiveRange, studentProgress])
 
   const [task, setTask] = useState<Task | null>(() =>
     world ? generateNext() : null

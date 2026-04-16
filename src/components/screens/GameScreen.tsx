@@ -12,9 +12,10 @@ import { getWorld } from '../../data/worlds'
 import { LuckyWheel } from '../ui/LuckyWheel'
 import { MysteryChest } from '../ui/MysteryChest'
 import { shouldTriggerWheel } from '../../hooks/useLuckyWheel'
+import { SkillDebugPanel } from '../dev/SkillDebugPanel'
 
 export function GameScreen() {
-  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, triggerWheel, collectWheelReward, chestPending, triggerChest, collectChestReward } = useGameStore()
+  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, triggerWheel, collectWheelReward, chestPending, triggerChest, collectChestReward, updateSkillMastery } = useGameStore()
   const worldId = currentWorldId ?? 'forest'
   const world = getWorld(worldId)
   const { adaptedRange, recordCorrect, recordIncorrect } = useAdaptiveDifficulty(
@@ -65,6 +66,7 @@ export function GameScreen() {
       if (level === 'mania') playSound.mania()
       else if (level === 'fire' || level === 'doubleFire') playSound.combo()
       else playSound.correct()
+      if (task?.skillId) updateSkillMastery(task.skillId, true)
       answerCorrect(worldId)
       recordCorrect()
       const newSession = totalCorrectSession + 1
@@ -77,6 +79,7 @@ export function GameScreen() {
       }
     } else {
       playSound.wrong()
+      if (task?.skillId) updateSkillMastery(task.skillId, false)
       answerIncorrect()
       recordIncorrect()
       await shakeControls.start({
@@ -156,6 +159,8 @@ export function GameScreen() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {import.meta.env.DEV && <SkillDebugPanel />}
     </div>
   )
 }

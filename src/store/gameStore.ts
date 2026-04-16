@@ -1,14 +1,16 @@
 // src/store/gameStore.ts
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { GameState, Screen, ShopItem } from '../data/types'
+import { persist, devtools } from 'zustand/middleware'
+import { GameState, Screen, ShopItem, MathSkillId } from '../data/types'
 import { COMBO_REWARDS, SHOWCASE_SLOTS, getComboLevel } from '../data/config'
 import { WORLDS } from '../data/worlds'
 import { setMuted as setMutedSound } from '../audio/sounds'
 import { SHOP_ITEMS } from '../data/shopItems'
 import { WheelReward } from '../data/types'
+import { createInitialProgress, checkUnlocks, updateMastery } from '../data/skills'
 
 export const useGameStore = create<GameState>()(
+  devtools(
   persist(
     (set, get) => ({
       currentScreen: 'home' as Screen,
@@ -29,6 +31,7 @@ export const useGameStore = create<GameState>()(
       totalCorrectSession: 0,
       wheelPending: false,
       chestPending: false,
+      studentProgress: createInitialProgress(),
 
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
 
@@ -141,7 +144,22 @@ export const useGameStore = create<GameState>()(
         })
         return true
       },
+
+      updateSkillMastery: (skillId: MathSkillId, isCorrect: boolean) => {
+        set(s => {
+          const current = s.studentProgress[skillId]
+          const updated = {
+            ...s.studentProgress,
+            [skillId]: {
+              ...current,
+              mastery: updateMastery(current.mastery, isCorrect),
+              attempts: current.attempts + 1,
+            },
+          }
+          return { studentProgress: checkUnlocks(updated) }
+        })
+      },
     }),
     { name: 'adicraft-game-v1' }
-  )
+  ), { name: 'AdiCraft' })
 )

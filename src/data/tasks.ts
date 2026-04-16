@@ -144,7 +144,7 @@ export function generateDragDropTask(range: [number, number], biome: string): Ta
 export function generateFindTask(range: [number, number]): Task {
   const [min, max] = range
   const target = ri(min, max)
-  const gridSize = ri(4, 9)
+  const gridSize = ri(5, 10)
   const pool = Array.from({ length: max - min + 1 }, (_, i) => min + i)
   const distractors = shuffle(pool.filter(n => n !== target)).slice(0, Math.min(gridSize - 1, pool.length - 1))
   return {
@@ -159,11 +159,13 @@ export function generateFindTask(range: [number, number]): Task {
 export type TaskGenerator = (range: [number, number], biome: string) => Task
 
 export const TASK_GENERATORS: Record<TaskType, TaskGenerator> = {
-  counting:    (r, b) => generateCountingTask(r, b),
-  tapNumber:   (r)    => generateTapNumberTask(r),
-  compare:     (r)    => generateCompareTask(r),
-  multiChoice: (r, b) => generateMultiChoiceTask(r, b),
-  math:        (r)    => generateMathTask(r),
-  dragDrop:    (r, b) => generateDragDropTask(r, b),
-  find:        (r)    => generateFindTask(r),
+  counting:      (r, b) => generateCountingTask(r, b),
+  tapNumber:     (r)    => generateTapNumberTask(r),
+  compare:       (r)    => generateCompareTask(r),
+  multiChoice:   (r, b) => generateMultiChoiceTask(r, b),
+  math:          (r)    => generateMathTask(r),
+  dragDrop:      (r, b) => generateDragDropTask(r, b),
+  find:          (r)    => generateFindTask(r),
+  // mathMultiply se generuje přes skill systém v useTask; toto je fallback
+  mathMultiply:  (r)    => generateMathTask(r),
 }

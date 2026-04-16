@@ -3,10 +3,11 @@ import { motion } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 import { WORLDS } from '../../data/worlds'
+import { SKILL_TREE } from '../../data/skills'
 import { HUD } from '../hud/HUD'
 
 export function ProfileScreen() {
-  const { totalCorrect, totalAttempts, maxCombo, sessionsPlayed, unlockedWorlds, ownedItems, showcaseSlots, navigateTo } = useGameStore()
+  const { totalCorrect, totalAttempts, maxCombo, sessionsPlayed, unlockedWorlds, ownedItems, showcaseSlots, studentProgress, navigateTo } = useGameStore()
   const accuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0
 
   return (
@@ -43,6 +44,39 @@ export function ProfileScreen() {
             )
           })}
         </motion.div>
+
+        <div className="section-title" style={{ marginTop: 8 }}>🧠 Matematické dovednosti</div>
+        {SKILL_TREE.map((skill, i) => {
+          const state = studentProgress[skill.id]
+          const pct = Math.round(state.mastery * 100)
+          const barColor = pct >= 70 ? 'var(--mc-green)' : pct >= 30 ? '#ffd700' : '#ff6b6b'
+          return (
+            <motion.div
+              key={skill.id}
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: state.unlocked ? 1 : 0.38, x: 0 }}
+              transition={{ delay: i * 0.05 }}
+              style={{ padding: '6px 12px' }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontSize: 13 }}>
+                <span>{skill.icon} {skill.name}</span>
+                <span style={{ color: 'var(--mc-muted)', fontSize: 11 }}>
+                  {state.unlocked ? `${pct}%` : '🔒 Zamčeno'}
+                </span>
+              </div>
+              {state.unlocked && (
+                <div style={{ height: 6, background: '#222', borderRadius: 3, overflow: 'hidden' }}>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${pct}%` }}
+                    transition={{ duration: 0.6, delay: i * 0.05 + 0.1 }}
+                    style={{ height: '100%', background: barColor, borderRadius: 3 }}
+                  />
+                </div>
+              )}
+            </motion.div>
+          )
+        })}
 
         <div className="section-title">🌍 Světy</div>
         {WORLDS.map(world => (
