@@ -1,13 +1,14 @@
 // src/hooks/useLuckyWheel.ts
 import type { WheelReward } from '../data/types'
+import { CURRENCY_ICONS } from '../data/config'
 
 export type { WheelReward }
 
 export const WHEEL_REWARDS: WheelReward[] = [
-  { label: '💰 +3',  diamonds: 3 },
-  { label: '💰 +6',  diamonds: 6 },
-  { label: '💎 +4',  emeralds: 4 },
-  { label: '⬛ +1',  stars: 1 },
+  { label: `${CURRENCY_ICONS.diamonds} +3`,  diamonds: 3 },
+  { label: `${CURRENCY_ICONS.diamonds} +6`,  diamonds: 6 },
+  { label: `${CURRENCY_ICONS.emeralds} +4`,  emeralds: 4 },
+  { label: `${CURRENCY_ICONS.stars} +1`,  stars: 1 },
   { label: '🎁 Překvapení', itemId: 'random' },
 ]
 

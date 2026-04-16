@@ -7,18 +7,17 @@ import { TaskRenderer } from '../tasks/TaskRenderer'
 import { PixelButton } from '../ui/PixelButton'
 import { playSound } from '../../audio/sounds'
 import { getComboLevel, COMBO_THRESHOLDS, REWARD_SCREEN_DURATION } from '../../data/config'
-import { useAdaptiveDifficulty } from '../../hooks/useAdaptiveDifficulty'
+import { getAdaptedRange } from '../../hooks/useAdaptiveDifficulty'
 import { getWorld } from '../../data/worlds'
 import { shouldTriggerWheel } from '../../hooks/useLuckyWheel'
 import { SkillDebugPanel } from '../dev/SkillDebugPanel'
 
 export function GameScreen() {
-  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, totalCorrect, triggerWheel, collectWheelReward, triggerChest, updateSkillMastery, triggerLevelUp } = useGameStore()
+  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, totalCorrect, triggerWheel, collectWheelReward, triggerChest, updateSkillMastery, triggerLevelUp, worldAccuracy } = useGameStore()
   const worldId = currentWorldId ?? 'forest'
   const world = getWorld(worldId)
-  const { adaptedRange, recordCorrect, recordIncorrect } = useAdaptiveDifficulty(
-    world?.numberRange ?? [1, 5]
-  )
+  const wa = worldAccuracy[worldId] ?? { correct: 0, total: 0 }
+  const adaptedRange = getAdaptedRange(world?.numberRange ?? [1, 5], wa.correct, wa.total)
   const { task, checkAnswer } = useTask(worldId, adaptedRange)
   const shakeControls = useAnimation()
   const hasAnswered = useRef(false)
@@ -58,7 +57,6 @@ export function GameScreen() {
       else playSound.correct()
       if (task?.skillId) updateSkillMastery(task.skillId, true)
       const leveledUp = answerCorrect(worldId)
-      recordCorrect()
       const newSession = totalCorrectSession + 1
       const newCombo = combo + 1
       const delay = REWARD_SCREEN_DURATION + 200
@@ -76,7 +74,6 @@ export function GameScreen() {
       playSound.wrong()
       if (task?.skillId) updateSkillMastery(task.skillId, false)
       answerIncorrect()
-      recordIncorrect()
       await shakeControls.start({
         x: [0, -12, 12, -10, 10, -6, 6, 0],
         transition: { duration: 0.5 },

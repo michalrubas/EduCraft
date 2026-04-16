@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 import { ShopItem, ItemCategory } from '../../data/types'
+import { CURRENCY_ICONS } from '../../data/config'
 import { HUD } from '../hud/HUD'
 
 const CATEGORIES: { id: ItemCategory | 'all'; label: string }[] = [
@@ -18,9 +19,9 @@ const CATEGORIES: { id: ItemCategory | 'all'; label: string }[] = [
 function costLabel(item: ShopItem): string {
   const { diamonds = 0, emeralds = 0, stars = 0 } = item.cost
   const parts: string[] = []
-  if (diamonds) parts.push(`💰 ${diamonds}`)
-  if (emeralds) parts.push(`💎 ${emeralds}`)
-  if (stars)    parts.push(`⬛ ${stars}`)
+  if (diamonds) parts.push(`${CURRENCY_ICONS.diamonds} ${diamonds}`)
+  if (emeralds) parts.push(`${CURRENCY_ICONS.emeralds} ${emeralds}`)
+  if (stars)    parts.push(`${CURRENCY_ICONS.stars} ${stars}`)
   return parts.join(' ')
 }
 

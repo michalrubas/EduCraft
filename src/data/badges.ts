@@ -1,4 +1,5 @@
 import { GameState, Badge } from './types'
+import { CURRENCY_ICONS } from './config'
 
 export interface BadgeDefinition extends Badge {
   condition: (state: GameState) => boolean
@@ -37,7 +38,7 @@ export const BADGES: BadgeDefinition[] = [
     id: 'rich_kid',
     name: 'Zlatokop',
     description: 'Nasbírej najednou 500 zlaťáků.',
-    icon: '💰',
+    icon: CURRENCY_ICONS.diamonds,
     condition: s => s.diamonds >= 500,
   },
   {

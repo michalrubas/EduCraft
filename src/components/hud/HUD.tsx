@@ -2,6 +2,8 @@
 import { useGameStore } from '../../store/gameStore'
 import { getComboInfo } from '../../hooks/useCombo'
 import { getLevelData } from '../../data/levels'
+import { CURRENCY_ICONS } from '../../data/config'
+import { Icon } from '../ui/Icon'
 import { ComboBar } from './ComboBar'
 
 export function HUD() {
@@ -15,9 +17,9 @@ export function HUD() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(0,0,0,0.5)', padding: '2px 8px', borderRadius: 4, marginRight: 4 }}>
           <span style={{ fontSize: 14, color: '#55ff55', fontWeight: 'bold' }}>Lev {level}</span>
         </div>
-        <span className="hud-currency">💰<span>{diamonds}</span></span>
-        <span className="hud-currency">💎<span>{emeralds}</span></span>
-        {stars > 0 && <span className="hud-currency">⬛<span>{stars}</span></span>}
+        <span className="hud-currency"><Icon src={CURRENCY_ICONS.diamonds} size={18} /><span>{diamonds}</span></span>
+        <span className="hud-currency"><Icon src={CURRENCY_ICONS.emeralds} size={18} /><span>{emeralds}</span></span>
+        <span className="hud-currency"><Icon src={CURRENCY_ICONS.stars} size={18} /><span>{stars}</span></span>
         {info.label && (
           <span className="hud-combo" style={{ color: info.color }}>{info.label}</span>
         )}

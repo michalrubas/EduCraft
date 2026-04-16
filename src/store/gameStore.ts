@@ -1,13 +1,13 @@
 // src/store/gameStore.ts
 import { create } from 'zustand'
 import { persist, devtools } from 'zustand/middleware'
-import { GameState, Screen, ShopItem, MathSkillId } from '../data/types'
+import { GameState, Screen, ShopItem, MathSkillId, LangSkillId, SkillState } from '../data/types'
 import { COMBO_REWARDS, SHOWCASE_SLOTS, getComboLevel } from '../data/config'
 import { WORLDS } from '../data/worlds'
 import { setMuted as setMutedSound } from '../audio/sounds'
 import { SHOP_ITEMS } from '../data/shopItems'
 import { WheelReward } from '../data/types'
-import { createInitialProgress, checkUnlocks, updateMastery } from '../data/skills'
+import { createInitialProgress, checkUnlocks, updateMastery, applyMasteryDecay, LANG_SKILL_TREE } from '../data/skills'
 import { getLevelData, getLevelReward, BASE_XP_PER_ANSWER } from '../data/levels'
 import { checkNewBadges } from '../data/badges'
 import { playSound } from '../audio/sounds'
@@ -23,7 +23,7 @@ export const useGameStore = create<GameState>()(
       diamonds: 10,
       emeralds: 0,
       stars: 0,
-      unlockedWorlds: ['forest'],
+      unlockedWorlds: import.meta.env.DEV ? ['forest'] : ['forest'],
       ownedItems: ['sword_wood'],
       showcaseSlots: Array<string | null>(SHOWCASE_SLOTS).fill(null),
       totalCorrect: 0,
@@ -41,6 +41,7 @@ export const useGameStore = create<GameState>()(
       particles: [],
       unlockedBadges: [],
       badgePending: null,
+      worldAccuracy: {} as Record<string, { correct: number; total: number }>,
 
       spawnParticles: (emoji, count, startX, startY) => {
         const newParticles = Array.from({ length: count }).map(() => ({
@@ -56,8 +57,23 @@ export const useGameStore = create<GameState>()(
 
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
 
-      enterWorld: (worldId: string) =>
-        set({ currentWorldId: worldId, currentScreen: 'game', wheelSpinsToday: 0, totalCorrectSession: 0 }),
+      enterWorld: (worldId: string) => {
+        const s = get()
+        const now = Date.now()
+        // Křivka zapomínání: jednou za sezení snížit mastery netrénovaných dovedností
+        const decayedProgress = applyMasteryDecay(s.studentProgress, now)
+        // Exponenciální fading paměti přesnosti: stará sezení mají 70 % váhy
+        const oldWa = s.worldAccuracy[worldId] ?? { correct: 0, total: 0 }
+        const fadedWa = { correct: Math.round(oldWa.correct * 0.7), total: Math.round(oldWa.total * 0.7) }
+        set({
+          currentWorldId: worldId,
+          currentScreen: 'game',
+          wheelSpinsToday: 0,
+          totalCorrectSession: 0,
+          studentProgress: decayedProgress,
+          worldAccuracy: { ...s.worldAccuracy, [worldId]: fadedWa },
+        })
+      },
 
       answerCorrect: (worldId: string) => {
         const s = get()
@@ -72,6 +88,7 @@ export const useGameStore = create<GameState>()(
         const nextLevelData = getLevelData(nextXp)
         const leveledUp = nextLevelData.level > s.level
 
+        const wa = s.worldAccuracy[worldId] ?? { correct: 0, total: 0 }
         set({
           combo: newCombo,
           maxCombo: Math.max(s.maxCombo, newCombo),
@@ -84,13 +101,21 @@ export const useGameStore = create<GameState>()(
           currentScreen: 'reward',
           xp: nextXp,
           level: nextLevelData.level,
+          worldAccuracy: { ...s.worldAccuracy, [worldId]: { correct: wa.correct + 1, total: wa.total + 1 } },
         })
         get().checkBadges()
         return leveledUp
       },
 
       answerIncorrect: () =>
-        set(s => ({ totalAttempts: s.totalAttempts + 1 })),
+        set(s => {
+          const worldId = s.currentWorldId
+          const wa = worldId ? (s.worldAccuracy[worldId] ?? { correct: 0, total: 0 }) : null
+          return {
+            totalAttempts: s.totalAttempts + 1,
+            ...(worldId && wa ? { worldAccuracy: { ...s.worldAccuracy, [worldId]: { correct: wa.correct, total: wa.total + 1 } } } : {}),
+          }
+        }),
 
       resetCombo: () => set({ combo: 0 }),
 
@@ -204,18 +229,18 @@ export const useGameStore = create<GameState>()(
           return { showcaseSlots: slots }
         }),
 
-      unlockWorld: (worldId: string, cost: number) => {
+      unlockWorld: (worldId: string, cost: number, currency: 'diamonds' | 'emeralds' | 'stars' = 'diamonds') => {
         const s = get()
-        if (s.diamonds < cost || s.unlockedWorlds.includes(worldId)) return false
+        if (s[currency] < cost || s.unlockedWorlds.includes(worldId)) return false
         set({
-          diamonds: s.diamonds - cost,
+          [currency]: s[currency] - cost,
           unlockedWorlds: [...s.unlockedWorlds, worldId],
         })
         get().checkBadges()
         return true
       },
 
-      updateSkillMastery: (skillId: MathSkillId, isCorrect: boolean) => {
+      updateSkillMastery: (skillId: MathSkillId | LangSkillId, isCorrect: boolean) => {
         set(s => {
           const current = s.studentProgress[skillId]
           const updated = {
@@ -224,12 +249,25 @@ export const useGameStore = create<GameState>()(
               ...current,
               mastery: updateMastery(current.mastery, isCorrect),
               attempts: current.attempts + 1,
+              lastPracticed: Date.now(),
             },
           }
           return { studentProgress: checkUnlocks(updated) }
         })
       },
     }),
-    { name: 'adicraft-game-v1' }
+    {
+      name: 'adicraft-game-v1',
+      version: 1,
+      migrate: (old: unknown) => {
+        const state = old as Record<string, unknown>
+        const existingProgress = (state.studentProgress ?? {}) as Record<string, SkillState>
+        const langDefaults: Record<string, SkillState> = {}
+        for (const skill of LANG_SKILL_TREE) {
+          langDefaults[skill.id] = { mastery: 0, unlocked: skill.prerequisites.length === 0, attempts: 0, lastPracticed: 0 }
+        }
+        return { ...state, studentProgress: { ...langDefaults, ...existingProgress } }
+      },
+    }
   ), { name: 'AdiCraft' })
 )

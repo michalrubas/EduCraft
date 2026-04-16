@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { playSound } from '../../audio/sounds'
 import { useGameStore } from '../../store/gameStore'
 import { getLevelReward } from '../../data/levels'
+import { CURRENCY_ICONS } from '../../data/config'
 import { useEffect } from 'react'
 
 export function LevelUpOverlay() {
@@ -18,8 +19,8 @@ export function LevelUpOverlay() {
     const y = rect.top + rect.height / 2
     
     // Spawnutí mincí podle typu odměny. Maximum particle omezíme na 10 aby to nezahlcovalo telefon.
-    if (reward.diamonds > 0) spawnParticles('💰', Math.min(reward.diamonds, 15), x, y)
-    if (reward.emeralds > 0) spawnParticles('💎', Math.min(reward.emeralds, 10), x, y)
+    if (reward.diamonds > 0) spawnParticles(CURRENCY_ICONS.diamonds, Math.min(reward.diamonds, 15), x, y)
+    if (reward.emeralds > 0) spawnParticles(CURRENCY_ICONS.emeralds, Math.min(reward.emeralds, 10), x, y)
     
     collectLevelUpReward()
   }
@@ -72,8 +73,8 @@ export function LevelUpOverlay() {
       >
         <p style={{ color: '#fff', margin: '0 0 8px 0', fontSize: 14 }}>Odměna za postup:</p>
         <div style={{ display: 'flex', gap: 16, fontSize: 24, fontWeight: 'bold' }}>
-          {reward.diamonds > 0 && <span style={{ color: '#ffd700' }}>+{reward.diamonds} 💰</span>}
-          {reward.emeralds > 0 && <span style={{ color: '#5de8fc' }}>+{reward.emeralds} 💎</span>}
+          {reward.diamonds > 0 && <span style={{ color: '#ffd700' }}>+{reward.diamonds} {CURRENCY_ICONS.diamonds}</span>}
+          {reward.emeralds > 0 && <span style={{ color: '#5de8fc' }}>+{reward.emeralds} {CURRENCY_ICONS.emeralds}</span>}
         </div>
       </motion.div>
 

@@ -3,6 +3,8 @@
 Tento dokument popisuje přesná místa v kódu kde upravovat herní mechaniky.
 Vše co potřebuješ je textový editor (VS Code) a znalost, kde co hledat.
 
+git checkout main
+git merge feat/language-tasks-wip
 ---
 
 ## Obsah

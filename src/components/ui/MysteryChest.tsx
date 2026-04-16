@@ -3,6 +3,7 @@ import { useState, useRef } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { WheelReward } from '../../data/types'
 import { playSound } from '../../audio/sounds'
+import { CURRENCY_ICONS } from '../../data/config'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 
@@ -101,7 +102,7 @@ export function MysteryChest({ onCollect }: Props) {
           const resolved = available[Math.floor(Math.random() * available.length)]
           picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
         } else {
-          picked = { ...picked, itemId: undefined, diamonds: 50, label: '💰 +50 (Náhrada za vše)' }
+          picked = { ...picked, itemId: undefined, diamonds: 50, label: `${CURRENCY_ICONS.diamonds} +50 (Náhrada za vše)` }
         }
       }
       setReward(picked)
@@ -110,7 +111,7 @@ export function MysteryChest({ onCollect }: Props) {
     }
   }
 
-  let bigIcon = reward?.diamonds ? '💰' : reward?.emeralds ? '💎' : reward?.stars ? '⬛' : '🎁'
+  let bigIcon = reward?.diamonds ? CURRENCY_ICONS.diamonds : reward?.emeralds ? CURRENCY_ICONS.emeralds : reward?.stars ? CURRENCY_ICONS.stars : '🎁'
   if (reward?.itemId) {
     const item = SHOP_ITEMS.find(i => i.id === reward.itemId)
     if (item) bigIcon = item.icon

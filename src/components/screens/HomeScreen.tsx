@@ -6,14 +6,15 @@ import { WorldCard } from '../ui/WorldCard'
 import { HUD } from '../hud/HUD'
 
 export function HomeScreen() {
-  const { unlockedWorlds, diamonds, enterWorld, unlockWorld, navigateTo } = useGameStore()
+  const { unlockedWorlds, diamonds, emeralds, stars, enterWorld, unlockWorld, navigateTo } = useGameStore()
+  const wallet = { diamonds, emeralds, stars }
 
-  function handleWorldPress(worldId: string, cost: number) {
+  function handleWorldPress(worldId: string, cost: number, currency: 'diamonds' | 'emeralds' | 'stars') {
     const isUnlocked = unlockedWorlds.includes(worldId)
     if (isUnlocked) {
       enterWorld(worldId)
-    } else if (diamonds >= cost) {
-      unlockWorld(worldId, cost)
+    } else if (wallet[currency] >= cost) {
+      unlockWorld(worldId, cost, currency)
     }
   }
 
@@ -45,7 +46,7 @@ export function HomeScreen() {
             <WorldCard
               world={world}
               unlocked={unlockedWorlds.includes(world.id)}
-              onPress={() => handleWorldPress(world.id, world.unlockCost)}
+              onPress={() => handleWorldPress(world.id, world.unlockCost, world.unlockCurrency ?? 'diamonds')}
             />
           </motion.div>
         ))}
