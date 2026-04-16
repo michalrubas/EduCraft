@@ -20,9 +20,6 @@ export function HUD() {
         <span className="hud-currency"><Icon src={CURRENCY_ICONS.diamonds} size={18} /><span>{diamonds}</span></span>
         <span className="hud-currency"><Icon src={CURRENCY_ICONS.emeralds} size={18} /><span>{emeralds}</span></span>
         <span className="hud-currency"><Icon src={CURRENCY_ICONS.stars} size={18} /><span>{stars}</span></span>
-        {info.label && (
-          <span className="hud-combo" style={{ color: info.color }}>{info.label}</span>
-        )}
         <button
           onClick={() => setMuted(!muted)}
           style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, color: 'var(--mc-muted)' }}
