@@ -16,8 +16,11 @@ export type TaskType =
   | 'find'
   | 'math'
   | 'mathMultiply'
+  | 'missingLetter'
+  | 'diacritics'
+  | 'wordOrder'
 
-export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end'
+export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle'
 
 // Typ úkolu s volitelnou vahou. Bez váhy = rovnoměrné rozdělení.
 // Příklad: { type: 'math', weight: 3 } znamená 3× vyšší šanci než typ s weight: 1.
@@ -36,13 +39,24 @@ export type MathSkillId =
   | 'mul_medium'       // násobilka 3, 4, 6  (odvozená)
   | 'mul_hard'         // násobilka 7, 8, 9  (zpaměti)
 
+export type LangSkillId =
+  | 'letter_missing_easy'
+  | 'letter_missing_hard'
+  | 'diacritics_basic'
+  | 'diacritics_hard'
+  | 'word_order_short'
+  | 'word_order_long'
+
+export type SkillId = MathSkillId | LangSkillId
+
 export interface SkillState {
-  mastery: number    // 0.0 – 1.0
+  mastery: number        // 0.0 – 1.0
   unlocked: boolean
   attempts: number
+  lastPracticed?: number // unix ms; undefined/0 = nikdy
 }
 
-export type StudentProgress = Record<MathSkillId, SkillState>
+export type StudentProgress = Record<MathSkillId | LangSkillId, SkillState>
 
 export interface World {
   id: string
@@ -51,7 +65,7 @@ export interface World {
   blockColor: string
   biome: Biome
   taskTypes: TaskTypeEntry[]
-  numberRange: [number, number]
+  numberRange?: [number, number]
   unlockCost: number
   comboMultiplier: number
   bgColor: string
@@ -69,13 +83,14 @@ export interface Badge {
 export interface Task {
   id: string
   type: TaskType
-  skillId?: MathSkillId
+  skillId?: MathSkillId | LangSkillId
   question: string
   visualCount?: number
-  options?: number[]
+  options?: (number | string)[]
   correctAnswer: number | string
   objects?: string[]
   dragTarget?: number
+  letters?: string[]   // pro wordOrder: scramblovaná písmena
 }
 
 export type ItemCategory = 'weapon' | 'armor' | 'trophy' | 'decoration' | 'rare'
@@ -128,6 +143,8 @@ export interface GameState {
   unlockedBadges: string[]
   badgePending: Badge | null
   
+  worldAccuracy: Record<string, { correct: number; total: number }>
+
   spawnParticles: (emoji: string, count: number, startX: number, startY: number) => void
   removeParticle: (id: string) => void
   triggerWheel: () => void
@@ -140,7 +157,7 @@ export interface GameState {
   collectLevelUpReward: () => void
   checkBadges: () => void
   dismissBadge: () => void
-  updateSkillMastery: (skillId: MathSkillId, isCorrect: boolean) => void
+  updateSkillMastery: (skillId: MathSkillId | LangSkillId, isCorrect: boolean) => void
   // actions
   navigateTo: (screen: Screen) => void
   enterWorld: (worldId: string) => void
