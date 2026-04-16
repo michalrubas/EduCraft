@@ -140,8 +140,26 @@
 | Sezónní eventy | ⭐⭐ | 🟡 střední | ✅ vysoká | Volitelné |
 | Narační linka | ⭐⭐ | 🟢 nízká | ✅ vysoká | Kdykoli |
 | Avatar | ⭐ | 🟡 střední | ✅ vysoká | Kosmetika, nízká priorita |
+| Předměty s efekty | ⭐⭐⭐ | 🟡 střední | ✅ vysoká | **V plánu** |
 | Kooperace/třída | ⭐⭐⭐ | 🔴 velmi vysoká | ✅ vysoká | Až bude backend |
 | Žebříček | ⭐ | 🔴 vysoká | ⚠️ rizikové | Zvážit opatrně |
+
+---
+
+## 🛠️ Rozpracované nápady (Backlog)
+
+### 🎒 Pasivní Bonusy z Předmětů (Artifacts)
+- **Mechanika:** 3 předměty umístěné ve Vitríně (Profile Showcase) dávají aktivní bonusy.
+- **Zbraně (XP Boost):** +XP body, urychlení levelování.
+- **Zbroje (Combo Shield):** Šance na záchranu komba při chybě.
+- **Magie/Dekorace (Economy):** Více zlaťáků, častější truhly.
+- **Legendární (Luck):** Vylepšené Kolo štěstí.
+
+### 🍱 Assety a Resource Packy
+Všechny nové Minecraft obrázky (PNG) nahrávat do složky:
+- `/public/assets/items/` (meče, jídlo, předměty)
+- `/public/assets/blocks/` (bloky pro biomy)
+- `/public/assets/ui/` (ikony srdíček, pozadí)
 
 ---
 

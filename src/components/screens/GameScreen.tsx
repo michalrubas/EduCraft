@@ -93,7 +93,7 @@ export function GameScreen() {
   if (!task) return null
 
   return (
-    <div className="screen" style={{ background: 'var(--mc-bg)', position: 'relative' }}>
+    <div className="screen" style={{ background: world?.bgColor || 'var(--mc-bg)', position: 'relative' }}>
       <HUD />
       <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8 }}>
         <PixelButton onClick={handleBackHome} style={{ padding: '8px 12px', fontSize: 10 }}>

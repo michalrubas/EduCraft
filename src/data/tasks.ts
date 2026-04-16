@@ -2,10 +2,14 @@
 import { Task, TaskType, Biome } from './types'
 
 const BIOME_OBJECTS: Record<Biome, string[]> = {
-  forest: ['🌾', '🪵', '🍎', '🐑', '🐄', '🍄'],   // wheat, log, apple, sheep, cow, mushroom
-  cave:   ['💎', '⛏️', '🪨', '🥇', '🦇', '🪔'],   // diamond, pickaxe, stone, gold, bat, lantern
-  snow:   ['🧊', '❄️', '🐺', '🐟', '⛄', '🎣'],    // ice, snowflake, wolf, fish, snowman, rod
-  nether: ['🔥', '💀', '🧱', '⚡', '🌋', '🐷'],    // fire, skull, brick, blaze, lava, piglin
+  forest: ['🌾', '🪵', '🍎', '🐑', '🐄', '🍄'],
+  cave:   ['💎', '⛏️', '🪨', '🥇', '🦇', '🪔'],
+  snow:   ['🧊', '❄️', '🐺', '🐟', '⛄', '🎣'],
+  desert: ['🐪', '🌵', '🐍', '🦂', '🏺', '☀️'],
+  ocean:  ['🐬', '🐟', '🐚', '🦀', '🦈', '⚓'],
+  jungle: ['🦜', '🍌', '🐒', '🐆', '🥭', '🐍'],
+  tnt:    ['/assets/blocks/Tnt.PNG'], 
+  nether: ['🔥', '💀', '🧱', '⚡', '🌋', '🐷'],
   end:    ['💹', '🔅', '❗️', '❓', '🔱', '⻰'], 
 }
 

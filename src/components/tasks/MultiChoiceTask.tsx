@@ -23,7 +23,9 @@ export function MultiChoiceTask({ task, onAnswer }: Props) {
           transition={{ duration: 0.3 }}
         >
           {task.objects.map((obj, i) => (
-            <span key={i}>{obj}</span>
+            (obj.startsWith('/') || obj.startsWith('http')) 
+              ? <img key={i} src={obj} alt="" style={{ width: 48, height: 48, objectFit: 'contain' }} /> 
+              : <span key={i}>{obj}</span>
           ))}
         </motion.div>
       )}

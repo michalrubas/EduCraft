@@ -8,6 +8,7 @@ export function DragDropTask({ task, onAnswer }: Props) {
   const target = task.dragTarget ?? Number(task.correctAnswer)
   const totalObjects = task.objects?.length ?? target + 2
   const emoji = task.objects?.[0] ?? '📦'
+  const isUrl = emoji.startsWith('/') || emoji.startsWith('http')
 
   const [sourceIds, setSourceIds] = useState<number[]>(() =>
     Array.from({ length: totalObjects }, (_, i) => i)
@@ -47,7 +48,7 @@ export function DragDropTask({ task, onAnswer }: Props) {
             onDragEnd={(e, info) => handleDragEnd(id, e, info)}
             whileDrag={{ scale: 1.25, zIndex: 50 }}
           >
-            {emoji}
+            {isUrl ? <img src={emoji} alt="" style={{ width: 40, height: 40, objectFit: 'contain', pointerEvents: 'none' }} /> : emoji}
           </motion.div>
         ))}
       </div>
@@ -60,7 +61,7 @@ export function DragDropTask({ task, onAnswer }: Props) {
             animate={{ scale: 1 }}
             style={{ fontSize: 28 }}
           >
-            {emoji}
+            {isUrl ? <img src={emoji} alt="" style={{ width: 32, height: 32, objectFit: 'contain' }} /> : emoji}
           </motion.span>
         ))}
         <span className="drop-zone-label">

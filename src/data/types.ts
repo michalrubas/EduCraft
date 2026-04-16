@@ -17,7 +17,7 @@ export type TaskType =
   | 'math'
   | 'mathMultiply'
 
-export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'nether' | 'end'
+export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end'
 
 // Typ úkolu s volitelnou vahou. Bez váhy = rovnoměrné rozdělení.
 // Příklad: { type: 'math', weight: 3 } znamená 3× vyšší šanci než typ s weight: 1.

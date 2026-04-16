@@ -122,14 +122,20 @@ export function ProfileScreen() {
         })}
 
         <div className="section-title">🌍 Světy</div>
-        {WORLDS.map(world => (
-          <div key={world.id} className="stat-row">
-            <span className="label">{world.icon} {world.name}</span>
-            <span className="value" style={{ color: unlockedWorlds.includes(world.id) ? 'var(--mc-green)' : 'var(--mc-muted)' }}>
-              {unlockedWorlds.includes(world.id) ? '✓ Odemčeno' : '🔒'}
-            </span>
-          </div>
-        ))}
+        {WORLDS.map(world => {
+          const isUrl = world.icon.startsWith('/') || world.icon.startsWith('http')
+          return (
+            <div key={world.id} className="stat-row">
+              <span className="label" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {isUrl ? <img src={world.icon} alt="" style={{ width: 20, height: 20, objectFit: 'contain' }} /> : world.icon} 
+                {world.name}
+              </span>
+              <span className="value" style={{ color: unlockedWorlds.includes(world.id) ? 'var(--mc-green)' : 'var(--mc-muted)' }}>
+                {unlockedWorlds.includes(world.id) ? '✓ Odemčeno' : '🔒'}
+              </span>
+            </div>
+          )
+        })}
       </div>
 
       <div className="bottom-nav">

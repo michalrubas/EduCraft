@@ -23,7 +23,11 @@ export function WorldCard({ world, unlocked, onPress }: Props) {
         className="world-block"
         style={{ background: unlocked ? world.blockColor : '#333' }}
       >
-        <span className="world-block-icon">{world.icon}</span>
+        <span className="world-block-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {(world.icon.startsWith('/') || world.icon.startsWith('http')) 
+            ? <img src={world.icon} alt="" style={{ width: 48, height: 48, objectFit: 'contain' }} /> 
+            : world.icon}
+        </span>
       </div>
 
       <span className="world-name">{world.name}</span>
