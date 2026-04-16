@@ -131,11 +131,13 @@ const MAX_DRAG_TARGET = 6
 
 export function generateDragDropTask(range: [number, number], biome: string): Task {
   const [min, max] = range
-  // Cap at MAX_DRAG_TARGET so the pool always has enough items
-  const target = ri(min, Math.min(max, MAX_DRAG_TARGET))
+  // Clamp both ends so ri() always receives min ≤ max
+  const cappedMin = Math.min(min, MAX_DRAG_TARGET)
+  const cappedMax = Math.min(max, MAX_DRAG_TARGET)
+  const target = ri(cappedMin, cappedMax)
   const objs = BIOME_OBJECTS[biome as Biome] ?? BIOME_OBJECTS.forest
   const obj = objs[ri(0, objs.length - 1)]
-  const poolSize = Math.min(target + 2, 8)
+  const poolSize = target + 2  // always exactly 2 extras, pool > target guaranteed
   return {
     id: uid(),
     type: 'dragDrop',
