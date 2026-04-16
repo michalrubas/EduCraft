@@ -161,10 +161,11 @@ export function ShopScreen() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: idx * 0.03 }}
                   onClick={() => {
+                    if (inShowcase) return  // už ve vitríně, nepřidávat znovu
                     const slot = selectedSlot !== null ? selectedSlot : showcaseSlots.findIndex(s => s === null)
                     if (slot !== -1) { addToShowcase(item.id, slot); setSelectedSlot(null) }
                   }}
-                  style={{ cursor: 'pointer', outline: inShowcase ? '2px solid var(--mc-gold)' : 'none' }}
+                  style={{ cursor: inShowcase ? 'default' : 'pointer', outline: inShowcase ? '2px solid var(--mc-gold)' : 'none' }}
                 >
                   <span className="shop-item-icon" style={{ display: 'flex', justifyContent: 'center' }}>
                     {isUrl ? <img src={item.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} /> : item.icon}
