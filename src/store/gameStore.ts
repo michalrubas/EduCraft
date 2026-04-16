@@ -23,7 +23,7 @@ export const useGameStore = create<GameState>()(
       diamonds: 10,
       emeralds: 0,
       stars: 0,
-      unlockedWorlds: import.meta.env.DEV ? ['forest', 'village', 'castle'] : ['forest'],
+      unlockedWorlds: import.meta.env.DEV ? ['forest'] : ['forest'],
       ownedItems: ['sword_wood'],
       showcaseSlots: Array<string | null>(SHOWCASE_SLOTS).fill(null),
       totalCorrect: 0,

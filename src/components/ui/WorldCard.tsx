@@ -1,6 +1,7 @@
 // src/components/ui/WorldCard.tsx
 import { motion } from 'framer-motion'
 import { World } from '../../data/types'
+import { CURRENCY_ICONS } from '../../data/config'
 
 interface Props {
   world: World
@@ -34,7 +35,7 @@ export function WorldCard({ world, unlocked, onPress }: Props) {
 
       {/* always reserve space at bottom — keeps all cards same height */}
       <span className="world-cost" style={{ visibility: unlocked ? 'hidden' : 'visible' }}>
-        {world.unlockCurrency === 'emeralds' ? '💎' : world.unlockCurrency === 'stars' ? '⬛' : '💰'} {world.unlockCost}
+        {world.unlockCurrency === 'emeralds' ? CURRENCY_ICONS.emeralds : world.unlockCurrency === 'stars' ? CURRENCY_ICONS.stars : CURRENCY_ICONS.diamonds} {world.unlockCost}
       </span>
     </motion.div>
   )

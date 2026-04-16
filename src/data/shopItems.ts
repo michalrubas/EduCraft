@@ -25,4 +25,9 @@ export const SHOP_ITEMS: ShopItem[] = [
   // Rare
   { id: 'star_item',   name: 'Hvězda',         icon: '🌟', category: 'rare',   cost: { stars: 10 },     rarity: 'legendary' },
   { id: 'dragon_egg',  name: 'Dračí vejce',    icon: '🥚', category: 'rare',   cost: { stars: 15 },     rarity: 'legendary' },
+  //Potion
+  { id: 'red_potion',  name: 'Červený lektvar',     icon: '/assets/items/potions/pt1.png', category: 'rare',   cost: { diamonds: 50 },  rarity: 'rare' },
+  { id: 'blue_potion',  name: 'Modrý lektvar',      icon: '/assets/items/potions/pt2.png', category: 'rare',   cost: { diamonds: 100 },  rarity: 'rare' },
+  { id: 'green_potion',  name: 'Zelený lektvar',    icon: '/assets/items/potions/pt3.png', category: 'rare',   cost: { diamonds: 150 },  rarity: 'rare' },
+  { id: 'yellow_potion',  name: 'Žlutý lektvar',    icon: '/assets/items/potions/pt4.png', category: 'rare',   cost: { diamonds: 200 },  rarity: 'rare' },
 ]

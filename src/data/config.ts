@@ -17,6 +17,13 @@ export const SHOWCASE_SLOTS = 8
 export const TASKS_BEFORE_EASY = 5
 export const REWARD_SCREEN_DURATION = 2000
 
+export const CURRENCY_ICONS = {
+  diamonds: '💰',
+  emeralds: '💎',
+  //stars: '⬛',
+  stars: '/assets/planets/planet1.png',
+}
+
 export function getComboLevel(combo: number): ComboLevel {
   if (combo >= COMBO_THRESHOLDS.mania) return 'mania'
   if (combo >= COMBO_THRESHOLDS.doubleFire) return 'doubleFire'

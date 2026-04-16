@@ -6,6 +6,7 @@ import { WHEEL_REWARDS } from '../../hooks/useLuckyWheel'
 import { playSound } from '../../audio/sounds'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
+import { CURRENCY_ICONS } from '../../data/config'
 
 interface Props {
   onCollect: (reward: WheelReward) => void
@@ -38,7 +39,7 @@ export function LuckyWheel({ onCollect }: Props) {
           const resolved = available[Math.floor(Math.random() * available.length)]
           picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
         } else {
-          picked = { ...picked, itemId: undefined, diamonds: 50, label: '💰 +50 (Náhrada za vše)' }
+          picked = { ...picked, itemId: undefined, diamonds: 50, label: `${CURRENCY_ICONS.diamonds} +50 (Náhrada za vše)` }
         }
       }
       setResultReward(picked)
@@ -129,7 +130,7 @@ export function LuckyWheel({ onCollect }: Props) {
         </motion.button>
       ) : (() => {
         const r = resultReward
-        let bigIcon = r.diamonds ? '💰' : r.emeralds ? '💎' : r.stars ? '⬛' : '🎁'
+        let bigIcon = r.diamonds ? CURRENCY_ICONS.diamonds : r.emeralds ? CURRENCY_ICONS.emeralds : r.stars ? CURRENCY_ICONS.stars : '🎁'
         if (r.itemId) {
           const item = SHOP_ITEMS.find(i => i.id === r.itemId)
           if (item) bigIcon = item.icon
@@ -164,9 +165,9 @@ export function LuckyWheel({ onCollect }: Props) {
                 const x = rect.left + rect.width / 2
                 const y = rect.top + rect.height / 2
                 const { spawnParticles } = useGameStore.getState()
-                if (r.diamonds) spawnParticles('💰', Math.min(r.diamonds, 15), x, y)
-                if (r.emeralds) spawnParticles('💎', Math.min(r.emeralds, 10), x, y)
-                if (r.stars) spawnParticles('⬛', Math.min(r.stars, 5), x, y)
+                if (r.diamonds) spawnParticles(CURRENCY_ICONS.diamonds, Math.min(r.diamonds, 15), x, y)
+                if (r.emeralds) spawnParticles(CURRENCY_ICONS.emeralds, Math.min(r.emeralds, 10), x, y)
+                if (r.stars) spawnParticles(CURRENCY_ICONS.stars, Math.min(r.stars, 5), x, y)
                 onCollect(r)
               }}
               initial={{ opacity: 0 }}

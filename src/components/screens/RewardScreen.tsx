@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { getComboInfo } from '../../hooks/useCombo'
-import { REWARD_SCREEN_DURATION, COMBO_REWARDS, getComboLevel } from '../../data/config'
+import { REWARD_SCREEN_DURATION, COMBO_REWARDS, getComboLevel, CURRENCY_ICONS } from '../../data/config'
 import { playSound } from '../../audio/sounds'
 
 interface Props {
@@ -30,9 +30,9 @@ export function RewardScreen({ onDone }: Props) {
   }
 
   const earnedParts = [
-    rewards.diamonds ? `+${rewards.diamonds} 💰` : '',
-    rewards.emeralds ? `+${rewards.emeralds} 💎` : '',
-    rewards.stars    ? `+${rewards.stars} ⬛` : '',
+    rewards.diamonds ? `+${rewards.diamonds} ${CURRENCY_ICONS.diamonds}` : '',
+    rewards.emeralds ? `+${rewards.emeralds} ${CURRENCY_ICONS.emeralds}` : '',
+    rewards.stars    ? `+${rewards.stars} ${CURRENCY_ICONS.stars}` : '',
   ].filter(Boolean).join('  ')
 
   return (
