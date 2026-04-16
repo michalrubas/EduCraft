@@ -8,6 +8,7 @@ import { setMuted as setMutedSound } from '../audio/sounds'
 import { SHOP_ITEMS } from '../data/shopItems'
 import { WheelReward } from '../data/types'
 import { createInitialProgress, checkUnlocks, updateMastery } from '../data/skills'
+import { getLevelData, getLevelReward, BASE_XP_PER_ANSWER } from '../data/levels'
 
 export const useGameStore = create<GameState>()(
   devtools(
@@ -31,6 +32,9 @@ export const useGameStore = create<GameState>()(
       totalCorrectSession: 0,
       wheelPending: false,
       chestPending: false,
+      xp: 0,
+      level: 1,
+      levelUpPending: false,
       studentProgress: createInitialProgress(),
 
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
@@ -43,8 +47,14 @@ export const useGameStore = create<GameState>()(
         const world = WORLDS.find(w => w.id === worldId)
         const multiplier = world?.comboMultiplier ?? 1
         const newCombo = s.combo + 1
-        const level = getComboLevel(newCombo)
-        const base = COMBO_REWARDS[level]
+        const comboLevel = getComboLevel(newCombo)
+        const base = COMBO_REWARDS[comboLevel]
+        
+        const gainedXp = Math.round(BASE_XP_PER_ANSWER * multiplier)
+        const nextXp = s.xp + gainedXp
+        const nextLevelData = getLevelData(nextXp)
+        const leveledUp = nextLevelData.level > s.level
+
         set({
           combo: newCombo,
           maxCombo: Math.max(s.maxCombo, newCombo),
@@ -55,6 +65,9 @@ export const useGameStore = create<GameState>()(
           totalAttempts: s.totalAttempts + 1,
           totalCorrectSession: s.totalCorrectSession + 1,
           currentScreen: 'reward',
+          xp: nextXp,
+          level: nextLevelData.level,
+          levelUpPending: s.levelUpPending || leveledUp,
         })
       },
 
@@ -112,6 +125,18 @@ export const useGameStore = create<GameState>()(
           ownedItems: resolvedItemId ? [...prev.ownedItems, resolvedItemId] : prev.ownedItems,
           chestPending: false,
         }))
+      },
+
+      dismissLevelUp: () => set({ levelUpPending: false }),
+
+      collectLevelUpReward: () => {
+        const s = get()
+        const reward = getLevelReward(s.level)
+        set({
+          diamonds: s.diamonds + reward.diamonds,
+          emeralds: s.emeralds + reward.emeralds,
+          levelUpPending: false,
+        })
       },
 
       buyItem: (item: ShopItem) => {

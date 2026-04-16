@@ -11,11 +11,12 @@ import { useAdaptiveDifficulty } from '../../hooks/useAdaptiveDifficulty'
 import { getWorld } from '../../data/worlds'
 import { LuckyWheel } from '../ui/LuckyWheel'
 import { MysteryChest } from '../ui/MysteryChest'
+import { LevelUpOverlay } from '../ui/LevelUpOverlay'
 import { shouldTriggerWheel } from '../../hooks/useLuckyWheel'
 import { SkillDebugPanel } from '../dev/SkillDebugPanel'
 
 export function GameScreen() {
-  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, totalCorrect, triggerWheel, collectWheelReward, chestPending, triggerChest, collectChestReward, updateSkillMastery } = useGameStore()
+  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, totalCorrect, triggerWheel, collectWheelReward, chestPending, triggerChest, collectChestReward, updateSkillMastery, levelUpPending } = useGameStore()
   const worldId = currentWorldId ?? 'forest'
   const world = getWorld(worldId)
   const { adaptedRange, recordCorrect, recordIncorrect } = useAdaptiveDifficulty(
@@ -121,6 +122,10 @@ export function GameScreen() {
 
       {chestPending && (
         <MysteryChest onCollect={collectChestReward} />
+      )}
+
+      {levelUpPending && (
+        <LevelUpOverlay />
       )}
 
       <AnimatePresence>

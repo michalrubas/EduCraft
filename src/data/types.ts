@@ -106,12 +106,17 @@ export interface GameState {
   totalCorrectSession: number
   wheelPending: boolean
   chestPending: boolean
+  xp: number
+  level: number
+  levelUpPending: boolean
   studentProgress: StudentProgress
   triggerWheel: () => void
   dismissWheel: () => void
   collectWheelReward: (reward: WheelReward) => void
   triggerChest: () => void
   collectChestReward: (reward: WheelReward) => void
+  dismissLevelUp: () => void
+  collectLevelUpReward: () => void
   updateSkillMastery: (skillId: MathSkillId, isCorrect: boolean) => void
   // actions
   navigateTo: (screen: Screen) => void

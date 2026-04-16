@@ -7,13 +7,20 @@ import { SKILL_TREE } from '../../data/skills'
 import { HUD } from '../hud/HUD'
 
 export function ProfileScreen() {
-  const { totalCorrect, totalAttempts, maxCombo, sessionsPlayed, unlockedWorlds, ownedItems, showcaseSlots, studentProgress, navigateTo } = useGameStore()
+  const { totalCorrect, totalAttempts, maxCombo, sessionsPlayed, unlockedWorlds, ownedItems, showcaseSlots, studentProgress, navigateTo, level, xp } = useGameStore()
   const accuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0
 
   return (
     <div className="screen" style={{ background: 'var(--mc-bg)' }}>
       <HUD />
       <div className="section-title">👤 Profil</div>
+
+      <div style={{ padding: '4px 12px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(0,0,0,0.2)', margin: '0 8px 12px 8px', borderRadius: 8 }}>
+        <div style={{ fontSize: 40, background: '#ffd700', borderRadius: '50%', width: 72, height: 72, display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 6, boxShadow: '0 4px 16px rgba(255, 215, 0, 0.4)', color: '#000', fontWeight: 'bold', border: '4px solid #fff' }}>
+          {level}
+        </div>
+        <div style={{ fontSize: 16, color: '#55ff55', fontWeight: 'bold' }}>Celkem zkušeností: {xp} XP</div>
+      </div>
 
       <div style={{ overflowY: 'auto', flex: 1 }}>
         <div className="stat-row"><span className="label">Správných odpovědí</span><span className="value">{totalCorrect}</span></div>
