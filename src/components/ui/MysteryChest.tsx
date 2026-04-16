@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { WheelReward } from '../../data/types'
 import { playSound } from '../../audio/sounds'
+import { useGameStore } from '../../store/gameStore'
+import { SHOP_ITEMS } from '../../data/shopItems'
 
 interface Props {
   onCollect: (reward: WheelReward) => void
@@ -87,14 +89,28 @@ export function MysteryChest({ onCollect }: Props) {
     const next = tapsLeft - 1
     setTapsLeft(next)
     if (next <= 0) {
-      const picked = tier.rewards[Math.floor(Math.random() * tier.rewards.length)]
+      let picked = tier.rewards[Math.floor(Math.random() * tier.rewards.length)]
+      if (picked.itemId === 'random') {
+        const s = useGameStore.getState()
+        const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id))
+        if (available.length > 0) {
+          const resolved = available[Math.floor(Math.random() * available.length)]
+          picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
+        } else {
+          picked = { ...picked, itemId: undefined, diamonds: 50, label: '💰 +50 (Náhrada za vše)' }
+        }
+      }
       setReward(picked)
       setOpened(true)
       playSound.reward()
     }
   }
 
-  const bigIcon = reward?.diamonds ? '💰' : reward?.emeralds ? '💎' : reward?.stars ? '⬛' : '🎁'
+  let bigIcon = reward?.diamonds ? '💰' : reward?.emeralds ? '💎' : reward?.stars ? '⬛' : '🎁'
+  if (reward?.itemId) {
+    const item = SHOP_ITEMS.find(i => i.id === reward.itemId)
+    if (item) bigIcon = item.icon
+  }
 
   return (
     <motion.div
@@ -159,7 +175,16 @@ export function MysteryChest({ onCollect }: Props) {
           </motion.p>
           <motion.button
             whileTap={{ scale: 0.93 }}
-            onClick={() => onCollect(reward!)}
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect()
+              const x = rect.left + rect.width / 2
+              const y = rect.top + rect.height / 2
+              const { spawnParticles } = useGameStore.getState()
+              if (reward?.diamonds) spawnParticles('💰', Math.min(reward.diamonds, 15), x, y)
+              if (reward?.emeralds) spawnParticles('💎', Math.min(reward.emeralds, 10), x, y)
+              if (reward?.stars) spawnParticles('⬛', Math.min(reward.stars, 5), x, y)
+              onCollect(reward!)
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}

@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { WheelReward } from '../../data/types'
 import { WHEEL_REWARDS } from '../../hooks/useLuckyWheel'
 import { playSound } from '../../audio/sounds'
+import { useGameStore } from '../../store/gameStore'
+import { SHOP_ITEMS } from '../../data/shopItems'
 
 interface Props {
   onCollect: (reward: WheelReward) => void
@@ -13,21 +15,33 @@ const SEGMENT_COLORS = ['#2d6d44', '#1a3d88', '#6d2d44', '#6d5a2d', '#2d4d6d']
 
 export function LuckyWheel({ onCollect }: Props) {
   const [spinning, setSpinning] = useState(false)
-  const [resultIdx, setResultIdx] = useState<number | null>(null)
+  const [resultReward, setResultReward] = useState<WheelReward | null>(null)
   const [rotation, setRotation] = useState(0)
 
   const segmentAngle = 360 / WHEEL_REWARDS.length
 
   function spin() {
-    if (spinning || resultIdx !== null) return
-    const picked = Math.floor(Math.random() * WHEEL_REWARDS.length)
-    const targetAngle = 360 * 5 + (360 - picked * segmentAngle - segmentAngle / 2)
+    if (spinning || resultReward !== null) return
+    const pickedIdx = Math.floor(Math.random() * WHEEL_REWARDS.length)
+    const targetAngle = 360 * 5 + (360 - pickedIdx * segmentAngle - segmentAngle / 2)
     setSpinning(true)
     setRotation(prev => prev + targetAngle)
     playSound.wheel()
     setTimeout(() => {
       setSpinning(false)
-      setResultIdx(picked)
+      let picked = WHEEL_REWARDS[pickedIdx]
+      // Rozlišení náhodného předmětu
+      if (picked.itemId === 'random') {
+        const s = useGameStore.getState()
+        const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id))
+        if (available.length > 0) {
+          const resolved = available[Math.floor(Math.random() * available.length)]
+          picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
+        } else {
+          picked = { ...picked, itemId: undefined, diamonds: 50, label: '💰 +50 (Náhrada za vše)' }
+        }
+      }
+      setResultReward(picked)
     }, 2200)
   }
 
@@ -99,7 +113,7 @@ export function LuckyWheel({ onCollect }: Props) {
         </motion.div>
       </div>
 
-      {resultIdx === null ? (
+      {resultReward === null ? (
         <motion.button
           whileTap={{ scale: 0.93 }}
           onClick={spin}
@@ -114,9 +128,13 @@ export function LuckyWheel({ onCollect }: Props) {
           {spinning ? '...' : '🎡 TOČIT!'}
         </motion.button>
       ) : (() => {
-        const r = WHEEL_REWARDS[resultIdx!]
-        const bigIcon = r.diamonds ? '💰' : r.emeralds ? '💎' : r.stars ? '⬛' : '🎁'
-        const rewardText = r.diamonds ? `+${r.diamonds} 💰` : r.emeralds ? `+${r.emeralds} 💎` : r.stars ? `+${r.stars} ⬛` : '🎁 Překvapení!'
+        const r = resultReward
+        let bigIcon = r.diamonds ? '💰' : r.emeralds ? '💎' : r.stars ? '⬛' : '🎁'
+        if (r.itemId) {
+          const item = SHOP_ITEMS.find(i => i.id === r.itemId)
+          if (item) bigIcon = item.icon
+        }
+        const rewardText = r.label
         return (
           <motion.div
             initial={{ scale: 0, y: 30 }}
@@ -141,7 +159,16 @@ export function LuckyWheel({ onCollect }: Props) {
             </motion.p>
             <motion.button
               whileTap={{ scale: 0.93 }}
-              onClick={() => onCollect(r)}
+              onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect()
+                const x = rect.left + rect.width / 2
+                const y = rect.top + rect.height / 2
+                const { spawnParticles } = useGameStore.getState()
+                if (r.diamonds) spawnParticles('💰', Math.min(r.diamonds, 15), x, y)
+                if (r.emeralds) spawnParticles('💎', Math.min(r.emeralds, 10), x, y)
+                if (r.stars) spawnParticles('⬛', Math.min(r.stars, 5), x, y)
+                onCollect(r)
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.35 }}

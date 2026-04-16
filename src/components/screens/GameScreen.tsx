@@ -9,14 +9,11 @@ import { playSound } from '../../audio/sounds'
 import { getComboLevel, COMBO_THRESHOLDS, REWARD_SCREEN_DURATION } from '../../data/config'
 import { useAdaptiveDifficulty } from '../../hooks/useAdaptiveDifficulty'
 import { getWorld } from '../../data/worlds'
-import { LuckyWheel } from '../ui/LuckyWheel'
-import { MysteryChest } from '../ui/MysteryChest'
-import { LevelUpOverlay } from '../ui/LevelUpOverlay'
 import { shouldTriggerWheel } from '../../hooks/useLuckyWheel'
 import { SkillDebugPanel } from '../dev/SkillDebugPanel'
 
 export function GameScreen() {
-  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, totalCorrect, triggerWheel, collectWheelReward, chestPending, triggerChest, collectChestReward, updateSkillMastery, levelUpPending } = useGameStore()
+  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, totalCorrect, triggerWheel, collectWheelReward, triggerChest, updateSkillMastery, triggerLevelUp } = useGameStore()
   const worldId = currentWorldId ?? 'forest'
   const world = getWorld(worldId)
   const { adaptedRange, recordCorrect, recordIncorrect } = useAdaptiveDifficulty(
@@ -46,14 +43,6 @@ export function GameScreen() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // intentionally only on mount
 
-  function handleWheelCollect(reward: Parameters<typeof collectWheelReward>[0]) {
-    collectWheelReward(reward)
-    if (isSeriesEndRef.current) {
-      resetCombo()
-      navigateTo('home')
-    }
-  }
-
   useEffect(() => {
     hasAnswered.current = false
   }, [task?.id])
@@ -68,11 +57,16 @@ export function GameScreen() {
       else if (level === 'fire' || level === 'doubleFire') playSound.combo()
       else playSound.correct()
       if (task?.skillId) updateSkillMastery(task.skillId, true)
-      answerCorrect(worldId)
+      const leveledUp = answerCorrect(worldId)
       recordCorrect()
       const newSession = totalCorrectSession + 1
       const newCombo = combo + 1
       const delay = REWARD_SCREEN_DURATION + 200
+
+      if (leveledUp) {
+        setTimeout(triggerLevelUp, delay)
+      }
+
       if (shouldTriggerWheel(newSession, wheelSpinsToday, newCombo === 10)) {
         setTimeout(triggerWheel, delay)
       } else if ((totalCorrect + 1) % 15 === 0) {
@@ -115,18 +109,6 @@ export function GameScreen() {
           onAnswer={handleAnswer}
         />
       </motion.div>
-
-      {wheelPending && (
-        <LuckyWheel onCollect={handleWheelCollect} />
-      )}
-
-      {chestPending && (
-        <MysteryChest onCollect={collectChestReward} />
-      )}
-
-      {levelUpPending && (
-        <LevelUpOverlay />
-      )}
 
       <AnimatePresence>
         {seriesComplete && !wheelPending && (

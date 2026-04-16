@@ -1,5 +1,12 @@
 // src/data/types.ts
 
+export interface Particle {
+  id: string
+  emoji: string
+  startX: number
+  startY: number
+}
+
 export type TaskType =
   | 'counting'
   | 'tapNumber'
@@ -110,18 +117,22 @@ export interface GameState {
   level: number
   levelUpPending: boolean
   studentProgress: StudentProgress
+  particles: Particle[]
+  spawnParticles: (emoji: string, count: number, startX: number, startY: number) => void
+  removeParticle: (id: string) => void
   triggerWheel: () => void
   dismissWheel: () => void
   collectWheelReward: (reward: WheelReward) => void
   triggerChest: () => void
   collectChestReward: (reward: WheelReward) => void
+  triggerLevelUp: () => void
   dismissLevelUp: () => void
   collectLevelUpReward: () => void
   updateSkillMastery: (skillId: MathSkillId, isCorrect: boolean) => void
   // actions
   navigateTo: (screen: Screen) => void
   enterWorld: (worldId: string) => void
-  answerCorrect: (worldId: string) => void
+  answerCorrect: (worldId: string) => boolean
   answerIncorrect: () => void
   resetCombo: () => void
   buyItem: (item: ShopItem) => boolean

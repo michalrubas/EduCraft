@@ -17,9 +17,9 @@ export function CountingTask({ task, onAnswer }: Props) {
       <p className="task-question">{task.question}</p>
       <motion.div
         className="object-grid"
-        initial={{ opacity: 0, scale: 0.85 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+        transition={{ duration: 0.3 }}
       >
         {task.objects?.map((obj, i) => (
           <span key={i}>{obj}</span>

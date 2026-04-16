@@ -16,13 +16,16 @@ export function MultiChoiceTask({ task, onAnswer }: Props) {
     <div className="task-area">
       <p className="task-question">{task.question}</p>
       {task.objects && (
-        <div className="object-grid">
+        <motion.div 
+          className="object-grid"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
           {task.objects.map((obj, i) => (
-            <motion.span key={i} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.04, type: 'spring' }}>
-              {obj}
-            </motion.span>
+            <span key={i}>{obj}</span>
           ))}
-        </div>
+        </motion.div>
       )}
       <div className="answer-grid">
         {task.options?.map(opt => (

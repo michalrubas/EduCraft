@@ -7,6 +7,11 @@ import { GameScreen } from './components/screens/GameScreen'
 import { RewardScreen } from './components/screens/RewardScreen'
 import { ShopScreen } from './components/screens/ShopScreen'
 import { ProfileScreen } from './components/screens/ProfileScreen'
+import { ParticlesOverlay } from './components/ui/ParticlesOverlay'
+import { MysteryChest } from './components/ui/MysteryChest'
+import { LuckyWheel } from './components/ui/LuckyWheel'
+import { LevelUpOverlay } from './components/ui/LevelUpOverlay'
+import { COMBO_THRESHOLDS } from './data/config'
 
 const SLIDE = {
   initial:  { opacity: 0, x: 60 },
@@ -16,11 +21,19 @@ const SLIDE = {
 }
 
 export default function App() {
-  const { currentScreen, currentWorldId, navigateTo } = useGameStore()
+  const { currentScreen, currentWorldId, navigateTo, wheelPending, chestPending, levelUpPending, collectWheelReward, collectChestReward, combo, resetCombo } = useGameStore()
 
   const handleRewardDone = useCallback(() => {
     navigateTo('game')
   }, [navigateTo])
+
+  function handleWheelCollectGlobal(reward: any) {
+    collectWheelReward(reward)
+    if (combo >= COMBO_THRESHOLDS.mania) {
+      resetCombo()
+      navigateTo('home')
+    }
+  }
 
   return (
     <div style={{ position: 'relative', height: '100dvh', overflow: 'hidden', width: '100%' }}>
@@ -50,6 +63,12 @@ export default function App() {
             <ProfileScreen />
           </motion.div>
         )}
+      </AnimatePresence>
+      <ParticlesOverlay />
+      <AnimatePresence>
+        {wheelPending && <LuckyWheel onCollect={handleWheelCollectGlobal} />}
+        {chestPending && <MysteryChest onCollect={collectChestReward} />}
+        {levelUpPending && <LevelUpOverlay />}
       </AnimatePresence>
     </div>
   )

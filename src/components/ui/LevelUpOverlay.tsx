@@ -5,12 +5,24 @@ import { getLevelReward } from '../../data/levels'
 import { useEffect } from 'react'
 
 export function LevelUpOverlay() {
-  const { level, collectLevelUpReward } = useGameStore()
+  const { level, collectLevelUpReward, spawnParticles } = useGameStore()
   const reward = getLevelReward(level)
 
   useEffect(() => {
     playSound.reward()
   }, [])
+
+  function handleCollect(e: React.MouseEvent) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = rect.left + rect.width / 2
+    const y = rect.top + rect.height / 2
+    
+    // Spawnutí mincí podle typu odměny. Maximum particle omezíme na 10 aby to nezahlcovalo telefon.
+    if (reward.diamonds > 0) spawnParticles('💰', Math.min(reward.diamonds, 15), x, y)
+    if (reward.emeralds > 0) spawnParticles('💎', Math.min(reward.emeralds, 10), x, y)
+    
+    collectLevelUpReward()
+  }
 
   return (
     <motion.div
@@ -70,7 +82,7 @@ export function LevelUpOverlay() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        onClick={collectLevelUpReward}
+        onClick={handleCollect}
         style={{
           padding: '16px 40px',
           fontSize: 18,

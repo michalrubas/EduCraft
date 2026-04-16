@@ -36,6 +36,19 @@ export const useGameStore = create<GameState>()(
       level: 1,
       levelUpPending: false,
       studentProgress: createInitialProgress(),
+      particles: [],
+
+      spawnParticles: (emoji, count, startX, startY) => {
+        const newParticles = Array.from({ length: count }).map(() => ({
+          id: Math.random().toString(36),
+          emoji,
+          startX: startX + (Math.random() * 60 - 30),
+          startY: startY + (Math.random() * 60 - 30),
+        }))
+        set(s => ({ particles: [...s.particles, ...newParticles] }))
+      },
+
+      removeParticle: (id) => set(s => ({ particles: s.particles.filter(p => p.id !== id) })),
 
       navigateTo: (screen: Screen) => set({ currentScreen: screen }),
 
@@ -67,8 +80,8 @@ export const useGameStore = create<GameState>()(
           currentScreen: 'reward',
           xp: nextXp,
           level: nextLevelData.level,
-          levelUpPending: s.levelUpPending || leveledUp,
         })
+        return leveledUp
       },
 
       answerIncorrect: () =>
@@ -96,6 +109,8 @@ export const useGameStore = create<GameState>()(
           if (available.length > 0) {
             resolvedItemId = available[Math.floor(Math.random() * available.length)].id
           }
+        } else if (reward.itemId) {
+          resolvedItemId = reward.itemId
         }
         set(prev => ({
           diamonds: prev.diamonds + (reward.diamonds ?? 0),
@@ -117,6 +132,8 @@ export const useGameStore = create<GameState>()(
           if (available.length > 0) {
             resolvedItemId = available[Math.floor(Math.random() * available.length)].id
           }
+        } else if (reward.itemId) {
+          resolvedItemId = reward.itemId
         }
         set(prev => ({
           diamonds: prev.diamonds + (reward.diamonds ?? 0),
@@ -126,6 +143,8 @@ export const useGameStore = create<GameState>()(
           chestPending: false,
         }))
       },
+
+      triggerLevelUp: () => set({ levelUpPending: true }),
 
       dismissLevelUp: () => set({ levelUpPending: false }),
 
