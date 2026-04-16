@@ -229,11 +229,11 @@ export const useGameStore = create<GameState>()(
           return { showcaseSlots: slots }
         }),
 
-      unlockWorld: (worldId: string, cost: number) => {
+      unlockWorld: (worldId: string, cost: number, currency: 'diamonds' | 'emeralds' | 'stars' = 'diamonds') => {
         const s = get()
-        if (s.diamonds < cost || s.unlockedWorlds.includes(worldId)) return false
+        if (s[currency] < cost || s.unlockedWorlds.includes(worldId)) return false
         set({
-          diamonds: s.diamonds - cost,
+          [currency]: s[currency] - cost,
           unlockedWorlds: [...s.unlockedWorlds, worldId],
         })
         get().checkBadges()

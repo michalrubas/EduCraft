@@ -67,6 +67,7 @@ export interface World {
   taskTypes: TaskTypeEntry[]
   numberRange?: [number, number]
   unlockCost: number
+  unlockCurrency?: 'diamonds' | 'emeralds' | 'stars'
   comboMultiplier: number
   bgColor: string
   accentColor: string
@@ -166,5 +167,5 @@ export interface GameState {
   resetCombo: () => void
   buyItem: (item: ShopItem) => boolean
   addToShowcase: (itemId: string, slot: number) => void
-  unlockWorld: (worldId: string, cost: number) => boolean
+  unlockWorld: (worldId: string, cost: number, currency?: 'diamonds' | 'emeralds' | 'stars') => boolean
 }
