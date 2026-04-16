@@ -6,7 +6,8 @@
 //
 // Proto jsou dovednosti definovány strukturou operace, nikoli rozsahem čísel.
 
-import { MathSkillId, SkillState, StudentProgress, Task } from './types'
+import { MathSkillId, LangSkillId, SkillState, StudentProgress, Task } from './types'
+import { LANG_WORDS, isAsciiWord } from './langWords'
 
 function uid(): string {
   return Math.random().toString(36).slice(2, 9)
@@ -105,6 +106,65 @@ export const SKILL_TREE: SkillConfig[] = [
     prerequisites: [{ id: 'mul_medium', minMastery: 0.7 }],
   },
 ]
+
+export interface LangSkillConfig {
+  id: LangSkillId
+  name: string
+  icon: string
+  description: string
+  prerequisites: { id: LangSkillId; minMastery: number }[]
+}
+
+export const LANG_SKILL_TREE: LangSkillConfig[] = [
+  {
+    id: 'letter_missing_easy',
+    name: 'Chybějící písmeno (lehké)',
+    icon: '🔤',
+    description: '3–4 písmenná slova s chybějícím písmenem',
+    prerequisites: [],
+  },
+  {
+    id: 'letter_missing_hard',
+    name: 'Chybějící písmeno (těžké)',
+    icon: '🔤',
+    description: '5–6 písmenná slova s chybějícím písmenem',
+    prerequisites: [{ id: 'letter_missing_easy', minMastery: 0.6 }],
+  },
+  {
+    id: 'diacritics_basic',
+    name: 'Háčky a čárky (základní)',
+    icon: '✍️',
+    description: 'Správný tvar jednoduchých slov s diakritikou',
+    prerequisites: [],
+  },
+  {
+    id: 'diacritics_hard',
+    name: 'Háčky a čárky (pokročilé)',
+    icon: '✍️',
+    description: 'Složitější slova s diakritikou',
+    prerequisites: [{ id: 'diacritics_basic', minMastery: 0.6 }],
+  },
+  {
+    id: 'word_order_short',
+    name: 'Pořadí písmen (krátká)',
+    icon: '🔀',
+    description: 'Seřaď 3–4 písmena do slova',
+    prerequisites: [],
+  },
+  {
+    id: 'word_order_long',
+    name: 'Pořadí písmen (delší)',
+    icon: '🔀',
+    description: 'Seřaď 5–6 písmen do slova',
+    prerequisites: [{ id: 'word_order_short', minMastery: 0.6 }],
+  },
+]
+
+export const LANG_SKILL_DOMAINS: Record<'missing_letter' | 'diacritics' | 'word_order', LangSkillId[]> = {
+  missing_letter: ['letter_missing_easy', 'letter_missing_hard'],
+  diacritics:     ['diacritics_basic', 'diacritics_hard'],
+  word_order:     ['word_order_short', 'word_order_long'],
+}
 
 // Skupiny skillů per task type — aby math a mathMultiply nevybíraly ze sdílených skillů
 export const SKILL_DOMAINS: Record<'add_sub' | 'multiply', MathSkillId[]> = {
@@ -335,6 +395,78 @@ export function generateSkillTask(skillId: MathSkillId): Task {
 }
 
 // ---------------------------------------------------------------------------
+// Lang task generators
+// ---------------------------------------------------------------------------
+
+const VOWELS = ['A', 'E', 'I', 'O', 'U']
+const CONSONANTS = ['B', 'D', 'K', 'L', 'M', 'N', 'P', 'R', 'S', 'T', 'V', 'Z']
+
+function genMissingLetter(skillId: LangSkillId): Task {
+  const diff = skillId === 'letter_missing_easy' ? 'easy' : 'hard'
+  const pool = LANG_WORDS.filter(w => isAsciiWord(w.word) && w.difficulty === diff)
+  const word = pool[Math.floor(Math.random() * pool.length)]
+  const letters = word.word.toUpperCase().split('')
+  const pos = Math.floor(Math.random() * letters.length)
+  const correct = letters[pos]
+  const question = letters.map((l, i) => i === pos ? '_' : l).join('')
+  const letterPool = VOWELS.includes(correct) ? VOWELS : CONSONANTS
+  const wrongs = shuffle(letterPool.filter(l => l !== correct)).slice(0, 3)
+  return {
+    id: uid(), type: 'missingLetter', skillId,
+    question,
+    options: shuffle([correct, ...wrongs]),
+    correctAnswer: correct,
+  }
+}
+
+function genDiacritics(skillId: LangSkillId): Task {
+  const diff = skillId === 'diacritics_basic' ? 'easy' : 'hard'
+  const pool = LANG_WORDS.filter(w => w.diacritics && w.difficulty === diff)
+  const word = pool[Math.floor(Math.random() * pool.length)]
+  const { correct, wrong } = word.diacritics!
+  return {
+    id: uid(), type: 'diacritics', skillId,
+    question: 'Správný tvar?',
+    options: shuffle([correct, ...wrong]),
+    correctAnswer: correct,
+  }
+}
+
+function genWordOrder(skillId: LangSkillId): Task {
+  const diff = skillId === 'word_order_short' ? 'easy' : 'hard'
+  const pool = LANG_WORDS.filter(w => isAsciiWord(w.word) && w.difficulty === diff)
+  const word = pool[Math.floor(Math.random() * pool.length)]
+  const correct = word.word.toUpperCase()
+  const letters = correct.split('')
+  let shuffled = shuffle([...letters])
+  let attempts = 0
+  while (shuffled.join('') === correct && attempts < 5) {
+    shuffled = shuffle([...letters])
+    attempts++
+  }
+  return {
+    id: uid(), type: 'wordOrder', skillId,
+    question: 'Seřaď písmena do slova',
+    letters: shuffled,
+    correctAnswer: correct,
+  }
+}
+
+export function generateLangTask(skillId: LangSkillId): Task {
+  switch (skillId) {
+    case 'letter_missing_easy':
+    case 'letter_missing_hard':
+      return genMissingLetter(skillId)
+    case 'diacritics_basic':
+    case 'diacritics_hard':
+      return genDiacritics(skillId)
+    case 'word_order_short':
+    case 'word_order_long':
+      return genWordOrder(skillId)
+  }
+}
+
+// ---------------------------------------------------------------------------
 // ZPD výběr dovednosti
 // ---------------------------------------------------------------------------
 
@@ -361,6 +493,35 @@ export function selectSkill(progress: StudentProgress, domain: 'add_sub' | 'mult
   }
 
   // Záloha: nejméně zvládnutá odemčená dovednost
+  return [...unlocked].sort((a, b) => progress[a.id].mastery - progress[b.id].mastery)[0].id
+}
+
+export function selectLangSkill(
+  progress: StudentProgress,
+  domain: 'missing_letter' | 'diacritics' | 'word_order',
+): LangSkillId {
+  const domainIds = LANG_SKILL_DOMAINS[domain]
+  const unlocked = LANG_SKILL_TREE.filter(s => domainIds.includes(s.id) && progress[s.id]?.unlocked)
+  const fallbacks: Record<typeof domain, LangSkillId> = {
+    missing_letter: 'letter_missing_easy',
+    diacritics:     'diacritics_basic',
+    word_order:     'word_order_short',
+  }
+  if (unlocked.length === 0) return fallbacks[domain]
+
+  const mastered = unlocked.filter(s => progress[s.id].mastery > 0.75)
+  if (mastered.length > 0 && Math.random() < 0.25) {
+    return mastered[Math.floor(Math.random() * mastered.length)].id
+  }
+
+  const zpd = unlocked.filter(s => {
+    const m = progress[s.id].mastery
+    return m >= 0.2 && m <= 0.75
+  })
+  if (zpd.length > 0) {
+    return zpd[Math.floor(Math.random() * zpd.length)].id
+  }
+
   return [...unlocked].sort((a, b) => progress[a.id].mastery - progress[b.id].mastery)[0].id
 }
 
@@ -394,6 +555,17 @@ export function checkUnlocks(progress: StudentProgress): StudentProgress {
     }
   }
 
+  for (const skill of LANG_SKILL_TREE) {
+    if (next[skill.id]?.unlocked) continue
+    const prereqsMet = skill.prerequisites.every(
+      p => (next[p.id]?.mastery ?? 0) >= p.minMastery
+    )
+    if (prereqsMet) {
+      next[skill.id] = { ...(next[skill.id] ?? { mastery: 0, unlocked: false, attempts: 0, lastPracticed: 0 }), unlocked: true }
+      updated = true
+    }
+  }
+
   return updated ? next : progress
 }
 
@@ -404,12 +576,10 @@ export function checkUnlocks(progress: StudentProgress): StudentProgress {
 export function createInitialProgress(): StudentProgress {
   const progress: Partial<StudentProgress> = {}
   for (const skill of SKILL_TREE) {
-    progress[skill.id] = {
-      mastery: 0,
-      unlocked: skill.prerequisites.length === 0,
-      attempts: 0,
-      lastPracticed: 0,
-    } satisfies SkillState
+    progress[skill.id] = { mastery: 0, unlocked: skill.prerequisites.length === 0, attempts: 0, lastPracticed: 0 } satisfies SkillState
+  }
+  for (const skill of LANG_SKILL_TREE) {
+    progress[skill.id] = { mastery: 0, unlocked: skill.prerequisites.length === 0, attempts: 0, lastPracticed: 0 } satisfies SkillState
   }
   return progress as StudentProgress
 }
@@ -429,7 +599,7 @@ export function applyMasteryDecay(progress: StudentProgress, now = Date.now()): 
   let changed = false
   const next = { ...progress }
 
-  for (const skillId of Object.keys(progress) as MathSkillId[]) {
+  for (const skillId of Object.keys(progress) as (MathSkillId | LangSkillId)[]) {
     const skill = progress[skillId]
     if (!skill.unlocked) continue
     const last = skill.lastPracticed ?? 0
