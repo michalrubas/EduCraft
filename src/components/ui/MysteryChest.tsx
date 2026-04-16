@@ -4,6 +4,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { WheelReward } from '../../data/types'
 import { playSound } from '../../audio/sounds'
 import { CURRENCY_ICONS } from '../../data/config'
+import { Icon } from './Icon'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 
@@ -165,11 +166,11 @@ export function MysteryChest({ onCollect }: Props) {
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}
         >
           <motion.div
-            style={{ fontSize: 72, lineHeight: 1, filter: `drop-shadow(0 0 28px ${tier.color})` }}
+            style={{ lineHeight: 1, filter: `drop-shadow(0 0 28px ${tier.color})` }}
             animate={{ rotate: [0, -12, 12, -6, 6, 0] }}
             transition={{ delay: 0.15, duration: 0.5 }}
           >
-            {bigIcon}
+            <Icon src={bigIcon} size={72} />
           </motion.div>
           <motion.p
             style={{ fontSize: 30, fontWeight: 800, color: tier.color, fontFamily: 'inherit', textAlign: 'center', letterSpacing: 2 }}

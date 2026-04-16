@@ -7,6 +7,7 @@ import { playSound } from '../../audio/sounds'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 import { CURRENCY_ICONS } from '../../data/config'
+import { Icon } from './Icon'
 
 interface Props {
   onCollect: (reward: WheelReward) => void
@@ -144,11 +145,11 @@ export function LuckyWheel({ onCollect }: Props) {
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}
           >
             <motion.div
-              style={{ fontSize: 72, lineHeight: 1, filter: 'drop-shadow(0 0 24px #ffd700)' }}
+              style={{ lineHeight: 1, filter: 'drop-shadow(0 0 24px #ffd700)' }}
               animate={{ rotate: [0, -12, 12, -6, 6, 0] }}
               transition={{ delay: 0.25, duration: 0.55 }}
             >
-              {bigIcon}
+              <Icon src={bigIcon} size={72} />
             </motion.div>
             <motion.p
               style={{ fontSize: 30, fontWeight: 800, color: '#ffd700', fontFamily: 'inherit', textAlign: 'center', letterSpacing: 2 }}
