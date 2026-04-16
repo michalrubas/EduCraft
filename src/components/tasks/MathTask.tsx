@@ -5,9 +5,9 @@ import { Task } from '../../data/types'
 interface Props { task: Task; onAnswer: (a: number | string) => void }
 
 export function MathTask({ task, onAnswer }: Props) {
-  const [selected, setSelected] = useState<number | null>(null)
+  const [selected, setSelected] = useState<number | string | null>(null)
 
-  function handleSelect(opt: number) {
+  function handleSelect(opt: number | string) {
     setSelected(opt)
     setTimeout(() => { setSelected(null); onAnswer(opt) }, 300)
   }
