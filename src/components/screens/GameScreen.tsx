@@ -15,7 +15,7 @@ import { shouldTriggerWheel } from '../../hooks/useLuckyWheel'
 import { SkillDebugPanel } from '../dev/SkillDebugPanel'
 
 export function GameScreen() {
-  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, triggerWheel, collectWheelReward, chestPending, triggerChest, collectChestReward, updateSkillMastery } = useGameStore()
+  const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, totalCorrect, triggerWheel, collectWheelReward, chestPending, triggerChest, collectChestReward, updateSkillMastery } = useGameStore()
   const worldId = currentWorldId ?? 'forest'
   const world = getWorld(worldId)
   const { adaptedRange, recordCorrect, recordIncorrect } = useAdaptiveDifficulty(
@@ -74,7 +74,7 @@ export function GameScreen() {
       const delay = REWARD_SCREEN_DURATION + 200
       if (shouldTriggerWheel(newSession, wheelSpinsToday, newCombo === 10)) {
         setTimeout(triggerWheel, delay)
-      } else if (newSession % 15 === 0) {
+      } else if ((totalCorrect + 1) % 15 === 0) {
         setTimeout(triggerChest, delay)
       }
     } else {
