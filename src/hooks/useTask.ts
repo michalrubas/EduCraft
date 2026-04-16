@@ -5,7 +5,7 @@ import { TASK_GENERATORS } from '../data/tasks'
 import { TASKS_BEFORE_EASY } from '../data/config'
 import { getWorld } from '../data/worlds'
 import { useGameStore } from '../store/gameStore'
-import { selectSkill, generateSkillTask } from '../data/skills'
+import { selectSkill, generateSkillTask, selectLangSkill, generateLangTask } from '../data/skills'
 
 // Vybere typ úkolu podle vah. Typy bez váhy mají implicitně weight: 1.
 // Parametr `exclude` slouží k vynechání posledního typu (pro pestrost).
@@ -42,8 +42,8 @@ export function useTask(worldId: string, rangeOverride?: [number, number]): UseT
     if (!world) throw new Error(`World "${worldId}" not found`)
     taskCountRef.current++
 
-    // Every TASKS_BEFORE_EASY tasks, insert an easier one to prevent frustration
-    if (taskCountRef.current % TASKS_BEFORE_EASY === 0) {
+    // Easy-task insert only for math worlds (lang worlds have no numberRange)
+    if (taskCountRef.current % TASKS_BEFORE_EASY === 0 && world.numberRange) {
       const easyRange: [number, number] = [
         effectiveRange[0],
         Math.ceil((effectiveRange[0] + effectiveRange[1]) / 2),
@@ -65,6 +65,15 @@ export function useTask(worldId: string, rangeOverride?: [number, number]): UseT
     if (chosen === 'mathMultiply') {
       const skillId = selectSkill(studentProgress, 'multiply')
       return generateSkillTask(skillId)
+    }
+    if (chosen === 'missingLetter') {
+      return generateLangTask(selectLangSkill(studentProgress, 'missing_letter'))
+    }
+    if (chosen === 'diacritics') {
+      return generateLangTask(selectLangSkill(studentProgress, 'diacritics'))
+    }
+    if (chosen === 'wordOrder') {
+      return generateLangTask(selectLangSkill(studentProgress, 'word_order'))
     }
 
     return TASK_GENERATORS[chosen](effectiveRange, world.biome)
