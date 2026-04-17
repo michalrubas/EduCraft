@@ -59,22 +59,29 @@ export function getOrCreateChildId(): string {
   return id
 }
 
+async function insertSnapshot(childId: string, state: GameState) {
+  if (!supabase) return
+  const { error } = await supabase.from('child_snapshots').insert({
+    child_id: childId,
+    snapshot: serializeSnapshot(state),
+  })
+  if (error && import.meta.env.DEV) console.error('[useSupabaseSync] insert failed', error)
+}
+
 export function useSupabaseSync() {
   useEffect(() => {
-    if (!import.meta.env.VITE_SUPABASE_URL) return
+    if (!supabase) return
 
     const childId = getOrCreateChildId()
+
+    // Initial snapshot on mount — ensures child ID exists in DB immediately
+    insertSnapshot(childId, useGameStore.getState())
+
     let timer: ReturnType<typeof setTimeout> | null = null
 
     const unsubscribe = useGameStore.subscribe((state) => {
       if (timer) clearTimeout(timer)
-      timer = setTimeout(async () => {
-        const { error } = await supabase.from('child_snapshots').insert({
-          child_id: childId,
-          snapshot: serializeSnapshot(state),
-        })
-        if (error && import.meta.env.DEV) console.error('[useSupabaseSync] insert failed', error)
-      }, SYNC_DEBOUNCE_MS)
+      timer = setTimeout(() => insertSnapshot(childId, state), SYNC_DEBOUNCE_MS)
     })
 
     return () => {

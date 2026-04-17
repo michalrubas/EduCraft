@@ -17,7 +17,7 @@ export default function ParentDashboard() {
   const [row, setRow] = useState<RowData | null>(null)
 
   async function load() {
-    if (!input.trim()) return
+    if (!input.trim() || !supabase) return
     setStatus('loading')
     const { data, error } = await supabase
       .from('child_snapshots')
