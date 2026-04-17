@@ -1,5 +1,6 @@
 // src/App.tsx
 import { useCallback } from 'react'
+import { useSupabaseSync } from './hooks/useSupabaseSync'
 import { AnimatePresence, motion, type Transition } from 'framer-motion'
 import { useGameStore } from './store/gameStore'
 import { HomeScreen } from './components/screens/HomeScreen'
@@ -22,7 +23,8 @@ const SLIDE = {
 }
 
 export default function App() {
-  const { 
+  useSupabaseSync()
+  const {
     currentScreen, currentWorldId, navigateTo, 
     wheelPending, chestPending, levelUpPending, badgePending, 
     collectWheelReward, collectChestReward, combo, resetCombo 
