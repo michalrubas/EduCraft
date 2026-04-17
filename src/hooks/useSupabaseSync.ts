@@ -3,7 +3,7 @@ import { useGameStore } from '../store/gameStore'
 import { supabase } from '../lib/supabase'
 import type { GameState } from '../data/types'
 
-const CHILD_ID_KEY = 'educraft-child-id'
+export const CHILD_ID_KEY = 'educraft-child-id'
 const SYNC_DEBOUNCE_MS = 60_000
 
 export type SnapshotPayload = {
@@ -69,10 +69,11 @@ export function useSupabaseSync() {
     const unsubscribe = useGameStore.subscribe((state) => {
       if (timer) clearTimeout(timer)
       timer = setTimeout(async () => {
-        await supabase.from('child_snapshots').insert({
+        const { error } = await supabase.from('child_snapshots').insert({
           child_id: childId,
           snapshot: serializeSnapshot(state),
         })
+        if (error && import.meta.env.DEV) console.error('[useSupabaseSync] insert failed', error)
       }, SYNC_DEBOUNCE_MS)
     })
 

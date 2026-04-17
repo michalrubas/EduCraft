@@ -48,6 +48,7 @@ describe('serializeSnapshot', () => {
   it('includes all 18 expected keys', () => {
     const result = serializeSnapshot(mockState)
     const keys = Object.keys(result)
+    expect(keys).toHaveLength(18)
     expect(keys).toContain('level')
     expect(keys).toContain('xp')
     expect(keys).toContain('combo')
