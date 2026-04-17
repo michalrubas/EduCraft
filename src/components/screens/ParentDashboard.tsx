@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
 import type { SnapshotPayload } from '../../hooks/useSupabaseSync'
+import { SKILL_TREE, LANG_SKILL_TREE } from '../../data/skills'
+
+const ALL_SKILLS = [...SKILL_TREE, ...LANG_SKILL_TREE]
+const SKILL_META = Object.fromEntries(ALL_SKILLS.map(s => [s.id, s]))
 
 const PARENT_CHILD_ID_KEY = 'educraft-parent-child-id'
 
@@ -99,18 +103,36 @@ export default function ParentDashboard() {
 
           <section>
             <h2>Dovednosti</h2>
-            {Object.entries(s.studentProgress).map(([skillId, skill]) => (
-              <div key={skillId} style={{ marginBottom: 6 }}>
-                <span style={{ display: 'inline-block', width: 200, fontSize: 13 }}>{skillId}</span>
-                <span style={{ display: 'inline-block', width: 60, fontSize: 13 }}>
-                  {Math.round(skill.mastery * 100)} %
-                </span>
-                <div style={{ display: 'inline-block', width: 120, height: 8, background: '#eee', borderRadius: 4 }}>
-                  <div style={{ width: `${skill.mastery * 100}%`, height: '100%', background: skill.mastery > 0.75 ? '#4caf50' : skill.mastery > 0.2 ? '#ff9800' : '#f44336', borderRadius: 4 }} />
+            <p style={{ fontSize: 12, color: 'gray', margin: '0 0 12px' }}>
+              Mastery 0–100 %: pod 20 % = začátečník, 20–75 % = aktivní učení (ZPD), nad 75 % = zvládnuto. Mastery bez praxe postupně klesá.
+            </p>
+            {Object.entries(s.studentProgress).map(([skillId, skill]) => {
+              const meta = SKILL_META[skillId]
+              const pct = Math.round(skill.mastery * 100)
+              const barColor = pct >= 75 ? '#4caf50' : pct >= 20 ? '#ff9800' : '#f44336'
+              const lastPracticed = skill.lastPracticed
+                ? new Date(skill.lastPracticed).toLocaleDateString('cs-CZ')
+                : 'nikdy'
+              return (
+                <div key={skillId} style={{ marginBottom: 12, padding: '8px 0', borderBottom: '1px solid #eee' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+                    {meta && <span>{meta.icon}</span>}
+                    <strong style={{ fontSize: 13 }}>{meta?.name ?? skillId}</strong>
+                    {!skill.unlocked && <span style={{ fontSize: 11, color: '#aaa' }}>🔒 zamčeno</span>}
+                  </div>
+                  {meta && <div style={{ fontSize: 11, color: 'gray', marginBottom: 4 }}>{meta.description}</div>}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ flex: 1, height: 8, background: '#eee', borderRadius: 4 }}>
+                      <div style={{ width: `${pct}%`, height: '100%', background: barColor, borderRadius: 4, transition: 'width 0.3s' }} />
+                    </div>
+                    <span style={{ fontSize: 12, minWidth: 36, textAlign: 'right' }}>{pct} %</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: '#aaa', marginTop: 2 }}>
+                    Naposledy: {lastPracticed} · Pokusů: {skill.attempts}
+                  </div>
                 </div>
-                {!skill.unlocked && <span style={{ fontSize: 11, color: '#aaa', marginLeft: 8 }}>🔒</span>}
-              </div>
-            ))}
+              )
+            })}
           </section>
 
           <section>
