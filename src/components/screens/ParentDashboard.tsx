@@ -63,11 +63,11 @@ export default function ParentDashboard() {
 
       {status === 'loaded' && s && (
         <div>
-          <p style={{ color: 'gray', fontSize: 12 }}>
+          <div style={{ color: 'gray', fontSize: 12, marginBottom: 8 }}>
             Poslední sync: {new Date(row!.synced_at).toLocaleString('cs-CZ')}
             {' '}
             <button onClick={load} style={{ fontSize: 12, padding: '2px 8px' }}>↻ Obnovit</button>
-          </p>
+          </div>
 
           <section>
             <h2>Postup</h2>
