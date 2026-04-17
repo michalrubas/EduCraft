@@ -1,4 +1,5 @@
 // src/components/screens/ProfileScreen.tsx
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
@@ -6,10 +7,20 @@ import { WORLDS } from '../../data/worlds'
 import { SKILL_TREE } from '../../data/skills'
 import { BADGES } from '../../data/badges'
 import { HUD } from '../hud/HUD'
+import { CHILD_ID_KEY } from '../../hooks/useSupabaseSync'
 
 export function ProfileScreen() {
   const { totalCorrect, totalAttempts, maxCombo, sessionsPlayed, unlockedWorlds, ownedItems, showcaseSlots, studentProgress, navigateTo, level, xp, unlockedBadges } = useGameStore()
   const accuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0
+  const childId = localStorage.getItem(CHILD_ID_KEY) ?? '—'
+  const [copied, setCopied] = useState(false)
+
+  function copyChildId() {
+    navigator.clipboard.writeText(childId).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
 
   return (
     <div className="screen" style={{ background: 'var(--mc-bg)' }}>
@@ -30,6 +41,17 @@ export function ProfileScreen() {
         <div className="stat-row"><span className="label">Odehraných sezení</span><span className="value">{sessionsPlayed}</span></div>
         <div className="stat-row"><span className="label">Odemčené světy</span><span className="value">{unlockedWorlds.length} / {WORLDS.length}</span></div>
         <div className="stat-row"><span className="label">Sbírka</span><span className="value">{ownedItems.length} / {SHOP_ITEMS.length}</span></div>
+
+        <div className="section-title" style={{ marginTop: 8 }}>👨‍👩‍👧 Rodičovský kód</div>
+        <div style={{ padding: '8px 12px 12px', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontFamily: 'monospace', fontSize: 12, color: 'var(--mc-muted)', flex: 1, wordBreak: 'break-all' }}>{childId}</span>
+          <button
+            onClick={copyChildId}
+            style={{ padding: '6px 12px', fontSize: 12, background: copied ? 'var(--mc-green)' : 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 6, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' }}
+          >
+            {copied ? '✓ Zkopírováno' : '📋 Kopírovat'}
+          </button>
+        </div>
 
         <div className="section-title" style={{ marginTop: 8 }}>🖼️ Moje vitrína</div>
         <motion.div
