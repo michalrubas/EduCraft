@@ -43,7 +43,7 @@ export default function ParentDashboard() {
   const s = row?.snapshot
 
   return (
-    <div style={{ fontFamily: 'monospace', padding: 24, maxWidth: 600, margin: '0 auto' }}>
+    <div style={{ fontFamily: 'monospace', padding: 24, maxWidth: 600, margin: '0 auto', height: '100%', overflowY: 'auto', boxSizing: 'border-box' }}>
       <h1>Rodičovský dashboard</h1>
 
       <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
