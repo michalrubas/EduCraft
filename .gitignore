@@ -4,3 +4,6 @@ dist/
 .npm-cache/
 .playwright-mcp/
 screenshot-*.png
+.env
+.env.local
+.env.*.local
