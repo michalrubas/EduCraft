@@ -20,7 +20,7 @@ export type TaskType =
   | 'diacritics'
   | 'wordOrder'
 
-export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle'
+export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle' | 'graveyard'
 
 // Typ úkolu s volitelnou vahou. Bez váhy = rovnoměrné rozdělení.
 // Příklad: { type: 'math', weight: 3 } znamená 3× vyšší šanci než typ s weight: 1.
@@ -126,6 +126,7 @@ export interface GameState {
   stars: number
   unlockedWorlds: string[]
   ownedItems: string[]
+  shopPurchases: number
   showcaseSlots: (string | null)[]
   totalCorrect: number
   totalAttempts: number

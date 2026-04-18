@@ -3,7 +3,7 @@ import { useState, useRef } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { WheelReward } from '../../data/types'
 import { playSound } from '../../audio/sounds'
-import { CURRENCY_ICONS, CURRENCY_EMOJI } from '../../data/config'
+import { CURRENCY_ICONS } from '../../data/config'
 import { Icon } from './Icon'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
@@ -25,9 +25,9 @@ const CHEST_TIERS: Record<ChestType, {
     color: '#cd7f32',
     bgColor: '#3d2010',
     rewards: [
-      { label: '💰 +5',  diamonds: 5 },
-      { label: '💰 +8',  diamonds: 8 },
-      { label: '💰 +12', diamonds: 12 },
+      { label: `${CURRENCY_ICONS.diamonds} +5`,  diamonds: 5 },
+      { label: `${CURRENCY_ICONS.diamonds} +8`,  diamonds: 8 },
+      { label: `${CURRENCY_ICONS.diamonds} +12`, diamonds: 12 },
     ],
   },
   silver: {
@@ -35,8 +35,8 @@ const CHEST_TIERS: Record<ChestType, {
     color: '#c0c0c0',
     bgColor: '#1e2030',
     rewards: [
-      { label: '💰 +20', diamonds: 20 },
-      { label: '💎 +1',  emeralds: 1 },
+      { label: `${CURRENCY_ICONS.diamonds} +20`, diamonds: 20 },
+      { label: `${CURRENCY_ICONS.emeralds} +1`,  emeralds: 1 },
       { label: '🎁 Předmět', itemId: 'random' },
     ],
   },
@@ -45,9 +45,9 @@ const CHEST_TIERS: Record<ChestType, {
     color: '#ffd700',
     bgColor: '#2d2000',
     rewards: [
-      { label: '💎 +2',  emeralds: 2 },
-      { label: '💎 +3',  emeralds: 3 },
-      { label: '💰 +30', diamonds: 30 },
+      { label: `${CURRENCY_ICONS.emeralds} +2`,  emeralds: 2 },
+      { label: `${CURRENCY_ICONS.emeralds} +3`,  emeralds: 3 },
+      { label: `${CURRENCY_ICONS.diamonds} +30`, diamonds: 30 },
       { label: '🎁 Předmět', itemId: 'random' },
     ],
   },
@@ -56,9 +56,9 @@ const CHEST_TIERS: Record<ChestType, {
     color: '#5de8fc',
     bgColor: '#002028',
     rewards: [
-      { label: '💎 +5',  emeralds: 5 },
-      { label: '⬛ +1',  stars: 1 },
-      { label: '💰 +50', diamonds: 50 },
+      { label: `${CURRENCY_ICONS.emeralds} +5`,  emeralds: 5 },
+      { label: '+1',                             stars: 1 },
+      { label: `${CURRENCY_ICONS.diamonds} +50`, diamonds: 50 },
       { label: '🎁 Vzácný předmět', itemId: 'random' },
     ],
   },
@@ -103,7 +103,7 @@ export function MysteryChest({ onCollect }: Props) {
           const resolved = available[Math.floor(Math.random() * available.length)]
           picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
         } else {
-          picked = { ...picked, itemId: undefined, diamonds: 50, label: `${CURRENCY_EMOJI.diamonds} +50 (Náhrada za vše)` }
+          picked = { ...picked, itemId: undefined, diamonds: 50, label: `${CURRENCY_ICONS.diamonds} +50 (Náhrada za vše)` }
         }
       }
       setReward(picked)
@@ -187,9 +187,9 @@ export function MysteryChest({ onCollect }: Props) {
               const x = rect.left + rect.width / 2
               const y = rect.top + rect.height / 2
               const { spawnParticles } = useGameStore.getState()
-              if (reward?.diamonds) spawnParticles('💰', Math.min(reward.diamonds, 15), x, y)
-              if (reward?.emeralds) spawnParticles('💎', Math.min(reward.emeralds, 10), x, y)
-              if (reward?.stars) spawnParticles('⬛', Math.min(reward.stars, 5), x, y)
+              if (reward?.diamonds) spawnParticles(CURRENCY_ICONS.diamonds, Math.min(reward.diamonds, 15), x, y)
+              if (reward?.emeralds) spawnParticles(CURRENCY_ICONS.emeralds, Math.min(reward.emeralds, 10), x, y)
+              if (reward?.stars) spawnParticles(CURRENCY_ICONS.stars, Math.min(reward.stars, 5), x, y)
               onCollect(reward!)
             }}
             initial={{ opacity: 0 }}

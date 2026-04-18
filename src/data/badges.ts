@@ -53,7 +53,7 @@ export const BADGES: BadgeDefinition[] = [
     name: 'Nákupčí',
     description: 'Kup si svůj první předmět v obchodě.',
     icon: '🛍️',
-    condition: s => s.ownedItems.length > 1, // Začíná s jedním
+    condition: s => s.shopPurchases >= 1,
   },
   {
     id: 'world_explorer',

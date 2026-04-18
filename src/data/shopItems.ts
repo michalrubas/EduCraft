@@ -9,7 +9,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: 'bow',         name: 'Luk',            icon: '🏹', category: 'weapon', cost: { emeralds: 15 }, rarity: 'rare'      },
   { id: 'trident',     name: 'Trojzubec',      icon: '🔱', category: 'weapon', cost: { diamonds: 60 }, rarity: 'epic'      },
   { id: 'scary_face',  name: 'Scary Face',    icon: '🫥', category: 'weapon',   cost: { stars: 30, diamonds: 500 }, rarity: 'legendary' }, 
-  { id: 'crossbow',    name: 'Kuš',           icon: '/assets/items/icons/bow_bronze_arrow.png', category: 'weapon',   cost: { stars: 100 }, rarity: 'epic' },
+  //{ id: 'crossbow',    name: 'Kuš',           icon: '/assets/items/icons/bow_bronze_arrow.png', category: 'weapon',   cost: { stars: 100 }, rarity: 'epic' },
 
   // Armor
   { id: 'shield',      name: 'Štít',           icon: '🛡️', category: 'armor',  cost: { diamonds: 35 }, rarity: 'common'    },
@@ -30,4 +30,16 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: 'blue_potion',  name: 'Modrý lektvar',      icon: '/assets/items/potions/pt2.png', category: 'rare',   cost: { diamonds: 100 },  rarity: 'rare' },
   { id: 'green_potion',  name: 'Zelený lektvar',    icon: '/assets/items/potions/pt3.png', category: 'rare',   cost: { diamonds: 150 },  rarity: 'rare' },
   { id: 'yellow_potion',  name: 'Žlutý lektvar',    icon: '/assets/items/potions/pt4.png', category: 'rare',   cost: { diamonds: 200 },  rarity: 'rare' },
+  
+  // Legendary Staves
+  { id: 'staff_mystic', name: 'Mystická hůl', icon: '/assets/items/icons/staff_mystic.png', category: 'weapon', cost: { stars: 25, diamonds: 500 }, rarity: 'legendary' },
+  { id: 'staff_fire',   name: 'Hůl věčného ohně', icon: '/assets/items/icons/staff_fire.png', category: 'weapon', cost: { stars: 15, diamonds: 300 }, rarity: 'epic' },
+  { id: 'staff_water',  name: 'Hůl mrazivé vody', icon: '/assets/items/icons/staff_water.png', category: 'weapon', cost: { emeralds: 50, diamonds: 200 }, rarity: 'epic' },
+  { id: 'staff_wind',   name: 'Hůl divokého větru', icon: '/assets/items/icons/staff_wind.png', category: 'weapon', cost: { emeralds: 50, diamonds: 200 }, rarity: 'epic' },
+
+  // Legendary Items
+  { id: 'elytra',       name: 'Vesmírná křídla', icon: '🌌', category: 'rare', cost: { stars: 50 }, rarity: 'legendary' },
+  { id: 'totem',        name: 'Totem nesmrtelnosti', icon: '🗿', category: 'rare', cost: { stars: 40 }, rarity: 'legendary' },
+  { id: 'netherite_crown', name: 'Netheritová koruna', icon: '👑', category: 'trophy', cost: { diamonds: 1000, emeralds: 20 }, rarity: 'legendary' },
+  { id: 'diamond_cape',  name: 'Diamantová kápě', icon: '🧥', category: 'armor', cost: { diamonds: 400, emeralds: 10 }, rarity: 'epic' },
 ]

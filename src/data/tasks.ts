@@ -13,6 +13,7 @@ const BIOME_OBJECTS: Record<Biome, string[]> = {
   end:    ['💹', '🔅', '❗️', '❓', '🔱', '⻰'],
   village: ['🏠', '🌻', '🐓', '🌾', '🪵', '🐄'],
   castle:  ['🏰', '⚔️', '🛡️', '🗝️', '👑', '🐉'],
+  graveyard: ['💀', '👻', '🕷️', '🦇', '🪦', '🌑'],
 }
 
 function ri(min: number, max: number): number {

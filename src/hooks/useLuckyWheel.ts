@@ -1,16 +1,16 @@
 // src/hooks/useLuckyWheel.ts
 import type { WheelReward } from '../data/types'
-import { CURRENCY_EMOJI } from '../data/config'
+import { CURRENCY_ICONS } from '../data/config'
 
 export type { WheelReward }
 
 export const WHEEL_REWARDS: WheelReward[] = [
-  { label: `${CURRENCY_EMOJI.diamonds} +5`,  diamonds: 5 },
+  { label: `${CURRENCY_ICONS.diamonds} +5`,  diamonds: 5 },
   { label: '🎁 ?',                            itemId: 'random' },
-  { label: `${CURRENCY_EMOJI.diamonds} +15`, diamonds: 15 },
-  { label: `${CURRENCY_EMOJI.stars} +3`,     stars: 3 },
-  { label: `${CURRENCY_EMOJI.emeralds} +4`,  emeralds: 4 },
-  { label: `${CURRENCY_EMOJI.stars} +1`,     stars: 1 },
+  { label: `${CURRENCY_ICONS.diamonds} +25`, diamonds: 25 },
+  { label: '+3',                              stars: 3 },
+  { label: `${CURRENCY_ICONS.emeralds} +4`,  emeralds: 4 },
+  { label: '+1',                              stars: 1 },
   { label: '🎁 ?',                            itemId: 'random' },
 ]
 

@@ -21,15 +21,7 @@ export const REWARD_SCREEN_DURATION = 2000
 export const CURRENCY_ICONS = {
   diamonds: '💰',
   emeralds: '💎',
-  //stars: '⬛',
   stars: '/assets/planets/planet1.png',
-}
-
-// Pro SVG text a string interpolaci — vždy emoji
-export const CURRENCY_EMOJI: Record<keyof typeof CURRENCY_ICONS, string> = {
-  diamonds: '💰',
-  emeralds: '💎',
-  stars: '⬛',
 }
 
 export function getComboLevel(combo: number): ComboLevel {

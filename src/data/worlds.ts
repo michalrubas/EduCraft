@@ -163,6 +163,26 @@ export const WORLDS: World[] = [
     accentColor: '#a0a0ff',
     story: 'Starý hrad skrývá tajné zprávy. Rozluštíš správný pravopis?',
   },
+  {
+    id: 'graveyard',
+    name: 'Hřbitov',
+    icon: '💀',
+    blockColor: '#4a3060',
+    biome: 'graveyard',
+    taskTypes: [
+      { type: 'math', weight: 4 },
+      { type: 'missingLetter', weight: 3 },
+      { type: 'compare', weight: 2 },
+      { type: 'wordOrder', weight: 2 },
+    ],
+    numberRange: [10, 50],
+    unlockCost: 1000,
+    unlockCurrency: 'emeralds',
+    comboMultiplier: 2.1,
+    bgColor: '#0d0014',
+    accentColor: '#cc44ff',
+    story: 'Kostra tě pronásleduje po hřbitově! Vyřeš záhady a přežij do svítání.',
+  },
 ]
 
 export function getWorld(id: string): World | undefined {

@@ -6,7 +6,7 @@ import { WHEEL_REWARDS } from '../../hooks/useLuckyWheel'
 import { playSound } from '../../audio/sounds'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
-import { CURRENCY_ICONS, CURRENCY_EMOJI } from '../../data/config'
+import { CURRENCY_ICONS } from '../../data/config'
 import { Icon } from './Icon'
 
 interface Props {
@@ -25,7 +25,7 @@ export function LuckyWheel({ onCollect }: Props) {
   function spin() {
     if (spinning || resultReward !== null) return
     const pickedIdx = Math.floor(Math.random() * WHEEL_REWARDS.length)
-    const targetAngle = 360 * 5 + (360 - pickedIdx * segmentAngle - segmentAngle / 2)
+    const targetAngle = 360 * 10 + (360 - pickedIdx * segmentAngle - segmentAngle / 2)
     setSpinning(true)
     setRotation(prev => prev + targetAngle)
     playSound.wheel()
@@ -40,11 +40,11 @@ export function LuckyWheel({ onCollect }: Props) {
           const resolved = available[Math.floor(Math.random() * available.length)]
           picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
         } else {
-          picked = { ...picked, itemId: undefined, diamonds: 50, label: `${CURRENCY_EMOJI.diamonds} +50 (Náhrada za vše)` }
+          picked = { ...picked, itemId: undefined, diamonds: 50, label: `${CURRENCY_ICONS.diamonds} +50 (Náhrada za vše)` }
         }
       }
       setResultReward(picked)
-    }, 2200)
+    }, 4600)
   }
 
   return (
@@ -71,7 +71,7 @@ export function LuckyWheel({ onCollect }: Props) {
 
         <motion.div
           animate={{ rotate: rotation }}
-          transition={{ duration: 2.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+          transition={{ duration: 4.5, ease: [0.0, 0.0, 0.2, 1.0] }}
           style={{
             width: 240, height: 240,
             borderRadius: '50%',
@@ -91,6 +91,18 @@ export function LuckyWheel({ onCollect }: Props) {
               const midAngle = ((i + 0.5) * segmentAngle - 90) * (Math.PI / 180)
               const tx = 50 + 32 * Math.cos(midAngle)
               const ty = 50 + 32 * Math.sin(midAngle)
+              const rotate = `rotate(${i * segmentAngle + segmentAngle / 2}, ${tx}, ${ty})`
+
+              const segIcon = reward.diamonds ? CURRENCY_ICONS.diamonds
+                : reward.emeralds ? CURRENCY_ICONS.emeralds
+                : reward.stars ? CURRENCY_ICONS.stars
+                : null
+              const segAmount = reward.diamonds ? `+${reward.diamonds}`
+                : reward.emeralds ? `+${reward.emeralds}`
+                : reward.stars ? `+${reward.stars}`
+                : null
+              const isImg = segIcon?.startsWith('/')
+
               return (
                 <g key={i}>
                   <path
@@ -99,15 +111,20 @@ export function LuckyWheel({ onCollect }: Props) {
                     stroke="#0d1b0f"
                     strokeWidth="0.5"
                   />
-                  <text
-                    x={tx} y={ty}
-                    textAnchor="middle" dominantBaseline="middle"
-                    fontSize="8" fill="#fff"
-                    transform={`rotate(${i * segmentAngle + segmentAngle / 2}, ${tx}, ${ty})`}
-                    style={{ fontFamily: 'monospace' }}
-                  >
-                    {reward.label}
-                  </text>
+                  <g transform={rotate}>
+                    {segIcon && segAmount ? (
+                      isImg ? (
+                        <>
+                          <image href={segIcon} x={tx - 5} y={ty - 10} width="10" height="10" />
+                          <text x={tx} y={ty + 5} textAnchor="middle" dominantBaseline="middle" fontSize="6" fill="#fff" style={{ fontFamily: 'monospace' }}>{segAmount}</text>
+                        </>
+                      ) : (
+                        <text x={tx} y={ty} textAnchor="middle" dominantBaseline="middle" fontSize="8" fill="#fff" style={{ fontFamily: 'monospace' }}>{`${segIcon} ${segAmount}`}</text>
+                      )
+                    ) : (
+                      <text x={tx} y={ty} textAnchor="middle" dominantBaseline="middle" fontSize="8" fill="#fff" style={{ fontFamily: 'monospace' }}>{reward.label}</text>
+                    )}
+                  </g>
                 </g>
               )
             })}

@@ -25,6 +25,7 @@ export const useGameStore = create<GameState>()(
       stars: 0,
       unlockedWorlds: import.meta.env.DEV ? ['forest'] : ['forest'],
       ownedItems: ['sword_wood'],
+      shopPurchases: 0,
       showcaseSlots: Array<string | null>(SHOWCASE_SLOTS).fill(null),
       totalCorrect: 0,
       totalAttempts: 0,
@@ -217,6 +218,7 @@ export const useGameStore = create<GameState>()(
           emeralds: s.emeralds - emeralds,
           stars: s.stars - stars,
           ownedItems: [...s.ownedItems, item.id],
+          shopPurchases: s.shopPurchases + 1,
         })
         get().checkBadges()
         return true
@@ -266,7 +268,7 @@ export const useGameStore = create<GameState>()(
         for (const skill of LANG_SKILL_TREE) {
           langDefaults[skill.id] = { mastery: 0, unlocked: skill.prerequisites.length === 0, attempts: 0, lastPracticed: 0 }
         }
-        return { ...state, studentProgress: { ...langDefaults, ...existingProgress } }
+        return { ...state, studentProgress: { ...langDefaults, ...existingProgress }, shopPurchases: state.shopPurchases ?? 0 }
       },
     }
   ), { name: 'AdiCraft' })

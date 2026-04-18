@@ -5,7 +5,7 @@ import { TASK_GENERATORS } from '../data/tasks'
 import { TASKS_BEFORE_EASY } from '../data/config'
 import { getWorld } from '../data/worlds'
 import { useGameStore } from '../store/gameStore'
-import { selectSkill, generateSkillTask, selectLangSkill, generateLangTask } from '../data/skills'
+import { selectSkill, generateSkillTask, selectLangSkill, generateLangTask, SKILL_DOMAINS } from '../data/skills'
 
 // Vybere typ úkolu podle vah. Typy bez váhy mají implicitně weight: 1.
 // Parametr `exclude` slouží k vynechání posledního typu (pro pestrost).
@@ -63,7 +63,10 @@ export function useTask(worldId: string, rangeOverride?: [number, number]): UseT
       return generateSkillTask(skillId)
     }
     if (chosen === 'mathMultiply') {
-      const skillId = selectSkill(studentProgress, 'multiply')
+      const hasMultiply = SKILL_DOMAINS.multiply.some(id => studentProgress[id]?.unlocked)
+      const skillId = hasMultiply
+        ? selectSkill(studentProgress, 'multiply')
+        : selectSkill(studentProgress, 'add_sub')
       return generateSkillTask(skillId)
     }
     if (chosen === 'missingLetter') {
