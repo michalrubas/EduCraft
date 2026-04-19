@@ -1,6 +1,7 @@
 // src/data/runnerGenerators.ts
 // Runner task generators — one function per question category.
-// Each always returns exactly 3 options (RUNNER_CONFIG.laneCount).
+// Each always returns exactly 3 options. If you change RUNNER_CONFIG.laneCount,
+// update these generators manually (they do not read the config at runtime).
 
 import { Task } from './types'
 import { LANG_WORDS, isAsciiWord } from './langWords'
@@ -24,18 +25,18 @@ function shuffle<T>(arr: T[]): T[] {
 
 /** Generates arithmetic expression (add/subtract) with 3 answer choices. */
 export function generateRunnerMath(range: [number, number]): Task {
-  const [, max] = range
+  const [min, max] = range
   const isAdd = Math.random() > 0.4
   let question: string
   let correct: number
 
   if (isAdd) {
-    const a = ri(1, Math.max(1, Math.floor(max * 0.7)))
+    const a = ri(min, Math.max(min, Math.floor(max * 0.7)))
     const b = ri(1, Math.max(1, max - a))
     correct = a + b
     question = `${a} + ${b} = ?`
   } else {
-    const a = ri(2, max)
+    const a = ri(Math.max(min + 1, 2), max)
     const b = ri(1, a - 1)
     correct = a - b
     question = `${a} − ${b} = ?`
