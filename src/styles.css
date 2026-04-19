@@ -564,3 +564,77 @@ body {
 .gap-8 { gap: 8px; }
 .flex-col { display: flex; flex-direction: column; }
 .flex-center { display: flex; align-items: center; justify-content: center; }
+
+/* ── Runner task ── */
+.runner-track {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  padding: 8px 0;
+}
+
+.runner-wall {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(to right, rgba(255, 50, 50, 0.3), transparent);
+  border-left: 3px solid var(--mc-red);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 1;
+  animation: runner-wall-grow var(--runner-wall-dur) linear forwards;
+}
+
+.runner-wall--paused {
+  animation-play-state: paused;
+}
+
+@keyframes runner-wall-grow {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+.runner-lane {
+  flex: 1;
+  min-height: 60px;
+  background: #0d1e30;
+  border: 2px solid #1a3a5a;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.runner-lane:active:not([disabled]) { transform: scale(0.98); }
+.runner-lane.correct { border-color: var(--mc-green); background: #0d2010; }
+.runner-lane.wrong   { border-color: var(--mc-red);   background: #300d0d; }
+
+.runner-block {
+  position: absolute;
+  right: -90px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1a5a8a;
+  border: 2px solid #3a8abf;
+  border-radius: 4px;
+  padding: 6px 18px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  white-space: nowrap;
+  animation: runner-block-slide var(--runner-block-dur) linear var(--runner-block-delay) both;
+}
+
+@keyframes runner-block-slide {
+  0%   { right: -90px; }
+  18%  { right: 55%; }
+  82%  { right: 10%; }
+  100% { right: calc(100% + 90px); }
+}
