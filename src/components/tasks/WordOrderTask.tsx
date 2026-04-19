@@ -4,6 +4,9 @@ import { motion } from 'framer-motion'
 import { Task } from '../../data/types'
 import { useGameStore } from '../../store/gameStore'
 import { HINT_COST, CURRENCY_ICONS } from '../../data/config'
+import { Icon } from '../ui/Icon'
+
+const EMOJI_HINT_COST = 1
 
 interface Props { task: Task; onAnswer: (a: number | string) => void }
 
@@ -12,8 +15,11 @@ export function WordOrderTask({ task, onAnswer }: Props) {
   const [placed, setPlaced] = useState<string[]>([])
   const [usedIndices, setUsedIndices] = useState<number[]>([])
   const [hintUsed, setHintUsed] = useState(false)
+  const [emojiRevealed, setEmojiRevealed] = useState(false)
   const diamonds = useGameStore(s => s.diamonds)
+  const stars = useGameStore(s => s.stars)
   const spendDiamonds = useGameStore(s => s.spendDiamonds)
+  const spendStars = useGameStore(s => s.spendStars)
 
   function handlePick(idx: number) {
     if (usedIndices.includes(idx)) return
@@ -25,6 +31,12 @@ export function WordOrderTask({ task, onAnswer }: Props) {
     if (newPlaced.length === total) {
       setTimeout(() => onAnswer(newPlaced.join('')), 400)
     }
+  }
+
+  function handleEmojiHint() {
+    if (emojiRevealed || !task.emoji) return
+    if (!spendStars(EMOJI_HINT_COST)) return
+    setEmojiRevealed(true)
   }
 
   function handleHint() {
@@ -47,6 +59,18 @@ export function WordOrderTask({ task, onAnswer }: Props) {
   return (
     <div className="task-area">
       <p className="task-question">{task.question}</p>
+
+      {/* Emoji hint */}
+      {emojiRevealed && task.emoji && (
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+          style={{ fontSize: 52, textAlign: 'center', marginBottom: 12, lineHeight: 1 }}
+        >
+          {task.emoji}
+        </motion.div>
+      )}
 
       {/* Answer slots */}
       <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginBottom: 24, flexWrap: 'wrap' }}>
@@ -98,6 +122,24 @@ export function WordOrderTask({ task, onAnswer }: Props) {
         >
           ↺ Zpět
         </motion.button>
+
+        {task.emoji && !emojiRevealed && (
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={handleEmojiHint}
+            disabled={stars < EMOJI_HINT_COST}
+            style={{
+              padding: '8px 14px', fontSize: 13,
+              background: 'transparent',
+              border: '2px solid #888',
+              borderRadius: 4, color: '#aaa', cursor: stars < EMOJI_HINT_COST ? 'not-allowed' : 'pointer',
+              fontFamily: 'inherit',
+              opacity: stars < EMOJI_HINT_COST ? 0.4 : 1,
+            }}
+          >
+            🖼️ Obrázek (<Icon src={CURRENCY_ICONS.stars} size={14} /> -{EMOJI_HINT_COST})
+          </motion.button>
+        )}
 
         {!hintUsed && (
           <motion.button

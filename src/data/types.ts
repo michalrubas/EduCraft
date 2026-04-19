@@ -92,6 +92,7 @@ export interface Task {
   objects?: string[]
   dragTarget?: number
   letters?: string[]   // pro wordOrder: scramblovaná písmena
+  emoji?: string       // pro wordOrder: emoji nápověda k slovu
 }
 
 export type ItemCategory = 'weapon' | 'armor' | 'trophy' | 'decoration' | 'rare'
@@ -167,6 +168,7 @@ export interface GameState {
   answerIncorrect: () => void
   resetCombo: () => void
   spendDiamonds: (amount: number) => boolean
+  spendStars: (amount: number) => boolean
   buyItem: (item: ShopItem) => boolean
   addToShowcase: (itemId: string, slot: number) => void
   unlockWorld: (worldId: string, cost: number, currency?: 'diamonds' | 'emeralds' | 'stars') => boolean

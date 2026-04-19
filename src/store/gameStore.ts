@@ -215,6 +215,13 @@ export const useGameStore = create<GameState>()(
         return true
       },
 
+      spendStars: (amount: number) => {
+        const s = get()
+        if (s.stars < amount) return false
+        set({ stars: s.stars - amount })
+        return true
+      },
+
       buyItem: (item: ShopItem) => {
         const s = get()
         if (s.ownedItems.includes(item.id)) return false

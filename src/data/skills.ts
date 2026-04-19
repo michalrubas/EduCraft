@@ -449,6 +449,7 @@ function genWordOrder(skillId: LangSkillId): Task {
     question: 'Seřaď písmena do slova',
     letters: shuffled,
     correctAnswer: correct,
+    emoji: word.emoji,
   }
 }
 
