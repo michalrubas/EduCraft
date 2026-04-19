@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Task } from '../../data/types'
+import { useGameStore } from '../../store/gameStore'
+import { HINT_COST, CURRENCY_ICONS } from '../../data/config'
 
 interface Props { task: Task; onAnswer: (a: number | string) => void }
 
@@ -9,6 +11,9 @@ export function WordOrderTask({ task, onAnswer }: Props) {
   const total = (task.correctAnswer as string).length
   const [placed, setPlaced] = useState<string[]>([])
   const [usedIndices, setUsedIndices] = useState<number[]>([])
+  const [hintUsed, setHintUsed] = useState(false)
+  const diamonds = useGameStore(s => s.diamonds)
+  const spendDiamonds = useGameStore(s => s.spendDiamonds)
 
   function handlePick(idx: number) {
     if (usedIndices.includes(idx)) return
@@ -20,6 +25,17 @@ export function WordOrderTask({ task, onAnswer }: Props) {
     if (newPlaced.length === total) {
       setTimeout(() => onAnswer(newPlaced.join('')), 400)
     }
+  }
+
+  function handleHint() {
+    if (hintUsed || placed.length > 0) return
+    if (!spendDiamonds(HINT_COST)) return
+    const firstLetter = (task.correctAnswer as string)[0]
+    const idx = task.letters!.findIndex((l, i) => l === firstLetter && !usedIndices.includes(i))
+    if (idx === -1) return
+    setPlaced([firstLetter])
+    setUsedIndices([idx])
+    setHintUsed(true)
   }
 
   function handleRemoveLast() {
@@ -72,15 +88,35 @@ export function WordOrderTask({ task, onAnswer }: Props) {
         ))}
       </div>
 
-      <motion.button
-        className="pixel-btn"
-        onClick={handleRemoveLast}
-        disabled={placed.length === 0}
-        whileTap={{ scale: 0.95 }}
-        style={{ opacity: placed.length === 0 ? 0.4 : 1 }}
-      >
-        ↺ Zpět
-      </motion.button>
+      <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+        <motion.button
+          className="pixel-btn"
+          onClick={handleRemoveLast}
+          disabled={placed.length === 0}
+          whileTap={{ scale: 0.95 }}
+          style={{ opacity: placed.length === 0 ? 0.4 : 1 }}
+        >
+          ↺ Zpět
+        </motion.button>
+
+        {!hintUsed && (
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={handleHint}
+            disabled={placed.length > 0 || diamonds < HINT_COST}
+            style={{
+              padding: '8px 14px', fontSize: 13,
+              background: 'transparent',
+              border: '2px solid #888',
+              borderRadius: 4, color: '#aaa', cursor: placed.length > 0 || diamonds < HINT_COST ? 'not-allowed' : 'pointer',
+              fontFamily: 'inherit',
+              opacity: placed.length > 0 || diamonds < HINT_COST ? 0.4 : 1,
+            }}
+          >
+            💡 Nápověda ({CURRENCY_ICONS.diamonds} -{HINT_COST})
+          </motion.button>
+        )}
+      </div>
     </div>
   )
 }

@@ -8,7 +8,9 @@ export const WORLDS: World[] = [
     icon: '🌿',
     blockColor: '#4a7c2f',
     biome: 'forest',
-    taskTypes: ['counting', 'tapNumber', 'compare', 'multiChoice', { type: 'math', weight: 5 }],
+    taskTypes: ['counting', 'tapNumber', 'compare', 'multiChoice', { type: 'math', weight: 5 },
+      { type: 'wordOrder', weight: 2 }
+    ],
     numberRange: [1, 10],
     unlockCost: 0,
     comboMultiplier: 1.0,

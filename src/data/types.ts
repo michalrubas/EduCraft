@@ -166,6 +166,7 @@ export interface GameState {
   answerCorrect: (worldId: string) => boolean
   answerIncorrect: () => void
   resetCombo: () => void
+  spendDiamonds: (amount: number) => boolean
   buyItem: (item: ShopItem) => boolean
   addToShowcase: (itemId: string, slot: number) => void
   unlockWorld: (worldId: string, cost: number, currency?: 'diamonds' | 'emeralds' | 'stars') => boolean

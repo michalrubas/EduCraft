@@ -208,6 +208,13 @@ export const useGameStore = create<GameState>()(
         })
       },
 
+      spendDiamonds: (amount: number) => {
+        const s = get()
+        if (s.diamonds < amount) return false
+        set({ diamonds: s.diamonds - amount })
+        return true
+      },
+
       buyItem: (item: ShopItem) => {
         const s = get()
         if (s.ownedItems.includes(item.id)) return false

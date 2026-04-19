@@ -16,6 +16,7 @@ export const COMBO_REWARDS: Record<ComboLevel, { diamonds: number; emeralds?: nu
 export const SHOWCASE_SLOTS = 8
 export const TASKS_BEFORE_EASY = 5
 export const REWARD_SCREEN_DURATION = 2000
+export const HINT_COST = 2
 
 // Pro renderování přes <Icon> — může být emoji nebo cesta k obrázku
 export const CURRENCY_ICONS = {
