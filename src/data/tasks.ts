@@ -182,4 +182,6 @@ export const TASK_GENERATORS: Record<TaskType, TaskGenerator> = {
   missingLetter: () => { throw new Error('missingLetter: use generateLangTask()') },
   diacritics:    () => { throw new Error('diacritics: use generateLangTask()') },
   wordOrder:     () => { throw new Error('wordOrder: use generateLangTask()') },
+  // runner is routed explicitly in useTask.ts — this stub satisfies the Record type
+  runner:        () => { throw new Error('runner: use routing in useTask.ts') },
 }

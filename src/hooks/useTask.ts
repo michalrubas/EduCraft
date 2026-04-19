@@ -6,6 +6,7 @@ import { TASKS_BEFORE_EASY } from '../data/config'
 import { getWorld } from '../data/worlds'
 import { useGameStore } from '../store/gameStore'
 import { selectSkill, generateSkillTask, selectLangSkill, generateLangTask, SKILL_DOMAINS } from '../data/skills'
+import { generateRunnerMath, generateRunnerCompare, generateRunnerLanguage } from '../data/runnerGenerators'
 
 // Vybere typ úkolu podle vah. Typy bez váhy mají implicitně weight: 1.
 // Parametr `exclude` slouží k vynechání posledního typu (pro pestrost).
@@ -77,6 +78,13 @@ export function useTask(worldId: string, rangeOverride?: [number, number]): UseT
     }
     if (chosen === 'wordOrder') {
       return generateLangTask(selectLangSkill(studentProgress, 'word_order'))
+    }
+    if (chosen === 'runner') {
+      const LANG_BIOMES = ['village', 'castle', 'library', 'graveyard']
+      const COMPARE_BIOMES = ['desert']
+      if (LANG_BIOMES.includes(world.biome)) return generateRunnerLanguage()
+      if (COMPARE_BIOMES.includes(world.biome)) return generateRunnerCompare(effectiveRange)
+      return generateRunnerMath(effectiveRange)
     }
 
     return TASK_GENERATORS[chosen](effectiveRange, world.biome)
