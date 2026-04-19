@@ -9,7 +9,7 @@ export const WORLDS: World[] = [
     blockColor: '#4a7c2f',
     biome: 'forest',
     taskTypes: ['counting', 'tapNumber', 'compare', 'multiChoice', { type: 'math', weight: 5 },
-      { type: 'wordOrder', weight: 2 }
+      { type: 'wordOrder', weight: 2 }, { type: 'runner', weight: 2 }
     ],
     numberRange: [1, 10],
     unlockCost: 0,
@@ -52,7 +52,7 @@ export const WORLDS: World[] = [
     icon: '🏜️',
     blockColor: '#d2b48c',
     biome: 'desert',
-    taskTypes: ['find', 'compare', { type: 'math', weight: 6 }, 'multiChoice'],
+    taskTypes: ['find', 'compare', { type: 'math', weight: 6 }, 'multiChoice', { type: 'runner', weight: 2 }],
     numberRange: [10, 30],
     unlockCost: 500,
     comboMultiplier: 1.8,
@@ -139,6 +139,7 @@ export const WORLDS: World[] = [
     taskTypes: [
       { type: 'missingLetter', weight: 3 },
       { type: 'wordOrder', weight: 2 },
+      { type: 'runner', weight: 2 },
     ],
     unlockCost: 80,
     unlockCurrency: 'emeralds',

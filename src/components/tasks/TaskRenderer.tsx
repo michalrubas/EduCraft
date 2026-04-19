@@ -10,6 +10,7 @@ import { DragDropTask } from './DragDropTask'
 import { MissingLetterTask } from './MissingLetterTask'
 import { DiacriticsTask }    from './DiacriticsTask'
 import { WordOrderTask }     from './WordOrderTask'
+import { RunnerTask }        from './RunnerTask'
 
 interface Props {
   task: Task
@@ -30,6 +31,7 @@ export function TaskRenderer({ task, onAnswer }: Props) {
       case 'missingLetter': return <MissingLetterTask task={task} onAnswer={onAnswer} />
       case 'diacritics':    return <DiacriticsTask    task={task} onAnswer={onAnswer} />
       case 'wordOrder':     return <WordOrderTask      task={task} onAnswer={onAnswer} />
+      case 'runner':        return <RunnerTask         task={task} onAnswer={onAnswer} />
     }
   })()
 

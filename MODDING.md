@@ -3,8 +3,17 @@
 Tento dokument popisuje přesná místa v kódu kde upravovat herní mechaniky.
 Vše co potřebuješ je textový editor (VS Code) a znalost, kde co hledat.
 
+//merge vetve
 git checkout main
 git merge feat/language-tasks-wip
+
+//odemknuti - uprava ve store
+Dev-only override ve store (čistší, commit na branch):
+Edit gameStore.ts
+
+//poradi svetu
+Světy se zobrazují v pořadí jak jsou v WORLDS array. Teď jsou village/castle na konci. Pokud chceš village mezi forest a cave:
+Read worlds.ts
 ---
 
 ## Obsah
@@ -23,6 +32,7 @@ git merge feat/language-tasks-wip
 12. [Systém matematických dovedností (Skill Tree)](#12-system-matematickych-dovednosti-skill-tree)
 13. [Vlastní ikony místo emoji](#13-vlastni-ikony-misto-emoji)
 14. [Debugging a sledování hodnot za běhu](#14-debugging-a-sledovani-hodnot-za-behu)
+15. [Runner task — Guitar Hero minigame](#15-runner-task--guitar-hero-minigame)
 
 ---
 
@@ -904,6 +914,95 @@ Nebo bez window hacku — stav vždy přečteš přes LocalStorage (Způsob 3).
 | Rychlost učení | Debug panel → klikej `+correct` opakovaně, sleduj jak mastery roste |
 | Reset při chybě | `+wrong` několikrát → mastery klesá o 15 % z aktuální hodnoty |
 | Persistence přes reload | LocalStorage → zavři tab, otevři znovu, hodnoty musí zůstat |
+
+---
+
+---
+
+## 15. Runner task — Guitar Hero minigame
+
+Typ úkolu `runner` je scroller se třemi pruhy. Nahoře se zobrazí otázka, zprava přijíždějí bloky s odpověďmi a dítě tapne správný pruh dřív, než ho přejede červená zeď zleva.
+
+### Nastavení rychlosti — `src/data/config.ts`
+
+```ts
+export const RUNNER_CONFIG = {
+  duration: 5000,      // ms — celková délka animace při 1× rychlosti (comboMultiplier = 1.0)
+  minDuration: 2500,   // ms — minimální délka bez ohledu na rychlost světa
+  staggerDelay: 400,   // ms — rozestup mezi příjezdem bloků (Guitar Hero efekt)
+  laneCount: 3,        // počet pruhů (dokumentační — generátory vždy vrátí 3 možnosti)
+}
+```
+
+**Vzorec rychlosti:** `effectiveDuration = max(minDuration, round(duration / world.comboMultiplier))`
+
+Příklady:
+
+| Svět | comboMultiplier | Výsledná rychlost |
+|------|----------------|-------------------|
+| Příroda (forest) | 1.0× | 5 000 ms |
+| Poušť (desert) | 1.8× | 2 778 ms |
+| Nether | 2.5× | 2 500 ms (min) |
+| End | 3.0× | 2 500 ms (min) |
+
+Chceš pomalejší hru? Zvyš `duration` na 7000. Chceš rychlejší minimum? Sniž `minDuration` na 2000.
+
+### Přidání runneru do světa — `src/data/worlds.ts`
+
+Přidej `{ type: 'runner', weight: N }` do `taskTypes` libovolného světa:
+
+```ts
+taskTypes: [
+  { type: 'math', weight: 5 },
+  { type: 'runner', weight: 2 },  // ← přidej toto
+],
+```
+
+Doporučené váhy: 1–2 jako doplněk, 4–6 jako hlavní typ úkolu.
+
+### Které otázky se zobrazí
+
+Typ otázky se volí automaticky podle biome světa:
+
+| Biome světa | Typ generátoru | Příklad otázky |
+|-------------|----------------|----------------|
+| `village`, `castle`, `library`, `graveyard` | chybějící písmeno | `P_S` → tap na I / E / A |
+| `desert` | největší číslo | „Které číslo je největší?" → 12 / 47 / 23 |
+| vše ostatní | aritmetika | `6 + 7 = ?` → 11 / 13 / 8 |
+
+Routing se mění v `src/hooks/useTask.ts`, blok `if (chosen === 'runner')`.
+
+### Přidání nového typu otázky do runneru
+
+1. Přidej funkci do `src/data/runnerGenerators.ts`:
+   ```ts
+   export function generateRunnerXxx(range?: [number, number]): Task {
+     return {
+       id: uid(),
+       type: 'runner',
+       question: 'Česká otázka?',
+       options: /* přesně 3 hodnoty */ [...],
+       correctAnswer: /* jedna z options */ ...,
+     }
+   }
+   ```
+
+2. Přidej větev do `src/hooks/useTask.ts`:
+   ```ts
+   if (chosen === 'runner') {
+     const XXX_BIOMES = ['tvojeBiome']
+     if (XXX_BIOMES.includes(world.biome)) return generateRunnerXxx(effectiveRange)
+     // ... zbytek stávajícího routingu
+   }
+   ```
+
+### Světy kde runner momentálně běží
+
+| Svět | Biome | Typ otázky |
+|------|-------|------------|
+| Příroda | `forest` | aritmetika (+/−) |
+| Poušť | `desert` | největší číslo |
+| Vesnice | `village` | chybějící písmeno |
 
 ---
 
