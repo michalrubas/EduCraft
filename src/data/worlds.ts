@@ -185,6 +185,22 @@ export const WORLDS: World[] = [
     accentColor: '#cc44ff',
     story: 'Kostra tě pronásleduje po hřbitově! Vyřeš záhady a přežij do svítání.',
   },
+  {
+    id: 'library',
+    name: 'Záhadná knihovna',
+    icon: '📚',
+    blockColor: '#5c3318',
+    biome: 'library',
+    taskTypes: [
+      { type: 'wordOrder', weight: 1 },
+    ],
+    unlockCost: 100,
+    unlockCurrency: 'stars',
+    comboMultiplier: 2.5,
+    bgColor: '#0a0603',
+    accentColor: '#e8c84a',
+    story: 'Kouzelná knihovna skrývá starobylé tajemství. Poskládej všechna slova a odhalíš skryté kouzlo!',
+  },
 ]
 
 export function getWorld(id: string): World | undefined {

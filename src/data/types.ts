@@ -20,7 +20,7 @@ export type TaskType =
   | 'diacritics'
   | 'wordOrder'
 
-export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle' | 'graveyard'
+export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle' | 'graveyard' | 'library'
 
 // Typ úkolu s volitelnou vahou. Bez váhy = rovnoměrné rozdělení.
 // Příklad: { type: 'math', weight: 3 } znamená 3× vyšší šanci než typ s weight: 1.

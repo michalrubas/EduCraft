@@ -64,6 +64,18 @@ export const LANG_WORDS: LangWord[] = [
   { word: 'raketa', emoji: '🚀', syllables: 3, difficulty: 'hard' },
   { word: 'lopata', emoji: '🪣', syllables: 3, difficulty: 'hard' },
   { word: 'komoda', emoji: '🪑', syllables: 3, difficulty: 'hard' },
+  { word: 'kometa', emoji: '☄️', syllables: 3, difficulty: 'hard' },
+  { word: 'lopata', emoji: '🪣', syllables: 3, difficulty: 'hard' },
+  { word: 'kaktus', emoji: '🌵', syllables: 2, difficulty: 'hard' },
+  { word: 'tablet', emoji: '📱', syllables: 2, difficulty: 'hard' },
+  { word: 'magnet', emoji: '🧲', syllables: 2, difficulty: 'hard' },
+  { word: 'housle', emoji: '🎻', syllables: 2, difficulty: 'hard' },
+  { word: 'kostka', emoji: '🧊', syllables: 2, difficulty: 'hard' },
+  { word: 'slunce', emoji: '☀️', syllables: 2, difficulty: 'hard' },
+  { word: 'obloha', emoji: '☁️', syllables: 3, difficulty: 'hard' },
+  { word: 'cirkus', emoji: '🎪', syllables: 2, difficulty: 'hard' },
+  { word: 'tvaroh', emoji: '🥣', syllables: 2, difficulty: 'hard' },
+  { word: 'truhla', emoji: '📦', syllables: 2, difficulty: 'hard' },
 
   // --- Easy diacritics ---
   {

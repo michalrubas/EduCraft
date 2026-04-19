@@ -76,6 +76,13 @@ export const BADGES: BadgeDefinition[] = [
     icon: '🌟',
     condition: s => s.totalCorrect >= 500,
   },
+  {
+    id: 'unlock_library',
+    name: 'Mistr slov',
+    description: 'Odemkni Záhadnou knihovnu.',
+    icon: '📚',
+    condition: s => s.unlockedWorlds.includes('library'),
+  },
 ]
 
 export function checkNewBadges(state: GameState): BadgeDefinition[] {
