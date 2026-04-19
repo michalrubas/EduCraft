@@ -19,6 +19,7 @@ export type TaskType =
   | 'missingLetter'
   | 'diacritics'
   | 'wordOrder'
+  | 'runner'
 
 export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle' | 'graveyard' | 'library'
 
