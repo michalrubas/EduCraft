@@ -19,30 +19,48 @@ export function RunnerTask({ task, onAnswer }: Props) {
     RUNNER_CONFIG.minDuration,
     Math.round(RUNNER_CONFIG.duration / multiplier),
   )
-  // wall expires slightly after the last block fully enters, giving the player a fair window
   const wallDur = effectiveDur + RUNNER_CONFIG.staggerDelay * (RUNNER_CONFIG.laneCount - 1)
 
   const [answered, setAnswered] = useState(false)
   const [selectedLane, setSelectedLane] = useState<number | null>(null)
+  const [round, setRound] = useState(0)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const restartRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const onAnswerRef = useRef(onAnswer)
+  onAnswerRef.current = onAnswer
+
+  function clearTimers() {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    if (restartRef.current) clearTimeout(restartRef.current)
+  }
 
   useEffect(() => {
     setAnswered(false)
     setSelectedLane(null)
+
     timerRef.current = setTimeout(() => {
       setAnswered(true)
-      onAnswer('')   // timeout counts as wrong answer
+      onAnswerRef.current('')
+      // After parent's shake animation, restart for another try
+      restartRef.current = setTimeout(() => setRound(r => r + 1), 800)
     }, wallDur)
-    return () => { if (timerRef.current) clearTimeout(timerRef.current) }
+
+    return clearTimers
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [task.id])
+  }, [task.id, round, wallDur])
 
   function handleTap(index: number) {
     if (answered) return
-    if (timerRef.current) clearTimeout(timerRef.current)
+    clearTimers()
     setAnswered(true)
     setSelectedLane(index)
-    setTimeout(() => onAnswer(task.options![index]), 300)
+    const value = task.options![index]
+    setTimeout(() => {
+      onAnswerRef.current(value)
+      if (value !== task.correctAnswer) {
+        restartRef.current = setTimeout(() => setRound(r => r + 1), 800)
+      }
+    }, 300)
   }
 
   const options = task.options ?? []
@@ -51,6 +69,7 @@ export function RunnerTask({ task, onAnswer }: Props) {
     <div className="task-area">
       <p className="task-question">{task.question}</p>
       <div
+        key={round}
         className="runner-track"
         style={{ '--runner-wall-dur': `${wallDur}ms` } as React.CSSProperties}
       >

@@ -568,6 +568,7 @@ body {
 /* ── Runner task ── */
 .runner-track {
   flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -632,9 +633,12 @@ body {
   animation: runner-block-slide var(--runner-block-dur) linear var(--runner-block-delay) both;
 }
 
+.runner-lane.correct .runner-block,
+.runner-lane.wrong .runner-block {
+  animation-play-state: paused;
+}
+
 @keyframes runner-block-slide {
-  0%   { right: -90px; }
-  18%  { right: 55%; }
-  82%  { right: 10%; }
-  100% { right: calc(100% + 90px); }
+  from { right: -90px; }
+  to   { right: calc(100% + 90px); }
 }

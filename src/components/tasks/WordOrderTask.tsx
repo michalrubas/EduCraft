@@ -35,7 +35,7 @@ export function WordOrderTask({ task, onAnswer }: Props) {
 
   function handleEmojiHint() {
     if (emojiRevealed || !task.emoji) return
-    if (!spendStars(EMOJI_HINT_COST)) return
+    if (!spendDiamonds(EMOJI_HINT_COST)) return
     setEmojiRevealed(true)
   }
 
