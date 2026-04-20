@@ -146,6 +146,23 @@
 
 ---
 
+## 🇬🇧 Anglická slovíčka (Rozdělený task)
+
+### Fáze 1 — Simple tasky (aktuálně implementováno)
+- Dva nové typy úkolů: `engPicture` (velká emoji → vyber anglické slovo) a `engWord` (anglické slovo → vyber správnou emoji)
+- Nový soubor `engWords.ts` s vlastní strukturou (oddělen od `langWords.ts`)
+- Nový svět **Library 📚** zaměřený na angličtinu
+- Ochutnávka v lesním světě (Forest)
+- **Bez skill trackingu** — náhodný výběr ze slovníku, žádné mastery
+
+### Fáze 2 — Skill-routed (budoucí task)
+- Přidat `EngSkillId` typy do `types.ts` (např. `eng_nouns_easy`, `eng_nouns_hard`, `eng_verbs`, ...)
+- Zapojit ZPD systém — systém si pamatuje co dítě umí a postupně přidává těžší slova
+- Generator přesměrovat přes `skills.ts` místo `tasks.ts`
+- Přidat routing v `useTask.ts`
+
+---
+
 ## 🛠️ Rozpracované nápady (Backlog)
 
 ### 🎒 Pasivní Bonusy z Předmětů (Artifacts)
