@@ -40,11 +40,11 @@ describe('answerCorrect', () => {
     useGameStore.getState().answerCorrect('forest')
     expect(useGameStore.getState().currentScreen).toBe('reward')
   })
-  it('applies comboMultiplier for nether (2x)', () => {
+  it('applies comboMultiplier for nether (2.5x)', () => {
     useGameStore.setState({ diamonds: 0 })
     useGameStore.getState().answerCorrect('nether')
-    // nether multiplier 2.0, base reward 1 diamond → 2
-    expect(useGameStore.getState().diamonds).toBe(2)
+    // nether multiplier 2.5, base reward 1 diamond → Math.round(2.5) = 3
+    expect(useGameStore.getState().diamonds).toBe(3)
   })
 })
 

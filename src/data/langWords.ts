@@ -18,7 +18,7 @@ export function isAsciiWord(word: string): boolean {
 }
 
 export const LANG_WORDS: LangWord[] = [
-  // --- Easy: 3–4 písmenná slova bez diakritiky ---
+  // --- Easy: 3–5 písmenná slova bez diakritiky ---
   { word: 'hora',  emoji: '⛰️',  syllables: 2, difficulty: 'easy' },
   { word: 'ryba',  emoji: '🐟',  syllables: 2, difficulty: 'easy' },
   { word: 'koza',  emoji: '🐐',  syllables: 2, difficulty: 'easy' },
@@ -50,6 +50,30 @@ export const LANG_WORDS: LangWord[] = [
   { word: 'sníh',    emoji: '❄️', syllables: 1, difficulty: 'easy' },
   { word: 'med',     emoji: '🍯', syllables: 1, difficulty: 'easy' },
   { word: 'třešeň',  emoji: '🍒', syllables: 2, difficulty: 'easy' },
+  // nové easy
+  { word: 'noc',   emoji: '🌙', syllables: 1, difficulty: 'easy' },
+  { word: 'den',   emoji: '☀️', syllables: 1, difficulty: 'easy' },
+  { word: 'rok',   emoji: '📅', syllables: 1, difficulty: 'easy' },
+  { word: 'nos',   emoji: '👃', syllables: 1, difficulty: 'easy' },
+  { word: 'lev',   emoji: '🦁', syllables: 1, difficulty: 'easy' },
+  { word: 'sob',   emoji: '🦌', syllables: 1, difficulty: 'easy' },
+  { word: 'kos',   emoji: '🐦', syllables: 1, difficulty: 'easy' },
+  { word: 'rak',   emoji: '🦀', syllables: 1, difficulty: 'easy' },
+  { word: 'kapr',  emoji: '🐟', syllables: 1, difficulty: 'easy' },
+  { word: 'slon',  emoji: '🐘', syllables: 1, difficulty: 'easy' },
+  { word: 'drak',  emoji: '🐉', syllables: 1, difficulty: 'easy' },
+  { word: 'krab',  emoji: '🦀', syllables: 1, difficulty: 'easy' },
+  { word: 'mrak',  emoji: '☁️', syllables: 1, difficulty: 'easy' },
+  { word: 'skok',  emoji: '🏃', syllables: 1, difficulty: 'easy' },
+  { word: 'kost',  emoji: '🦴', syllables: 1, difficulty: 'easy' },
+  { word: 'plot',  emoji: '🪵', syllables: 1, difficulty: 'easy' },
+  { word: 'kolo',  emoji: '🚲', syllables: 2, difficulty: 'easy' },
+  { word: 'ruka',  emoji: '💪', syllables: 2, difficulty: 'easy' },
+  { word: 'noha',  emoji: '🦵', syllables: 2, difficulty: 'easy' },
+  { word: 'sova',  emoji: '🦉', syllables: 2, difficulty: 'easy' },
+  { word: 'vosa',  emoji: '🐝', syllables: 2, difficulty: 'easy' },
+  { word: 'mapa',  emoji: '🗺️', syllables: 2, difficulty: 'easy' },
+  { word: 'nota',  emoji: '🎵', syllables: 2, difficulty: 'easy' },
 
   // --- Medium: 5–6 písmenná slova bez diakritiky ---
   { word: 'strom',  emoji: '🌲', syllables: 1, difficulty: 'medium', biome: 'forest' },
@@ -59,13 +83,12 @@ export const LANG_WORDS: LangWord[] = [
   { word: 'kaktus', emoji: '🌵', syllables: 2, difficulty: 'medium' },
   { word: 'kostel', emoji: '⛪', syllables: 2, difficulty: 'medium' },
 
-  // --- Hard: 6 písmenná slova bez diakritiky ---
+  // --- Hard: 5–7 písmenná slova bez diakritiky ---
   { word: 'hrdina', emoji: '🦸', syllables: 3, difficulty: 'hard' },
   { word: 'raketa', emoji: '🚀', syllables: 3, difficulty: 'hard' },
   { word: 'lopata', emoji: '🪣', syllables: 3, difficulty: 'hard' },
   { word: 'komoda', emoji: '🪑', syllables: 3, difficulty: 'hard' },
   { word: 'kometa', emoji: '☄️', syllables: 3, difficulty: 'hard' },
-  { word: 'lopata', emoji: '🪣', syllables: 3, difficulty: 'hard' },
   { word: 'kaktus', emoji: '🌵', syllables: 2, difficulty: 'hard' },
   { word: 'tablet', emoji: '📱', syllables: 2, difficulty: 'hard' },
   { word: 'magnet', emoji: '🧲', syllables: 2, difficulty: 'hard' },
@@ -76,6 +99,26 @@ export const LANG_WORDS: LangWord[] = [
   { word: 'cirkus', emoji: '🎪', syllables: 2, difficulty: 'hard' },
   { word: 'tvaroh', emoji: '🥣', syllables: 2, difficulty: 'hard' },
   { word: 'truhla', emoji: '📦', syllables: 2, difficulty: 'hard' },
+  // nové hard
+  { word: 'stopa',  emoji: '🐾', syllables: 2, difficulty: 'hard' },
+  { word: 'sopka',  emoji: '🌋', syllables: 2, difficulty: 'hard' },
+  { word: 'kobra',  emoji: '🐍', syllables: 2, difficulty: 'hard' },
+  { word: 'panda',  emoji: '🐼', syllables: 2, difficulty: 'hard' },
+  { word: 'palma',  emoji: '🌴', syllables: 2, difficulty: 'hard' },
+  { word: 'lampa',  emoji: '💡', syllables: 2, difficulty: 'hard' },
+  { word: 'kapsa',  emoji: '👖', syllables: 2, difficulty: 'hard' },
+  { word: 'banka',  emoji: '🏦', syllables: 2, difficulty: 'hard' },
+  { word: 'karta',  emoji: '🃏', syllables: 2, difficulty: 'hard' },
+  { word: 'mozek',  emoji: '🧠', syllables: 2, difficulty: 'hard' },
+  { word: 'kamen',  emoji: '🪨', syllables: 2, difficulty: 'hard' },
+  { word: 'barva',  emoji: '🎨', syllables: 2, difficulty: 'hard' },
+  { word: 'krtek',  emoji: '🐭', syllables: 2, difficulty: 'hard' },
+  { word: 'kotel',  emoji: '⚙️', syllables: 2, difficulty: 'hard' },
+  { word: 'balon',  emoji: '🎈', syllables: 2, difficulty: 'hard' },
+  { word: 'beton',  emoji: '🧱', syllables: 2, difficulty: 'hard' },
+  { word: 'bratr',  emoji: '👦', syllables: 2, difficulty: 'hard' },
+  { word: 'kostra', emoji: '💀', syllables: 2, difficulty: 'hard' },
+  { word: 'sestra', emoji: '👧', syllables: 2, difficulty: 'hard' },
 
   // --- Easy diacritics ---
   {
@@ -96,51 +139,51 @@ export const LANG_WORDS: LangWord[] = [
   },
   {
     word: 'máma', emoji: '👩', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'máma', wrong: ['mama'] },
+    diacritics: { correct: 'máma', wrong: ['mama', 'mámá'] },
   },
   {
     word: 'táta', emoji: '👨', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'táta', wrong: ['tata'] },
+    diacritics: { correct: 'táta', wrong: ['tata', 'tátá'] },
   },
   {
     word: 'škola', emoji: '🏫', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'škola', wrong: ['skola'] },
+    diacritics: { correct: 'škola', wrong: ['skola', 'škóla'] },
   },
   {
     word: 'žába', emoji: '🐸', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'žába', wrong: ['zaba'] },
+    diacritics: { correct: 'žába', wrong: ['zaba', 'žabá'] },
   },
   {
     word: 'čaj', emoji: '🍵', syllables: 1, difficulty: 'easy',
-    diacritics: { correct: 'čaj', wrong: ['caj'] },
+    diacritics: { correct: 'čaj', wrong: ['caj', 'čáj'] },
   },
   {
     word: 'řeka', emoji: '🏞️', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'řeka', wrong: ['reka'] },
+    diacritics: { correct: 'řeka', wrong: ['reka', 'řéka'] },
   },
   {
     word: 'měsíc', emoji: '🌙', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'měsíc', wrong: ['mesic'] },
+    diacritics: { correct: 'měsíc', wrong: ['mesic', 'měsic'] },
   },
   {
     word: 'kůže', emoji: '🧴', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'kůže', wrong: ['kuze'] },
+    diacritics: { correct: 'kůže', wrong: ['kuze', 'kuže'] },
   },
   {
     word: 'růže', emoji: '🌹', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'růže', wrong: ['ruze'] },
+    diacritics: { correct: 'růže', wrong: ['ruze', 'ruže'] },
   },
   {
     word: 'klíč', emoji: '🔑', syllables: 1, difficulty: 'easy',
-    diacritics: { correct: 'klíč', wrong: ['klic'] },
+    diacritics: { correct: 'klíč', wrong: ['klic', 'klič'] },
   },
   {
     word: 'písek', emoji: '🏖️', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'písek', wrong: ['pisek'] },
+    diacritics: { correct: 'písek', wrong: ['pisek', 'píšek'] },
   },
   {
     word: 'víno', emoji: '🍷', syllables: 2, difficulty: 'easy',
-    diacritics: { correct: 'víno', wrong: ['vino'] },
+    diacritics: { correct: 'víno', wrong: ['vino', 'vínó'] },
   },
   {
     word: 'kůl', emoji: '🪵', syllables: 1, difficulty: 'easy',
