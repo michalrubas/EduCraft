@@ -20,6 +20,8 @@ export type TaskType =
   | 'diacritics'
   | 'wordOrder'
   | 'runner'
+  | 'engPicture'
+  | 'engWord'
 
 export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle' | 'graveyard' | 'library'
 
