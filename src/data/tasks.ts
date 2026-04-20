@@ -170,10 +170,9 @@ export function generateFindTask(range: [number, number]): Task {
 }
 
 export function generateEngPictureTask(_range: [number, number], _biome: string): Task {
-  const pool = ENG_POOL
-  const idx = ri(0, pool.length - 1)
-  const word = pool[idx]
-  const others = pool.filter((_, i) => i !== idx)
+  const idx = ri(0, ENG_POOL.length - 1)
+  const word = ENG_POOL[idx]
+  const others = ENG_POOL.filter((_, i) => i !== idx)
   const distractors = shuffle(others).slice(0, 2).map(w => w.english)
   return {
     id: uid(),
@@ -186,10 +185,9 @@ export function generateEngPictureTask(_range: [number, number], _biome: string)
 }
 
 export function generateEngWordTask(_range: [number, number], _biome: string): Task {
-  const pool = ENG_POOL
-  const idx = ri(0, pool.length - 1)
-  const word = pool[idx]
-  const others = pool.filter((_, i) => i !== idx)
+  const idx = ri(0, ENG_POOL.length - 1)
+  const word = ENG_POOL[idx]
+  const others = ENG_POOL.filter((_, i) => i !== idx)
   const distractors = shuffle(others).slice(0, 3).map(w => w.emoji)
   return {
     id: uid(),

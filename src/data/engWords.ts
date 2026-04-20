@@ -5,7 +5,7 @@ export interface EngWord {
   czech: string
   emoji: string
   difficulty: 'easy' | 'medium' | 'hard'
-  category: 'animals' | 'food' | 'nature' | 'objects' | 'colors'
+  category: 'animals' | 'food' | 'nature' | 'objects'
 }
 
 export const ENG_WORDS: EngWord[] = [
