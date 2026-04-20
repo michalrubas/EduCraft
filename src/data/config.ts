@@ -1,3 +1,5 @@
+import {TaskType } from '../data/types'
+
 export const COMBO_THRESHOLDS = {
   fire: 3,
   doubleFire: 5,
@@ -12,6 +14,11 @@ export const COMBO_REWARDS: Record<ComboLevel, { diamonds: number; emeralds?: nu
   doubleFire: { diamonds: 3, emeralds: 1 },
   mania:      { diamonds: 5, emeralds: 2, stars: 1 },
 }
+
+export const TASK_TYPE_REWARDS: Partial<Record<TaskType, number>> = {
+  runner: 5,
+}
+
 
 export const SHOWCASE_SLOTS = 8
 export const TASKS_BEFORE_EASY = 5

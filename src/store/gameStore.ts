@@ -1,8 +1,8 @@
 // src/store/gameStore.ts
 import { create } from 'zustand'
 import { persist, devtools } from 'zustand/middleware'
-import { GameState, Screen, ShopItem, MathSkillId, LangSkillId, SkillState } from '../data/types'
-import { COMBO_REWARDS, SHOWCASE_SLOTS, getComboLevel } from '../data/config'
+import { GameState, Screen, ShopItem, MathSkillId, LangSkillId, SkillState, TaskType } from '../data/types'
+import { COMBO_REWARDS, SHOWCASE_SLOTS, TASK_TYPE_REWARDS, getComboLevel } from '../data/config'
 import { WORLDS } from '../data/worlds'
 import { setMuted as setMutedSound } from '../audio/sounds'
 import { SHOP_ITEMS } from '../data/shopItems'
@@ -76,7 +76,7 @@ export const useGameStore = create<GameState>()(
         })
       },
 
-      answerCorrect: (worldId: string) => {
+      answerCorrect: (worldId: string, taskType?) => {
         const s = get()
         const world = WORLDS.find(w => w.id === worldId)
         const multiplier = world?.comboMultiplier ?? 1
@@ -88,14 +88,15 @@ export const useGameStore = create<GameState>()(
         const nextXp = s.xp + gainedXp
         const nextLevelData = getLevelData(nextXp)
         const leveledUp = nextLevelData.level > s.level
+        const taskMultiplier = taskType ? (TASK_TYPE_REWARDS[taskType] ?? 1) : 1
 
         const wa = s.worldAccuracy[worldId] ?? { correct: 0, total: 0 }
         set({
           combo: newCombo,
           maxCombo: Math.max(s.maxCombo, newCombo),
-          diamonds: s.diamonds + Math.round((base.diamonds ?? 0) * multiplier),
-          emeralds: s.emeralds + Math.round((base.emeralds ?? 0) * multiplier),
-          stars: s.stars + Math.round((base.stars ?? 0) * multiplier),
+          diamonds: s.diamonds + Math.round((base.diamonds ?? 0) * multiplier * taskMultiplier),
+          emeralds: s.emeralds + Math.round((base.emeralds ?? 0) * multiplier * taskMultiplier),
+          stars: s.stars + Math.round((base.stars ?? 0) * multiplier * taskMultiplier),
           totalCorrect: s.totalCorrect + 1,
           totalAttempts: s.totalAttempts + 1,
           totalCorrectSession: s.totalCorrectSession + 1,

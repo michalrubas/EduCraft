@@ -56,7 +56,7 @@ export function GameScreen() {
       else if (level === 'fire' || level === 'doubleFire') playSound.combo()
       else playSound.correct()
       if (task?.skillId) updateSkillMastery(task.skillId, true)
-      const leveledUp = answerCorrect(worldId)
+      const leveledUp = answerCorrect(worldId, task?.type)
       const newSession = totalCorrectSession + 1
       const newCombo = combo + 1
       const delay = REWARD_SCREEN_DURATION + 200

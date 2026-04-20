@@ -167,7 +167,8 @@ export interface GameState {
   // actions
   navigateTo: (screen: Screen) => void
   enterWorld: (worldId: string) => void
-  answerCorrect: (worldId: string) => boolean
+  //answerCorrect: (worldId: string) => boolean
+  answerCorrect: (worldId: string, taskType?: TaskType) => boolean
   answerIncorrect: () => void
   resetCombo: () => void
   spendDiamonds: (amount: number) => boolean
