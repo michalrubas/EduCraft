@@ -11,6 +11,8 @@ import { MissingLetterTask } from './MissingLetterTask'
 import { DiacriticsTask }    from './DiacriticsTask'
 import { WordOrderTask }     from './WordOrderTask'
 import { RunnerTask }        from './RunnerTask'
+import { EngPictureTask } from './EngPictureTask'
+import { EngWordTask }    from './EngWordTask'
 
 interface Props {
   task: Task
@@ -32,6 +34,8 @@ export function TaskRenderer({ task, onAnswer }: Props) {
       case 'diacritics':    return <DiacriticsTask    task={task} onAnswer={onAnswer} />
       case 'wordOrder':     return <WordOrderTask      task={task} onAnswer={onAnswer} />
       case 'runner':        return <RunnerTask         task={task} onAnswer={onAnswer} />
+      case 'engPicture': return <EngPictureTask task={task} onAnswer={onAnswer} />
+      case 'engWord':    return <EngWordTask    task={task} onAnswer={onAnswer} />
     }
   })()
 
