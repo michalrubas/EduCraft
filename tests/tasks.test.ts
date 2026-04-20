@@ -9,6 +9,10 @@ import {
   generateDragDropTask,
   generateFindTask,
 } from '../src/data/tasks'
+import {
+  generateEngPictureTask,
+  generateEngWordTask,
+} from '../src/data/tasks'
 
 const RANGE: [number, number] = [1, 5]
 
@@ -96,5 +100,52 @@ describe('generateFindTask', () => {
   it('options contain correctAnswer', () => {
     const t = generateFindTask(RANGE)
     expect(t.options).toContain(t.correctAnswer)
+  })
+})
+
+describe('generateEngPictureTask', () => {
+  it('returns correct type', () => {
+    expect(generateEngPictureTask([1, 10], 'library').type).toBe('engPicture')
+  })
+  it('has 3 options', () => {
+    const t = generateEngPictureTask([1, 10], 'library')
+    expect(t.options).toHaveLength(3)
+  })
+  it('options contain correctAnswer', () => {
+    const t = generateEngPictureTask([1, 10], 'library')
+    expect(t.options).toContain(t.correctAnswer)
+  })
+  it('all options are distinct', () => {
+    for (let i = 0; i < 20; i++) {
+      const t = generateEngPictureTask([1, 10], 'library')
+      const unique = new Set(t.options)
+      expect(unique.size).toBe(3)
+    }
+  })
+  it('has objects array with one emoji', () => {
+    const t = generateEngPictureTask([1, 10], 'library')
+    expect(t.objects).toHaveLength(1)
+    expect(typeof t.objects![0]).toBe('string')
+  })
+})
+
+describe('generateEngWordTask', () => {
+  it('returns correct type', () => {
+    expect(generateEngWordTask([1, 10], 'library').type).toBe('engWord')
+  })
+  it('has 4 options', () => {
+    const t = generateEngWordTask([1, 10], 'library')
+    expect(t.options).toHaveLength(4)
+  })
+  it('options contain correctAnswer', () => {
+    const t = generateEngWordTask([1, 10], 'library')
+    expect(t.options).toContain(t.correctAnswer)
+  })
+  it('all options are distinct', () => {
+    for (let i = 0; i < 20; i++) {
+      const t = generateEngWordTask([1, 10], 'library')
+      const unique = new Set(t.options)
+      expect(unique.size).toBe(4)
+    }
   })
 })
