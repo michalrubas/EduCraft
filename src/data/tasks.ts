@@ -2,6 +2,8 @@
 import { Task, TaskType, Biome } from './types'
 import { ENG_WORDS } from './engWords'
 
+const ENG_POOL = ENG_WORDS.filter(w => w.difficulty === 'easy')
+
 const BIOME_OBJECTS: Record<Biome, string[]> = {
   forest: ['🌾', '🪵', '🍎', '🐑', '🐄', '🍄'],
   cave:   ['💎', '⛏️', '🪨', '🥇', '🦇', '🪔'],
@@ -168,7 +170,7 @@ export function generateFindTask(range: [number, number]): Task {
 }
 
 export function generateEngPictureTask(_range: [number, number], _biome: string): Task {
-  const pool = ENG_WORDS.filter(w => w.difficulty === 'easy')
+  const pool = ENG_POOL
   const idx = ri(0, pool.length - 1)
   const word = pool[idx]
   const others = pool.filter((_, i) => i !== idx)
@@ -184,7 +186,7 @@ export function generateEngPictureTask(_range: [number, number], _biome: string)
 }
 
 export function generateEngWordTask(_range: [number, number], _biome: string): Task {
-  const pool = ENG_WORDS.filter(w => w.difficulty === 'easy')
+  const pool = ENG_POOL
   const idx = ri(0, pool.length - 1)
   const word = pool[idx]
   const others = pool.filter((_, i) => i !== idx)
@@ -208,10 +210,13 @@ export const TASK_GENERATORS: Record<TaskType, TaskGenerator> = {
   math:          (r)    => generateMathTask(r),
   dragDrop:      (r, b) => generateDragDropTask(r, b),
   find:          (r)    => generateFindTask(r),
+  // mathMultiply se generuje přes skill systém v useTask; toto je fallback
   mathMultiply:  (r)    => generateMathTask(r),
+  // Lang task types are dispatched via generateLangTask() in useTask.ts — these are never called
   missingLetter: () => { throw new Error('missingLetter: use generateLangTask()') },
   diacritics:    () => { throw new Error('diacritics: use generateLangTask()') },
   wordOrder:     () => { throw new Error('wordOrder: use generateLangTask()') },
+  // runner is routed explicitly in useTask.ts — this stub satisfies the Record type
   runner:        () => { throw new Error('runner: use routing in useTask.ts') },
   engPicture:    (r, b) => generateEngPictureTask(r, b),
   engWord:       (r, b) => generateEngWordTask(r, b),

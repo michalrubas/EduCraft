@@ -8,8 +8,6 @@ import {
   generateMathTask,
   generateDragDropTask,
   generateFindTask,
-} from '../src/data/tasks'
-import {
   generateEngPictureTask,
   generateEngWordTask,
 } from '../src/data/tasks'
