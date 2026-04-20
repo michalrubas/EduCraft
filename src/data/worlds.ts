@@ -8,9 +8,14 @@ export const WORLDS: World[] = [
     icon: '🌿',
     blockColor: '#4a7c2f',
     biome: 'forest',
-    taskTypes: ['counting', 'tapNumber', 'compare', 'multiChoice', { type: 'math', weight: 5 },
-       { type: 'wordOrder', weight: 2 }, { type: 'runner', weight: 2 }
-     ],
+    taskTypes: [
+      'counting', 'tapNumber', 'compare', 'multiChoice',
+      { type: 'math',       weight: 5 },
+      { type: 'wordOrder',  weight: 2 },
+      { type: 'runner',     weight: 2 },
+      { type: 'engPicture', weight: 1 },
+      { type: 'engWord',    weight: 1 },
+    ],
     numberRange: [1, 10],
     unlockCost: 0,
     comboMultiplier: 1.0,
@@ -193,7 +198,9 @@ export const WORLDS: World[] = [
     blockColor: '#5c3318',
     biome: 'library',
     taskTypes: [
-      { type: 'wordOrder', weight: 1 },
+      { type: 'engPicture', weight: 5 },
+      { type: 'engWord',    weight: 4 },
+      { type: 'wordOrder',  weight: 1 },
     ],
     unlockCost: 100,
     unlockCurrency: 'stars',
