@@ -42,4 +42,11 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: 'totem',        name: 'Totem nesmrtelnosti', icon: '🗿', category: 'rare', cost: { stars: 40 }, rarity: 'legendary' },
   { id: 'netherite_crown', name: 'Netheritová koruna', icon: '👑', category: 'trophy', cost: { diamonds: 1000, emeralds: 20 }, rarity: 'legendary' },
   { id: 'diamond_cape',  name: 'Diamantová kápě', icon: '🧥', category: 'armor', cost: { diamonds: 400, emeralds: 10 }, rarity: 'epic' },
+
+  // Shop-only legendary items (cannot be won from wheel/chest)
+  { id: 'netherite_sword', name: 'Netheritový meč',  icon: '⚔️', category: 'weapon',     cost: { stars: 80, diamonds: 2000 },   rarity: 'legendary', shopOnly: true },
+  { id: 'ender_pearl',    name: 'Ender perla',       icon: '🟣', category: 'rare',       cost: { stars: 60, diamonds: 1500 },   rarity: 'legendary', shopOnly: true },
+  { id: 'beacon',         name: 'Beacon',            icon: '🔮', category: 'decoration', cost: { stars: 100 },                  rarity: 'legendary', shopOnly: true },
+  { id: 'dragon_armor',   name: 'Dračí brnění',      icon: '🐉', category: 'armor',      cost: { stars: 70, emeralds: 1000 },   rarity: 'legendary', shopOnly: true },
+  { id: 'nether_star',    name: 'Nether Star',       icon: '✨', category: 'rare',       cost: { stars: 120 },                  rarity: 'legendary', shopOnly: true },
 ]
