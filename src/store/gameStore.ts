@@ -137,7 +137,7 @@ export const useGameStore = create<GameState>()(
         const s = get()
         let resolvedItemId: string | undefined
         if (reward.itemId === 'random') {
-          const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id))
+          const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id) && !i.shopOnly)
           if (available.length > 0) {
             resolvedItemId = available[Math.floor(Math.random() * available.length)].id
           }
@@ -161,7 +161,7 @@ export const useGameStore = create<GameState>()(
         const s = get()
         let resolvedItemId: string | undefined
         if (reward.itemId === 'random') {
-          const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id))
+          const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id) && !i.shopOnly)
           if (available.length > 0) {
             resolvedItemId = available[Math.floor(Math.random() * available.length)].id
           }
