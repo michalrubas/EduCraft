@@ -83,6 +83,41 @@ export const BADGES: BadgeDefinition[] = [
     icon: '📚',
     condition: s => s.unlockedWorlds.includes('library'),
   },
+  {
+    id: 'unlock_diamond_cave',
+    name: 'Diamantový horník',
+    description: 'Odemkni Diamantovou jeskyni.',
+    icon: '⛏️',
+    condition: s => s.unlockedWorlds.includes('diamond_cave'),
+  },
+  {
+    id: 'unlock_axolotl',
+    name: 'Axolotl přítel',
+    description: 'Odemkni Axolotl doupě.',
+    icon: '🦎',
+    condition: s => s.unlockedWorlds.includes('axolotl'),
+  },
+  {
+    id: 'unlock_mushroom',
+    name: 'Houbový král',
+    description: 'Odemkni Houbový ostrov.',
+    icon: '🍄',
+    condition: s => s.unlockedWorlds.includes('mushroom'),
+  },
+  {
+    id: 'master_all',
+    name: 'Mistr všeho',
+    description: 'Odpověz celkově na 2000 otázek správně.',
+    icon: '🏅',
+    condition: s => s.totalCorrect >= 2000,
+  },
+  {
+    id: 'combo_25',
+    name: 'Combo legenda',
+    description: 'Dosáhni komba 25 bez chyby.',
+    icon: '⚡',
+    condition: s => s.maxCombo >= 25,
+  },
 ]
 
 export function checkNewBadges(state: GameState): BadgeDefinition[] {
