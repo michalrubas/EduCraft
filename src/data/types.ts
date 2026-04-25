@@ -23,7 +23,7 @@ export type TaskType =
   | 'engPicture'
   | 'engWord'
 
-export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle' | 'graveyard' | 'library'
+export type Biome = 'forest' | 'cave' | 'snow' | 'desert' | 'ocean' | 'jungle' | 'tnt' | 'nether' | 'end' | 'village' | 'castle' | 'graveyard' | 'library' | 'diamond_cave' | 'axolotl' | 'mushroom' | 'bedrock'
 
 // Typ úkolu s volitelnou vahou. Bez váhy = rovnoměrné rozdělení.
 // Příklad: { type: 'math', weight: 3 } znamená 3× vyšší šanci než typ s weight: 1.
@@ -108,6 +108,7 @@ export interface ShopItem {
   category: ItemCategory
   cost: { diamonds?: number; emeralds?: number; stars?: number }
   rarity: ItemRarity
+  shopOnly?: boolean
 }
 
 export interface WheelReward {
