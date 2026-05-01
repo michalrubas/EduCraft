@@ -49,4 +49,16 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: 'beacon',         name: 'Beacon',            icon: '🔮', category: 'decoration', cost: { stars: 100 },                  rarity: 'legendary', shopOnly: true },
   { id: 'dragon_armor',   name: 'Dračí brnění',      icon: '🐉', category: 'armor',      cost: { stars: 70, emeralds: 1000 },   rarity: 'legendary', shopOnly: true },
   { id: 'nether_star',    name: 'Nether Star',       icon: '✨', category: 'rare',       cost: { stars: 120 },                  rarity: 'legendary', shopOnly: true },
+
+  // New legendary shop-only items
+  { id: 'wither_skull',     name: 'Wither lebka',        icon: '💀', category: 'weapon',     cost: { stars: 90, diamonds: 2000 },  rarity: 'legendary', shopOnly: true },
+  { id: 'golden_apple',     name: 'Zlaté jablko',        icon: '🍎', category: 'rare',       cost: { stars: 65 },                  rarity: 'legendary', shopOnly: true },
+  { id: 'enchanted_book',   name: 'Enchantovaná kniha',  icon: '📜', category: 'decoration', cost: { stars: 55, diamonds: 1200 },  rarity: 'legendary', shopOnly: true },
+  { id: 'netherite_boots',  name: 'Netheritové boty',    icon: '🥾', category: 'armor',      cost: { stars: 75, diamonds: 1800 },  rarity: 'legendary', shopOnly: true },
+  { id: 'obsidian_block',   name: 'Obsidiánový blok',    icon: '🖤', category: 'decoration', cost: { stars: 50, diamonds: 1000 },  rarity: 'legendary', shopOnly: true },
+  { id: 'phoenix_feather',  name: 'Fénixové pero',       icon: '🪶', category: 'rare',       cost: { stars: 70 },                  rarity: 'legendary', shopOnly: true },
+  { id: 'shadow_cloak',     name: 'Stínový plášť',       icon: '🌑', category: 'armor',      cost: { stars: 60, emeralds: 900 },   rarity: 'legendary', shopOnly: true },
+  { id: 'storm_amulet',     name: 'Bouřkový amulet',     icon: '⚡', category: 'rare',       cost: { stars: 80, diamonds: 1500 },  rarity: 'legendary', shopOnly: true },
+  { id: 'moon_orb',         name: 'Měsíční koule',       icon: '🌙', category: 'decoration', cost: { stars: 85 },                  rarity: 'legendary', shopOnly: true },
+  { id: 'dragon_trophy',    name: 'Dračí trofej',        icon: '🐲', category: 'trophy',     cost: { stars: 110, diamonds: 2500 }, rarity: 'legendary', shopOnly: true },
 ]
