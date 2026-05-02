@@ -546,12 +546,12 @@ export function checkUnlocks(progress: StudentProgress): StudentProgress {
   const next = { ...progress }
 
   for (const skill of SKILL_TREE) {
-    if (next[skill.id].unlocked) continue
+    if (next[skill.id]?.unlocked) continue
     const prereqsMet = skill.prerequisites.every(
-      p => next[p.id].mastery >= p.minMastery
+      p => (next[p.id]?.mastery ?? 0) >= p.minMastery
     )
     if (prereqsMet) {
-      next[skill.id] = { ...next[skill.id], unlocked: true }
+      next[skill.id] = { mastery: 0, attempts: 0, ...(next[skill.id] ?? {}), unlocked: true }
       updated = true
     }
   }

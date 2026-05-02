@@ -73,10 +73,10 @@ export default function App() {
       </AnimatePresence>
       <ParticlesOverlay />
       <AnimatePresence>
-        {wheelPending && <LuckyWheel onCollect={handleWheelCollectGlobal} />}
-        {chestPending && <MysteryChest onCollect={collectChestReward} />}
-        {levelUpPending && <LevelUpOverlay />}
-        {badgePending && <BadgeOverlay />}
+        {wheelPending && <LuckyWheel key="wheel" onCollect={handleWheelCollectGlobal} />}
+        {chestPending && <MysteryChest key="chest" onCollect={collectChestReward} />}
+        {levelUpPending && <LevelUpOverlay key="levelup" />}
+        {badgePending && <BadgeOverlay key="badge" />}
       </AnimatePresence>
     </div>
   )
