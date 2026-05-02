@@ -7,6 +7,7 @@ import { CURRENCY_ICONS } from '../../data/config'
 import { Icon } from './Icon'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
+import chestImg from '/assets/items/bauzin.png'
 
 interface Props {
   onCollect: (reward: WheelReward) => void
@@ -149,7 +150,7 @@ export function MysteryChest({ onCollect }: Props) {
               transformOrigin: 'center bottom',
             }}
           >
-            <img src="/assets/items/bauzin.png" alt="Truhla" style={{ width: 140, height: 140, objectFit: 'contain' }} />
+            <img src={chestImg} alt="Truhla" style={{ width: 140, height: 140, objectFit: 'contain', imageRendering: 'pixelated' }} />
           </motion.div>
           <p style={{ fontSize: 22, fontWeight: 800, color: '#fff', fontFamily: 'inherit', textAlign: 'center' }}>
             Ťukni ještě <span style={{ color: tier.color }}>{tapsLeft}×</span>
