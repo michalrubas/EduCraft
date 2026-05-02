@@ -551,7 +551,7 @@ export function checkUnlocks(progress: StudentProgress): StudentProgress {
       p => (next[p.id]?.mastery ?? 0) >= p.minMastery
     )
     if (prereqsMet) {
-      next[skill.id] = { mastery: 0, attempts: 0, ...(next[skill.id] ?? {}), unlocked: true }
+      next[skill.id] = { ...(next[skill.id] ?? { mastery: 0, attempts: 0 }), unlocked: true }
       updated = true
     }
   }
