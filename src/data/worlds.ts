@@ -242,7 +242,7 @@ export const WORLDS: World[] = [
   {
     id: 'diamond_cave',
     name: 'Diamantová jeskyně',
-    icon: '⛏️💎',
+    icon: '💎',
     blockColor: '#1a6b8a',
     biome: 'diamond_cave',
     taskTypes: [

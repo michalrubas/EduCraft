@@ -61,4 +61,16 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: 'storm_amulet',     name: 'Bouřkový amulet',     icon: '⚡', category: 'rare',       cost: { stars: 80, diamonds: 1500 },  rarity: 'legendary', shopOnly: true },
   { id: 'moon_orb',         name: 'Měsíční koule',       icon: '🌙', category: 'decoration', cost: { stars: 85 },                  rarity: 'legendary', shopOnly: true },
   { id: 'dragon_trophy',    name: 'Dračí trofej',        icon: '🐲', category: 'trophy',     cost: { stars: 110, diamonds: 2500 }, rarity: 'legendary', shopOnly: true },
+
+  // Mixed rarity items
+  { id: 'iron_pickaxe',    name: 'Železný krumpáč',     icon: '⛏️', category: 'weapon',     cost: { diamonds: 30 },                rarity: 'common' },
+  { id: 'leather_boots',   name: 'Kožené boty',         icon: '👢', category: 'armor',      cost: { diamonds: 25 },                rarity: 'common' },
+  { id: 'compass',         name: 'Kompas',              icon: '🧭', category: 'decoration', cost: { emeralds: 18 },                rarity: 'rare' },
+  { id: 'spyglass',        name: 'Dalekohled',          icon: '🔭', category: 'decoration', cost: { diamonds: 70 },                rarity: 'rare' },
+  { id: 'fire_sword',      name: 'Ohnivý meč',         icon: '🔥', category: 'weapon',     cost: { diamonds: 300, emeralds: 30 }, rarity: 'epic' },
+  { id: 'ice_shield',      name: 'Ledový štít',         icon: '🧊', category: 'armor',      cost: { diamonds: 250, emeralds: 25 }, rarity: 'epic',      shopOnly: true },
+  { id: 'ancient_map',     name: 'Stará mapa',          icon: '🗺️', category: 'rare',       cost: { emeralds: 60, diamonds: 400 }, rarity: 'epic',      shopOnly: true },
+  { id: 'soul_lantern',    name: 'Lucerna duší',        icon: '🪔', category: 'decoration', cost: { stars: 45, diamonds: 800 },    rarity: 'legendary', shopOnly: true },
+  { id: 'void_crystal',    name: 'Krystal prázdnoty',   icon: '💜', category: 'rare',       cost: { stars: 95 },                   rarity: 'legendary', shopOnly: true },
+  { id: 'titan_helmet',    name: 'Titánská přilba',     icon: '🪖', category: 'armor',      cost: { stars: 85, diamonds: 2200 },   rarity: 'legendary', shopOnly: true },
 ]
