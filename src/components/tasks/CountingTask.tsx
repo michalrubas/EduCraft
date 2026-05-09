@@ -1,8 +1,17 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Task } from '../../data/types'
+import { SignBoard } from '../ui/SignBoard'
+import { CubeButton } from '../ui/CubeButton'
+import { theme, block } from '../../theme'
 
 interface Props { task: Task; onAnswer: (a: number | string) => void }
+
+const COLORS = [
+  { color: '#3ac8d1', edge: '#1d7a80' },
+  { color: '#5fb84a', edge: '#2f6a23' },
+  { color: '#f5b90d', edge: '#a06d04' },
+]
 
 export function CountingTask({ task, onAnswer }: Props) {
   const [selected, setSelected] = useState<number | string | null>(null)
@@ -12,31 +21,44 @@ export function CountingTask({ task, onAnswer }: Props) {
     setTimeout(() => { setSelected(null); onAnswer(opt) }, 300)
   }
 
+  const options = (task.options ?? []).slice(0, 3)
+
   return (
-    <div className="task-area">
-      <p className="task-question">{task.question}</p>
+    <div style={{
+      flex: 1, display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      gap: 22, padding: '0 16px 8px', minHeight: 0,
+    }}>
+      <SignBoard fontSize={26}>{task.question}</SignBoard>
+
       <motion.div
-        className="object-grid"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
+        style={{
+          background: '#e8d6a8', border: `4px solid ${theme.cardEdge}`,
+          borderRadius: 12, padding: '14px 20px',
+          boxShadow: block(4),
+          display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center',
+          maxWidth: 280,
+        }}
       >
         {task.objects?.map((obj, i) => (
-          (obj.startsWith('/') || obj.startsWith('http')) 
-            ? <img key={i} src={obj} alt="" style={{ width: 48, height: 48, objectFit: 'contain' }} /> 
-            : <span key={i}>{obj}</span>
+          (obj.startsWith('/') || obj.startsWith('http'))
+            ? <img key={i} src={obj} alt="" style={{ width: 48, height: 48, objectFit: 'contain' }} />
+            : <span key={i} style={{ fontSize: 36, lineHeight: 1 }}>{obj}</span>
         ))}
       </motion.div>
-      <div className="answer-grid">
-        {task.options?.map(opt => (
-          <motion.button
+
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${options.length}, 1fr)`, gap: 10, width: '100%', maxWidth: 280 }}>
+        {options.map((opt, i) => (
+          <CubeButton
             key={opt}
-            className={`answer-btn ${selected === opt ? (opt === task.correctAnswer ? 'correct' : 'wrong') : ''}`}
-            whileTap={{ scale: 0.9 }}
+            label={opt}
+            color={COLORS[i % COLORS.length].color}
+            edge={COLORS[i % COLORS.length].edge}
+            size="sm"
             onClick={() => handleSelect(opt)}
-          >
-            {opt}
-          </motion.button>
+          />
         ))}
       </div>
     </div>
