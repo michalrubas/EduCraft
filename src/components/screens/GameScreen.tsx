@@ -4,13 +4,16 @@ import { useGameStore } from '../../store/gameStore'
 import { useTask } from '../../hooks/useTask'
 import { HUD } from '../hud/HUD'
 import { TaskRenderer } from '../tasks/TaskRenderer'
-import { PixelButton } from '../ui/PixelButton'
 import { playSound } from '../../audio/sounds'
 import { getComboLevel, COMBO_THRESHOLDS, REWARD_SCREEN_DURATION } from '../../data/config'
 import { getAdaptedRange } from '../../hooks/useAdaptiveDifficulty'
 import { getWorld } from '../../data/worlds'
 import { shouldTriggerWheel } from '../../hooks/useLuckyWheel'
 import { SkillDebugPanel } from '../dev/SkillDebugPanel'
+import { ScreenShell } from '../ui/ScreenShell'
+import { Cloud } from '../ui/Cloud'
+import { ComboBar } from '../hud/ComboBar'
+import { theme, block, skyFull } from '../../theme'
 
 export function GameScreen() {
   const { currentWorldId, combo, answerCorrect, answerIncorrect, navigateTo, resetCombo, wheelPending, wheelSpinsToday, totalCorrectSession, totalCorrect, triggerWheel, collectWheelReward, triggerChest, updateSkillMastery, triggerLevelUp, worldAccuracy } = useGameStore()
@@ -91,13 +94,37 @@ export function GameScreen() {
   if (!task) return null
 
   return (
-    <div className="screen" style={{ background: world?.bgColor || 'var(--mc-bg)', position: 'relative' }}>
+    <ScreenShell background={skyFull}>
+      <Cloud style={{ top: 90, left: 30, opacity: 0.85 }} />
+      <Cloud style={{ top: 130, right: 20, opacity: 0.6, transform: 'scale(0.7)' }} />
+
       <HUD />
-      <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', gap: 8 }}>
-        <PixelButton onClick={handleBackHome} style={{ padding: '8px 12px', fontSize: 10 }}>
-          ← Domů
-        </PixelButton>
+
+      <div style={{ padding: '0 12px 6px', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+        <motion.button
+          whileTap={{ scale: 0.94 }}
+          onClick={handleBackHome}
+          style={{
+            background: theme.card, border: `3px solid ${theme.cardEdge}`,
+            borderRadius: 999, padding: '4px 10px 4px 6px',
+            display: 'flex', alignItems: 'center', gap: 4,
+            fontFamily: 'inherit', fontSize: 12, fontWeight: 900, color: theme.ink,
+            boxShadow: block(3), cursor: 'pointer',
+          }}
+        >
+          <span style={{ fontSize: 16 }}>←</span> Mapa
+        </motion.button>
+        <div style={{
+          background: 'rgba(255,255,255,0.7)', borderRadius: 999, padding: '4px 10px',
+          fontSize: 12, fontWeight: 800, color: theme.ink,
+          border: `2px solid ${theme.cardEdge}`,
+        }}>
+          {world?.icon} {world?.name}
+        </div>
       </div>
+
+      <ComboBar combo={combo} />
+
       <motion.div
         animate={shakeControls}
         style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
@@ -111,14 +138,14 @@ export function GameScreen() {
       <AnimatePresence>
         {seriesComplete && !wheelPending && (
           <motion.div
-            className="series-overlay"
+            style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, background: 'rgba(43, 29, 16, 0.78)', zIndex: 50 }}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 300, damping: 22 }}
           >
             <motion.div
-              className="series-trophy"
+              style={{ fontSize: 80, filter: 'drop-shadow(0 0 30px #ffd700)' }}
               initial={{ scale: 0, rotate: -15 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ delay: 0.1, type: 'spring', stiffness: 350 }}
@@ -126,7 +153,7 @@ export function GameScreen() {
               🏆
             </motion.div>
             <motion.p
-              className="series-title"
+              style={{ fontSize: 32, fontWeight: 900, color: '#f5b90d', textShadow: '0 0 20px #f5b90d', textAlign: 'center' }}
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.18 }}
@@ -134,7 +161,7 @@ export function GameScreen() {
               SÉRIE HOTOVA!
             </motion.p>
             <motion.p
-              className="series-sub"
+              style={{ fontSize: 20, fontWeight: 700, color: '#fff', textAlign: 'center' }}
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.28 }}
@@ -146,6 +173,8 @@ export function GameScreen() {
       </AnimatePresence>
 
       {import.meta.env.DEV && <SkillDebugPanel />}
-    </div>
+
+      <div style={{ height: theme.navH, flexShrink: 0 }} />
+    </ScreenShell>
   )
 }
