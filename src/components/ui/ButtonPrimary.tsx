@@ -4,7 +4,7 @@ import { theme, block } from '../../theme'
 
 interface Props {
   children: ReactNode
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export function ButtonPrimary({ children, onClick }: Props) {
