@@ -8,26 +8,31 @@ html, body, #root { height: 100%; width: 100%; overflow: hidden; }
 body {
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
-  background: #0d1b0f;
-  color: #ffffff;
+  background: var(--sky1);
+  color: var(--ink);
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
 
 /* ── CSS Variables ── */
 :root {
-  --mc-bg:       #0d1b0f;
-  --mc-surface:  #1a2e1a;
-  --mc-border:   #2d6d44;
-  --mc-green:    #5dfc8c;
-  --mc-gold:     #ffd700;
-  --mc-diamond:  #5de8fc;
-  --mc-emerald:  #50f090;
-  --mc-red:      #ff6b6b;
-  --mc-text:     #ffffff;
-  --mc-muted:    #8a9a8a;
-  --radius:      3px;
-  --hud-height:  56px;
+  --sky1:       #7ec8f0;
+  --sky2:       #a8dcf2;
+  --grass1:     #5fb84a;
+  --grass2:     #3f8e2d;
+  --card:       #fffaf0;
+  --card-edge:  #3a2410;
+  --ink:        #2b1d10;
+  --ink-soft:   #6b5b48;
+  --gold:       #f5b90d;
+  --gold-deep:  #b67806;
+  --diamond:    #3ac8d1;
+  --emerald:    #30b15c;
+  --star:       #ffd84a;
+  --red:        #e64a3a;
+  --purple:     #9b59b6;
+  --radius:     12px;
+  --hud-height: auto;
 }
 
 /* ── App shell ── */
@@ -641,4 +646,10 @@ body {
 @keyframes runner-block-slide {
   from { right: -90px; }
   to   { right: calc(100% + 90px); }
+}
+
+/* ── Pulse animation for letter tiles ── */
+@keyframes pulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
 }
