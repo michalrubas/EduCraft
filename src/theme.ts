@@ -25,7 +25,7 @@ export const theme = {
 } as const
 
 /** Chunky 3D block-depth shadow */
-export function block(depth = 4, color = theme.cardEdge) {
+export function block(depth = 4, color: string = theme.cardEdge) {
   return `0 ${depth}px 0 ${color}, 0 ${depth + 2}px ${depth * 2}px rgba(0,0,0,0.18)`
 }
 

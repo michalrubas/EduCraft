@@ -1,45 +1,69 @@
 // src/components/hud/HUD.tsx
 import { useGameStore } from '../../store/gameStore'
-import { getComboInfo } from '../../hooks/useCombo'
 import { getLevelData } from '../../data/levels'
-import { CURRENCY_ICONS } from '../../data/config'
-import { Icon } from '../ui/Icon'
-import { ComboBar } from './ComboBar'
+import { theme, block } from '../../theme'
+
+function Coin({ icon, value, tint }: { icon: string; value: number; tint: string }) {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 4,
+      background: theme.card, border: `3px solid ${theme.cardEdge}`,
+      borderRadius: 999, padding: '3px 10px 3px 4px',
+      boxShadow: block(3),
+    }}>
+      <span style={{
+        fontSize: 18, width: 24, height: 24,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: tint, borderRadius: '50%',
+        boxShadow: 'inset -2px -2px 0 rgba(0,0,0,0.25), inset 2px 2px 0 rgba(255,255,255,0.4)',
+      }}>{icon}</span>
+      <span style={{ fontSize: 14, fontWeight: 900, color: theme.ink }}>{value}</span>
+    </div>
+  )
+}
 
 export function HUD() {
-  const { diamonds, emeralds, stars, combo, muted, setMuted, xp, level } = useGameStore()
-  const info = getComboInfo(combo)
+  const { diamonds, emeralds, stars, level, xp } = useGameStore()
   const { progressPercent } = getLevelData(xp)
 
   return (
-    <>
-      <div className="hud">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(0,0,0,0.5)', padding: '2px 8px', borderRadius: 4, marginRight: 4 }}>
-          <span style={{ fontSize: 14, color: '#55ff55', fontWeight: 'bold' }}>Lev {level}</span>
+    <div style={{
+      padding: '10px 12px 8px',
+      display: 'flex', alignItems: 'center', gap: 8,
+      fontFamily: 'Nunito, sans-serif', fontWeight: 800,
+      flexShrink: 0,
+    }}>
+      {/* Avatar + level */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 8,
+        background: theme.card, border: `3px solid ${theme.cardEdge}`,
+        borderRadius: 999, padding: '4px 12px 4px 4px',
+        boxShadow: block(3),
+      }}>
+        <div style={{
+          width: 36, height: 36, borderRadius: '50%',
+          background: '#ffd9a6', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 22, border: `2px solid ${theme.cardEdge}`,
+        }}>🧑‍🌾</div>
+        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+          <span style={{ fontSize: 9, color: theme.inkSoft, letterSpacing: 0.5 }}>LEVEL</span>
+          <span style={{ fontSize: 16, color: theme.ink, fontWeight: 900 }}>{level}</span>
         </div>
-        <span className="hud-currency"><Icon src={CURRENCY_ICONS.diamonds} size={18} /><span>{diamonds}</span></span>
-        <span className="hud-currency"><Icon src={CURRENCY_ICONS.emeralds} size={18} /><span>{emeralds}</span></span>
-        <span className="hud-currency"><Icon src={CURRENCY_ICONS.stars} size={18} /><span>{stars}</span></span>
-        <button
-          onClick={() => setMuted(!muted)}
-          style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, color: 'var(--mc-muted)' }}
-          aria-label={muted ? 'Zapnout zvuk' : 'Vypnout zvuk'}
-        >
-          {muted ? '🔇' : '🔊'}
-        </button>
-      </div>
-      
-      {/* XP Bar */}
-      <div style={{ height: 4, background: '#1c301c', width: '100%', position: 'relative', borderBottom: '1px solid #000' }}>
-        <div style={{ 
-          height: '100%', 
-          background: '#55ff55', 
-          width: `${progressPercent}%`,
-          transition: 'width 0.4s ease-out'
-        }} />
+        {/* XP ring */}
+        <div style={{
+          width: 8, height: 24, background: '#eadfcc', borderRadius: 4, marginLeft: 4,
+          overflow: 'hidden', display: 'flex', alignItems: 'flex-end',
+        }}>
+          <div style={{ width: '100%', height: `${progressPercent}%`, background: theme.grass1, transition: 'height 0.4s ease-out' }} />
+        </div>
       </div>
 
-      <ComboBar combo={combo} />
-    </>
+      {/* Currencies */}
+      <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+        <Coin icon="💎" value={diamonds} tint={theme.diamond} />
+        <Coin icon="🟢" value={emeralds} tint={theme.emerald} />
+        <Coin icon="⭐" value={stars} tint={theme.star} />
+      </div>
+    </div>
   )
 }
