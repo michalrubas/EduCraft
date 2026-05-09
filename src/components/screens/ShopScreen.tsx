@@ -4,9 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 import { ShopItem, ItemCategory } from '../../data/types'
-import { CURRENCY_ICONS } from '../../data/config'
-import { Icon } from '../ui/Icon'
 import { HUD } from '../hud/HUD'
+import { ScreenShell } from '../ui/ScreenShell'
+import { Cloud } from '../ui/Cloud'
+import { theme, block, skyShort } from '../../theme'
 
 const CATEGORIES: { id: ItemCategory | 'all'; label: string }[] = [
   { id: 'all',         label: '🎒 Vše'     },
@@ -17,14 +18,20 @@ const CATEGORIES: { id: ItemCategory | 'all'; label: string }[] = [
   { id: 'rare',        label: '🌟 Vzácné'  },
 ]
 
-function CostLabel({ item }: { item: ShopItem }) {
+function CostPill({ item }: { item: ShopItem }) {
   const { diamonds = 0, emeralds = 0, stars = 0 } = item.cost
+  const parts: { icon: string; val: number }[] = []
+  if (diamonds) parts.push({ icon: '💎', val: diamonds })
+  if (emeralds) parts.push({ icon: '🟢', val: emeralds })
+  if (stars) parts.push({ icon: '⭐', val: stars })
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, flexWrap: 'wrap', justifyContent: 'center' }}>
-      {!!diamonds && <><Icon src={CURRENCY_ICONS.diamonds} size={14} />{diamonds}</>}
-      {!!emeralds && <><Icon src={CURRENCY_ICONS.emeralds} size={14} />{emeralds}</>}
-      {!!stars    && <><Icon src={CURRENCY_ICONS.stars}    size={14} />{stars}</>}
-    </span>
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 4, justifyContent: 'center',
+      background: theme.gold, borderRadius: 999, padding: '2px 8px',
+      fontSize: 11, fontWeight: 900, color: theme.ink,
+    }}>
+      {parts.map((p, i) => <span key={i}>{p.icon}{p.val}</span>)}
+    </div>
   )
 }
 
@@ -55,62 +62,110 @@ export function ShopScreen() {
   const total = SHOP_ITEMS.length
 
   return (
-    <div className="screen" style={{ background: 'var(--mc-bg)' }}>
+    <ScreenShell background={skyShort}>
+      <Cloud style={{ top: 80, left: 24, opacity: 0.7 }} />
+
       <HUD />
-      <div className="section-title" style={{ display: 'flex', gap: 16 }}>
-        <span 
-          style={{ cursor: 'pointer', opacity: mainTab === 'shop' ? 1 : 0.5, borderBottom: mainTab === 'shop' ? '2px solid var(--mc-gold)' : 'none', paddingBottom: 4 }}
-          onClick={() => setMainTab('shop')}
-        >🏪 Obchod</span>
-        <span 
-          style={{ cursor: 'pointer', opacity: mainTab === 'showcase' ? 1 : 0.5, borderBottom: mainTab === 'showcase' ? '2px solid var(--mc-gold)' : 'none', paddingBottom: 4 }}
-          onClick={() => setMainTab('showcase')}
-        >🖼️ Vitrína</span>
+
+      {/* Main tabs: Obchod / Vitrína */}
+      <div style={{ display: 'flex', gap: 10, padding: '6px 12px 10px', justifyContent: 'center' }}>
+        {(['shop', 'showcase'] as const).map(tab => (
+          <motion.button
+            key={tab}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setMainTab(tab)}
+            style={{
+              background: theme.card,
+              border: `3px solid ${theme.cardEdge}`,
+              borderRadius: 14,
+              padding: '8px 18px',
+              fontFamily: 'Nunito, sans-serif',
+              fontSize: 14, fontWeight: 900, color: theme.ink,
+              cursor: 'pointer',
+              boxShadow: mainTab === tab ? block(4) : 'none',
+              opacity: mainTab === tab ? 1 : 0.7,
+            }}
+          >
+            {tab === 'shop' ? '🏪 Obchod' : '🖼️ Vitrína'}
+          </motion.button>
+        ))}
       </div>
 
       {mainTab === 'shop' && (
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-          <div className="shop-tabs">
+          {/* Category pills */}
+          <div style={{
+            display: 'flex', gap: 6, padding: '0 12px 8px',
+            overflowX: 'auto', scrollbarWidth: 'none',
+          }}>
             {CATEGORIES.map(cat => (
               <button
                 key={cat.id}
-                className={`shop-tab ${activeTab === cat.id ? 'active' : ''}`}
                 onClick={() => setActiveTab(cat.id)}
+                style={{
+                  flexShrink: 0, padding: '6px 12px',
+                  borderRadius: 999,
+                  background: activeTab === cat.id ? theme.gold : theme.card,
+                  border: `2px solid ${activeTab === cat.id ? theme.goldDeep : theme.cardEdge}`,
+                  fontFamily: 'Nunito, sans-serif',
+                  fontSize: 12, fontWeight: 900,
+                  color: theme.ink, cursor: 'pointer',
+                }}
               >
                 {cat.label}
               </button>
             ))}
           </div>
 
-          <div className="shop-grid" style={{ overflowY: 'auto', flex: 1 }}>
+          {/* Item grid */}
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 8, padding: '0 12px 12px',
+            overflowY: 'auto', flex: 1,
+          }}>
             <AnimatePresence>
               {visible.map((item, i) => {
                 const isOwned = ownedItems.includes(item.id)
                 const affordable = canAfford(item, diamonds, emeralds, stars)
                 const isUrl = item.icon.startsWith('/') || item.icon.startsWith('http')
+                const isEpic = item.rarity === 'epic'
+                const isLegendary = item.rarity === 'legendary'
                 return (
                   <motion.div
                     key={item.id}
-                    className={[
-                      'shop-item-card',
-                      isOwned ? 'owned' : '',
-                      !isOwned && !affordable ? 'locked' : '',
-                      item.rarity === 'epic' ? 'epic' : '',
-                      item.rarity === 'legendary' ? 'legendary' : '',
-                    ].join(' ')}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.03 }}
                     onClick={() => handleBuy(item)}
+                    style={{
+                      background: isLegendary
+                        ? 'linear-gradient(180deg, #fff5d4, #ffe8a0)'
+                        : theme.card,
+                      border: `3px solid ${isEpic ? theme.purple : isLegendary ? theme.gold : theme.cardEdge}`,
+                      borderRadius: 12,
+                      padding: '10px 6px 8px',
+                      textAlign: 'center',
+                      cursor: isOwned ? 'default' : 'pointer',
+                      position: 'relative',
+                      opacity: !isOwned && !affordable ? 0.45 : 1,
+                      boxShadow: block(3),
+                    }}
                   >
-                    <span className="shop-item-icon" style={{ display: 'flex', justifyContent: 'center' }}>
+                    {/* Owned badge */}
+                    {isOwned && (
+                      <div style={{
+                        position: 'absolute', top: -6, right: -6,
+                        width: 22, height: 22, borderRadius: '50%',
+                        background: theme.grass1, border: `2px solid ${theme.cardEdge}`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: 12, color: '#fff', fontWeight: 900,
+                      }}>✓</div>
+                    )}
+                    <span style={{ fontSize: 30, display: 'block', marginBottom: 4 }}>
                       {isUrl ? <img src={item.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} /> : item.icon}
                     </span>
-                    <div className="shop-item-name">{item.name}</div>
-                    {isOwned
-                      ? <div className="shop-item-owned">✓ mám</div>
-                      : <div className="shop-item-price"><CostLabel item={item} /></div>
-                    }
+                    <div style={{ fontSize: 11, fontWeight: 800, color: theme.inkSoft, marginBottom: 4 }}>{item.name}</div>
+                    {!isOwned && <CostPill item={item} />}
                   </motion.div>
                 )
               })}
@@ -120,12 +175,16 @@ export function ShopScreen() {
       )}
 
       {mainTab === 'showcase' && (
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflowY: 'auto', padding: '0 8px 16px' }}>
-          <div style={{ fontSize: 11, color: 'var(--mc-muted)', textAlign: 'center', marginBottom: 8 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflowY: 'auto', padding: '0 12px 16px' }}>
+          <div style={{ fontSize: 11, color: theme.inkSoft, textAlign: 'center', marginBottom: 8, fontWeight: 800 }}>
             {selectedSlot !== null ? `Vyber předmět pro slot ${selectedSlot + 1}` : 'Klikni na slot a pak na předmět'}
           </div>
 
-          <div className="showcase-grid" style={{ marginBottom: 16 }}>
+          {/* 4×2 showcase slots */}
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 8, marginBottom: 16,
+          }}>
             {showcaseSlots.map((itemId, slot) => {
               const item = itemId ? SHOP_ITEMS.find(i => i.id === itemId) : null
               const isUrl = item?.icon.startsWith('/') || item?.icon.startsWith('http')
@@ -133,10 +192,23 @@ export function ShopScreen() {
               return (
                 <motion.div
                   key={slot}
-                  className={`showcase-slot ${item ? 'filled' : 'empty'}`}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setSelectedSlot(isSelected ? null : slot)}
-                  style={{ outline: isSelected ? '2px solid var(--mc-gold)' : 'none', cursor: 'pointer' }}
+                  style={{
+                    aspectRatio: '1',
+                    background: item ? theme.card : 'rgba(255,255,255,0.3)',
+                    border: item
+                      ? `3px solid ${theme.gold}`
+                      : `2px dashed ${theme.cardEdge}`,
+                    borderRadius: 12,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: item ? 26 : 16,
+                    color: item ? theme.ink : theme.inkSoft,
+                    cursor: 'pointer',
+                    boxShadow: item ? block(3) : 'none',
+                    outline: isSelected ? `3px solid ${theme.gold}` : 'none',
+                    outlineOffset: 2,
+                  }}
                 >
                   {item
                     ? (isUrl ? <img src={item.icon} alt="" style={{ width: 36, height: 36, objectFit: 'contain' }} /> : item.icon)
@@ -146,37 +218,53 @@ export function ShopScreen() {
             })}
           </div>
 
-          <div style={{ fontSize: 12, color: 'var(--mc-muted)', marginBottom: 8, fontWeight: 700 }}>
+          <div style={{ fontSize: 12, color: theme.inkSoft, marginBottom: 8, fontWeight: 800 }}>
             Moje předměty ({owned} z {total})
           </div>
-          <div className="shop-grid">
+
+          {/* Owned items grid */}
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 8,
+          }}>
             {SHOP_ITEMS.filter(i => ownedItems.includes(i.id)).map((item, idx) => {
               const isUrl = item.icon.startsWith('/') || item.icon.startsWith('http')
               const inShowcase = showcaseSlots.includes(item.id)
+              const isEpic = item.rarity === 'epic'
+              const isLegendary = item.rarity === 'legendary'
               return (
                 <motion.div
                   key={item.id}
-                  className={['shop-item-card', 'owned', item.rarity === 'epic' ? 'epic' : '', item.rarity === 'legendary' ? 'legendary' : ''].join(' ')}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: idx * 0.03 }}
                   onClick={() => {
-                    if (inShowcase) return  // už ve vitríně, nepřidávat znovu
+                    if (inShowcase) return
                     const slot = selectedSlot !== null ? selectedSlot : showcaseSlots.findIndex(s => s === null)
                     if (slot !== -1) { addToShowcase(item.id, slot); setSelectedSlot(null) }
                   }}
-                  style={{ cursor: inShowcase ? 'default' : 'pointer', outline: inShowcase ? '2px solid var(--mc-gold)' : 'none' }}
+                  style={{
+                    background: isLegendary ? 'linear-gradient(180deg, #fff5d4, #ffe8a0)' : theme.card,
+                    border: `3px solid ${inShowcase ? theme.gold : isEpic ? theme.purple : theme.cardEdge}`,
+                    borderRadius: 12,
+                    padding: '10px 6px 8px',
+                    textAlign: 'center',
+                    cursor: inShowcase ? 'default' : 'pointer',
+                    boxShadow: block(3),
+                  }}
                 >
-                  <span className="shop-item-icon" style={{ display: 'flex', justifyContent: 'center' }}>
+                  <span style={{ fontSize: 30, display: 'block', marginBottom: 4 }}>
                     {isUrl ? <img src={item.icon} alt="" style={{ width: 40, height: 40, objectFit: 'contain' }} /> : item.icon}
                   </span>
-                  <div className="shop-item-name">{item.name}</div>
-                  <div className="shop-item-owned">{inShowcase ? '⭐ ve vitríně' : '✓ mám'}</div>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: theme.inkSoft, marginBottom: 2 }}>{item.name}</div>
+                  <div style={{ fontSize: 11, fontWeight: 900, color: inShowcase ? theme.gold : theme.grass1 }}>
+                    {inShowcase ? '⭐ ve vitríně' : '✓ mám'}
+                  </div>
                 </motion.div>
               )
             })}
             {ownedItems.length === 0 && (
-              <div style={{ gridColumn: '1/-1', textAlign: 'center', color: 'var(--mc-muted)', padding: 24 }}>
+              <div style={{ gridColumn: '1/-1', textAlign: 'center', color: theme.inkSoft, padding: 24, fontWeight: 800 }}>
                 Zatím žádné předměty. Kup si je v Obchodě!
               </div>
             )}
@@ -184,17 +272,43 @@ export function ShopScreen() {
         </div>
       )}
 
-      <div className="bottom-nav">
-        <button className="nav-btn" onClick={() => navigateTo('home')}>
-          <span>🌍</span><span>Světy</span>
-        </button>
-        <button className="nav-btn active">
-          <span>🏪</span><span>Obchod</span>
-        </button>
-        <button className="nav-btn" onClick={() => navigateTo('profile')}>
-          <span>👤</span><span>Profil</span>
-        </button>
+      {/* Spacer for floating nav */}
+      <div style={{ height: theme.navH, flexShrink: 0 }} />
+
+      {/* Floating bottom nav */}
+      <div style={{
+        position: 'absolute', left: 0, right: 0, bottom: 22,
+        display: 'flex', justifyContent: 'center', gap: 14,
+        pointerEvents: 'none', zIndex: 100,
+      }}>
+        <motion.button
+          whileTap={{ scale: 0.94 }}
+          onClick={() => navigateTo('home')}
+          style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+            background: theme.card, border: `3px solid ${theme.cardEdge}`,
+            borderRadius: 18, padding: '8px 18px',
+            fontFamily: 'Nunito, sans-serif', color: theme.ink, fontWeight: 800,
+            boxShadow: block(4), cursor: 'pointer', pointerEvents: 'auto',
+          }}
+        >
+          <span style={{ fontSize: 24 }}>🗺️</span>
+          <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3 }}>MAPA</span>
+        </motion.button>
+        <motion.button
+          whileTap={{ scale: 0.94 }}
+          style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+            background: theme.gold, border: `3px solid ${theme.cardEdge}`,
+            borderRadius: 18, padding: '8px 18px',
+            fontFamily: 'Nunito, sans-serif', color: theme.ink, fontWeight: 800,
+            boxShadow: block(4), cursor: 'pointer', pointerEvents: 'auto',
+          }}
+        >
+          <span style={{ fontSize: 24 }}>🎒</span>
+          <span style={{ fontSize: 11, fontWeight: 900, letterSpacing: 0.3 }}>BATOH</span>
+        </motion.button>
       </div>
-    </div>
+    </ScreenShell>
   )
 }
