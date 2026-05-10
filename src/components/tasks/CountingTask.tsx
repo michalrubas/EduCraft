@@ -49,7 +49,7 @@ export function CountingTask({ task, onAnswer }: Props) {
         ))}
       </motion.div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${options.length}, 1fr)`, gap: 10, width: '100%', maxWidth: 280 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${options.length <= 3 ? options.length : 2}, 1fr)`, gap: 12, width: '100%', maxWidth: 320 }}>
         {options.map((opt, i) => (
           <CubeButton
             key={opt}

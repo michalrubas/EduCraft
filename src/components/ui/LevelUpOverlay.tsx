@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import { playSound } from '../../audio/sounds'
 import { useGameStore } from '../../store/gameStore'
 import { getLevelReward } from '../../data/levels'
-import { CURRENCY_ICONS } from '../../data/config'
 import { useEffect } from 'react'
 import { OverlayBackdrop } from './OverlayBackdrop'
 import { ButtonPrimary } from './ButtonPrimary'
@@ -21,8 +20,8 @@ export function LevelUpOverlay() {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = rect.left + rect.width / 2
     const y = rect.top + rect.height / 2
-    if (reward.diamonds > 0) spawnParticles(CURRENCY_ICONS.diamonds, Math.min(reward.diamonds, 15), x, y)
-    if (reward.emeralds > 0) spawnParticles(CURRENCY_ICONS.emeralds, Math.min(reward.emeralds, 10), x, y)
+    if (reward.diamonds > 0) spawnParticles('💎', Math.min(reward.diamonds, 15), x, y)
+    if (reward.emeralds > 0) spawnParticles('🟢', Math.min(reward.emeralds, 10), x, y)
     collectLevelUpReward()
   }
 

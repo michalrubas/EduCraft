@@ -20,7 +20,7 @@ export function WorldCard({ world, unlocked, isCurrent, progress, onPress }: Pro
       whileTap={{ scale: 0.96 }}
       onClick={onPress}
       style={{
-        flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+        flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
         transform: isCurrent ? 'translateY(-8px)' : 'none',
         paddingTop: isCurrent ? 14 : 0,
         cursor: 'pointer',
@@ -76,18 +76,25 @@ export function WorldCard({ world, unlocked, isCurrent, progress, onPress }: Pro
       <div style={{
         fontSize: isCurrent ? 16 : 13, fontWeight: 900, color: theme.ink,
         textShadow: '0 1px 0 rgba(255,255,255,0.5)',
+        textAlign: 'center', lineHeight: 1.15,
+        maxWidth: size, wordBreak: 'break-word',
+        height: isCurrent ? 37 : 30,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>{world.name}</div>
 
-      {locked && (
-        <div style={{
-          background: theme.card, border: `2px solid ${theme.cardEdge}`,
-          borderRadius: 999, padding: '2px 8px',
-          fontSize: 12, fontWeight: 900, color: theme.ink, display: 'flex', alignItems: 'center', gap: 3,
-          boxShadow: block(2),
-        }}>
-          {world.unlockCurrency === 'emeralds' ? '🟢' : world.unlockCurrency === 'stars' ? '⭐' : '💎'} {world.unlockCost}
-        </div>
-      )}
+      {/* Always reserve space for cost pill to keep alignment */}
+      <div style={{ minHeight: 22, display: 'flex', alignItems: 'center' }}>
+        {locked && (
+          <div style={{
+            background: theme.card, border: `2px solid ${theme.cardEdge}`,
+            borderRadius: 999, padding: '2px 8px',
+            fontSize: 12, fontWeight: 900, color: theme.ink, display: 'flex', alignItems: 'center', gap: 3,
+            boxShadow: block(2),
+          }}>
+            {world.unlockCurrency === 'emeralds' ? '🟢' : world.unlockCurrency === 'stars' ? '⭐' : '💎'} {world.unlockCost}
+          </div>
+        )}
+      </div>
     </motion.div>
   )
 }

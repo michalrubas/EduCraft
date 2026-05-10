@@ -40,13 +40,13 @@ export function RewardScreen({ onDone }: Props) {
           initial={{ scale: 0, rotate: -20 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-          style={{ position: 'relative' }}
+          style={{ position: 'relative', width: 180, height: 180, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-          <svg width="180" height="180" viewBox="0 0 180 180" style={{ position: 'absolute', inset: 0 }}>
+          <svg width="180" height="180" viewBox="0 0 180 180" style={{ position: 'absolute', top: 0, left: 0 }}>
             {Array.from({ length: 12 }).map((_, i) => {
               const a = (i / 12) * Math.PI * 2
               const x1 = 90 + Math.cos(a) * 40, y1 = 90 + Math.sin(a) * 40
-              const x2 = 90 + Math.cos(a) * 80, y2 = 90 + Math.sin(a) * 80
+              const x2 = 90 + Math.cos(a) * 85, y2 = 90 + Math.sin(a) * 85
               return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={theme.gold} strokeWidth="6" strokeLinecap="round" opacity="0.8" />
             })}
           </svg>
@@ -55,7 +55,7 @@ export function RewardScreen({ onDone }: Props) {
             background: theme.grass1, border: `5px solid ${theme.cardEdge}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 70, position: 'relative', zIndex: 1,
-            boxShadow: `${blockInset}, 0 8px 0 ${theme.grass2}`,
+            boxShadow: blockInset,
           }}>✓</div>
         </motion.div>
 

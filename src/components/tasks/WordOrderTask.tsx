@@ -3,8 +3,9 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Task } from '../../data/types'
 import { useGameStore } from '../../store/gameStore'
-import { HINT_COST, CURRENCY_ICONS } from '../../data/config'
-import { Icon } from '../ui/Icon'
+import { HINT_COST } from '../../data/config'
+import { SignBoard } from '../ui/SignBoard'
+import { theme, block } from '../../theme'
 
 const EMOJI_HINT_COST = 1
 
@@ -56,9 +57,22 @@ export function WordOrderTask({ task, onAnswer }: Props) {
     setUsedIndices(usedIndices.slice(0, -1))
   }
 
+  const hintBtnStyle = (disabled: boolean): React.CSSProperties => ({
+    padding: '8px 14px', fontSize: 13, fontWeight: 800,
+    background: theme.card, border: `3px solid ${theme.cardEdge}`,
+    borderRadius: 12, color: theme.ink, fontFamily: 'inherit',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.4 : 1,
+    boxShadow: block(3),
+  })
+
   return (
-    <div className="task-area">
-      <p className="task-question">{task.question}</p>
+    <div style={{
+      flex: 1, display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      gap: 18, padding: '0 16px 8px', minHeight: 0,
+    }}>
+      <SignBoard fontSize={22}>{task.question}</SignBoard>
 
       {/* Emoji hint */}
       {emojiRevealed && task.emoji && (
@@ -66,26 +80,27 @@ export function WordOrderTask({ task, onAnswer }: Props) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-          style={{ fontSize: 52, textAlign: 'center', marginBottom: 12, lineHeight: 1 }}
+          style={{ fontSize: 52, textAlign: 'center', lineHeight: 1 }}
         >
           {task.emoji}
         </motion.div>
       )}
 
       {/* Answer slots */}
-      <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginBottom: 24, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 6, justifyContent: 'center', flexWrap: 'wrap' }}>
         {Array.from({ length: total }).map((_, i) => (
           <div
             key={i}
             style={{
               width: 44, height: 52,
-              border: '2px solid var(--mc-accent, #5dfc8c)',
-              borderRadius: 4,
+              border: `3px solid ${placed[i] ? theme.grass1 : theme.cardEdge}`,
+              borderRadius: 10,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 22, fontWeight: 'bold',
-              background: placed[i] ? 'var(--mc-accent, #5dfc8c)' : 'transparent',
-              color: placed[i] ? '#000' : 'transparent',
-              transition: 'background 0.15s',
+              fontSize: 22, fontWeight: 900,
+              background: placed[i] ? theme.grass1 : theme.card,
+              color: placed[i] ? '#fff' : 'transparent',
+              boxShadow: block(3),
+              transition: 'background 0.15s, border-color 0.15s',
             }}
           >
             {placed[i] ?? ''}
@@ -94,17 +109,21 @@ export function WordOrderTask({ task, onAnswer }: Props) {
       </div>
 
       {/* Source letters */}
-      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 16 }}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
         {task.letters!.map((letter, idx) => (
           <motion.button
             key={idx}
-            className="answer-btn"
             whileTap={{ scale: 0.9 }}
             onClick={() => handlePick(idx)}
             style={{
-              width: 48, fontSize: 22, fontWeight: 'bold',
+              width: 48, aspectRatio: 1, fontSize: 22, fontWeight: 900,
+              background: theme.card, border: `3px solid ${theme.cardEdge}`,
+              borderRadius: 10, color: theme.ink, fontFamily: 'inherit',
+              boxShadow: block(3),
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
               opacity: usedIndices.includes(idx) ? 0.2 : 1,
               pointerEvents: usedIndices.includes(idx) ? 'none' : 'auto',
+              cursor: 'pointer',
             }}
           >
             {letter}
@@ -112,13 +131,12 @@ export function WordOrderTask({ task, onAnswer }: Props) {
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+      <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
         <motion.button
-          className="pixel-btn"
           onClick={handleRemoveLast}
           disabled={placed.length === 0}
           whileTap={{ scale: 0.95 }}
-          style={{ opacity: placed.length === 0 ? 0.4 : 1 }}
+          style={hintBtnStyle(placed.length === 0)}
         >
           ↺ Zpět
         </motion.button>
@@ -128,16 +146,9 @@ export function WordOrderTask({ task, onAnswer }: Props) {
             whileTap={{ scale: 0.95 }}
             onClick={handleEmojiHint}
             disabled={stars < EMOJI_HINT_COST}
-            style={{
-              padding: '8px 14px', fontSize: 13,
-              background: 'transparent',
-              border: '2px solid #888',
-              borderRadius: 4, color: '#aaa', cursor: stars < EMOJI_HINT_COST ? 'not-allowed' : 'pointer',
-              fontFamily: 'inherit',
-              opacity: stars < EMOJI_HINT_COST ? 0.4 : 1,
-            }}
+            style={hintBtnStyle(stars < EMOJI_HINT_COST)}
           >
-            🖼️ Obrázek (<Icon src={CURRENCY_ICONS.stars} size={14} /> -{EMOJI_HINT_COST})
+            🖼️ Obrázek (⭐ -{EMOJI_HINT_COST})
           </motion.button>
         )}
 
@@ -146,16 +157,9 @@ export function WordOrderTask({ task, onAnswer }: Props) {
             whileTap={{ scale: 0.95 }}
             onClick={handleHint}
             disabled={placed.length > 0 || diamonds < HINT_COST}
-            style={{
-              padding: '8px 14px', fontSize: 13,
-              background: 'transparent',
-              border: '2px solid #888',
-              borderRadius: 4, color: '#aaa', cursor: placed.length > 0 || diamonds < HINT_COST ? 'not-allowed' : 'pointer',
-              fontFamily: 'inherit',
-              opacity: placed.length > 0 || diamonds < HINT_COST ? 0.4 : 1,
-            }}
+            style={hintBtnStyle(placed.length > 0 || diamonds < HINT_COST)}
           >
-            💡 Nápověda ({CURRENCY_ICONS.diamonds} -{HINT_COST})
+            💡 Nápověda (💎 -{HINT_COST})
           </motion.button>
         )}
       </div>

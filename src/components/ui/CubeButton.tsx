@@ -11,9 +11,9 @@ interface Props {
 }
 
 const DIMS = {
-  sm: { fontSize: 28 },
-  md: { fontSize: 36 },
-  lg: { fontSize: 50, width: 100 },
+  sm: { fontSize: 28, padding: '12px 8px' },
+  md: { fontSize: 36, padding: '16px 8px' },
+  lg: { fontSize: 50, padding: '18px 12px', width: 120 },
 } as const
 
 export function CubeButton({ label, color, edge, size = 'md', onClick, className }: Props) {
@@ -24,8 +24,9 @@ export function CubeButton({ label, color, edge, size = 'md', onClick, className
       whileTap={{ scale: 0.9 }}
       onClick={onClick}
       style={{
-        aspectRatio: '1.1',
-        width: 'width' in d ? d.width : undefined,
+        width: 'width' in d ? d.width : '100%',
+        aspectRatio: 'width' in d ? 1 : undefined,
+        padding: d.padding,
         borderRadius: 14,
         background: color,
         border: `4px solid ${edge}`,

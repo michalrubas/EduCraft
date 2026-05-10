@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion'
 import { useGameStore } from '../../store/gameStore'
+import { OverlayBackdrop } from './OverlayBackdrop'
+import { ButtonPrimary } from './ButtonPrimary'
+import { theme, block } from '../../theme'
 
 export function BadgeOverlay() {
   const { badgePending, dismissBadge, spawnParticles } = useGameStore()
@@ -16,78 +19,65 @@ export function BadgeOverlay() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 350,
-        background: 'rgba(0,0,0,0.85)',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        padding: 24, gap: 20, textAlign: 'center'
-      }}
-    >
-      <motion.p
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        style={{ color: '#ffd700', fontSize: 16, fontWeight: 800, letterSpacing: 2, fontFamily: 'inherit' }}
-      >
-        NOVÝ ODZNAK!
-      </motion.p>
-      
+    <OverlayBackdrop>
       <motion.div
-        initial={{ scale: 0, rotate: -45 }}
-        animate={{ scale: 1, rotate: [0, -10, 10, -5, 5, 0] }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 22 }}
         style={{
-          width: 120, height: 120,
-          background: 'radial-gradient(circle, #fff7b0 0%, #ffd700 60%, #b8860b 100%)',
-          borderRadius: '50%',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 64, filter: 'drop-shadow(0 0 32px #ffd700)',
-          border: '4px solid #fff'
+          background: theme.card, border: `4px solid ${theme.cardEdge}`,
+          borderRadius: 22, padding: '28px 24px', boxShadow: block(6),
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
+          maxWidth: 320, width: '100%', textAlign: 'center',
         }}
       >
-        {badge.icon}
+        <div style={{ fontSize: 16, fontWeight: 900, color: theme.goldDeep, letterSpacing: 2 }}>
+          NOVÝ ODZNAK!
+        </div>
+
+        <motion.div
+          initial={{ scale: 0, rotate: -45 }}
+          animate={{ scale: 1, rotate: [0, -10, 10, -5, 5, 0] }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          style={{
+            width: 110, height: 110,
+            background: 'radial-gradient(circle at 30% 30%, #fff5b8, #f5b90d 60%, #b67806 100%)',
+            borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 56,
+            border: `4px solid ${theme.cardEdge}`,
+            boxShadow: block(4, theme.goldDeep),
+          }}
+        >
+          {badge.icon}
+        </motion.div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          style={{ fontSize: 26, fontWeight: 900, color: theme.ink, fontFamily: 'inherit' }}
+        >
+          {badge.name}
+        </motion.div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          style={{ fontSize: 14, color: theme.inkSoft, fontWeight: 700, maxWidth: 260, fontFamily: 'inherit' }}
+        >
+          {badge.description}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          <ButtonPrimary onClick={handleCollect}>Skvělé! 🎉</ButtonPrimary>
+        </motion.div>
       </motion.div>
-
-      <motion.h2
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        style={{ color: '#fff', fontSize: 32, margin: 0, textShadow: '0 2px 4px rgba(0,0,0,0.5)', fontFamily: 'inherit' }}
-      >
-        {badge.name}
-      </motion.h2>
-
-      <motion.p
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        style={{ color: '#ccc', fontSize: 16, maxWidth: 300, fontFamily: 'inherit' }}
-      >
-        {badge.description}
-      </motion.p>
-
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 0.6 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={handleCollect}
-        className="pixel-btn"
-        style={{
-          marginTop: 20,
-          background: '#ffd700',
-          color: '#000',
-          padding: '16px 32px',
-          fontSize: 16,
-          borderColor: '#ffed4a'
-        }}
-      >
-        Skvělé!
-      </motion.button>
-    </motion.div>
+    </OverlayBackdrop>
   )
 }

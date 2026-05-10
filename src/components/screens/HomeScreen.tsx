@@ -56,7 +56,7 @@ export function HomeScreen() {
         <div style={{
           display: 'flex', gap: 14, overflowX: 'auto',
           padding: '24px 16px 28px', scrollbarWidth: 'none',
-          width: '100%',
+          width: '100%', alignItems: 'flex-end',
         }}>
           {WORLDS.map((world, i) => (
             <motion.div

@@ -47,8 +47,8 @@ export function EngPictureTask({ task, onAnswer }: Props) {
       <SignBoard fontSize={20}>{task.question}</SignBoard>
 
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 14, width: '100%', maxWidth: 280,
+        display: 'grid', gridTemplateColumns: `repeat(${options.length <= 3 ? options.length : 2}, 1fr)`,
+        gap: 14, width: '100%', maxWidth: 320,
       }}>
         {options.map((opt, i) => (
           <CubeButton

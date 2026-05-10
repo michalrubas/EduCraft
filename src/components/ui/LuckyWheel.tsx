@@ -6,8 +6,6 @@ import { WHEEL_REWARDS } from '../../hooks/useLuckyWheel'
 import { playSound } from '../../audio/sounds'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
-import { CURRENCY_ICONS } from '../../data/config'
-import { Icon } from './Icon'
 import { OverlayBackdrop } from './OverlayBackdrop'
 import { ButtonPrimary } from './ButtonPrimary'
 import { theme, block } from '../../theme'
@@ -37,7 +35,7 @@ export function LuckyWheel({ onCollect }: Props) {
       let picked = WHEEL_REWARDS[pickedIdx]
       if (picked.itemId === 'random') {
         const s = useGameStore.getState()
-        const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id))
+        const available = SHOP_ITEMS.filter(i => !i.shopOnly && !s.ownedItems.includes(i.id))
         if (available.length > 0) {
           const resolved = available[Math.floor(Math.random() * available.length)]
           picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
@@ -99,15 +97,14 @@ export function LuckyWheel({ onCollect }: Props) {
                 const ty = 50 + 32 * Math.sin(midAngle)
                 const rotate = `rotate(${i * segmentAngle + segmentAngle / 2}, ${tx}, ${ty})`
 
-                const segIcon = reward.diamonds ? CURRENCY_ICONS.diamonds
-                  : reward.emeralds ? CURRENCY_ICONS.emeralds
-                  : reward.stars ? CURRENCY_ICONS.stars
+                const segIcon = reward.diamonds ? '💎'
+                  : reward.emeralds ? '🟢'
+                  : reward.stars ? '⭐'
                   : null
                 const segAmount = reward.diamonds ? `+${reward.diamonds}`
                   : reward.emeralds ? `+${reward.emeralds}`
                   : reward.stars ? `+${reward.stars}`
                   : null
-                const isImg = segIcon?.startsWith('/')
 
                 return (
                   <g key={i}>
@@ -119,14 +116,7 @@ export function LuckyWheel({ onCollect }: Props) {
                     />
                     <g transform={rotate}>
                       {segIcon && segAmount ? (
-                        isImg ? (
-                          <>
-                            <image href={segIcon} x={tx - 5} y={ty - 10} width="10" height="10" />
-                            <text x={tx} y={ty + 5} textAnchor="middle" dominantBaseline="middle" fontSize="6" fill="#fff" style={{ fontFamily: 'monospace' }}>{segAmount}</text>
-                          </>
-                        ) : (
-                          <text x={tx} y={ty} textAnchor="middle" dominantBaseline="middle" fontSize="8" fill="#fff" style={{ fontFamily: 'monospace' }}>{`${segIcon} ${segAmount}`}</text>
-                        )
+                        <text x={tx} y={ty} textAnchor="middle" dominantBaseline="middle" fontSize="8" fill="#fff" style={{ fontFamily: 'monospace' }}>{`${segIcon} ${segAmount}`}</text>
                       ) : (
                         <text x={tx} y={ty} textAnchor="middle" dominantBaseline="middle" fontSize="8" fill="#fff" style={{ fontFamily: 'monospace' }}>{reward.label}</text>
                       )}
@@ -146,7 +136,8 @@ export function LuckyWheel({ onCollect }: Props) {
           </ButtonPrimary>
         ) : (() => {
           const r = resultReward
-          let bigIcon = r.diamonds ? CURRENCY_ICONS.diamonds : r.emeralds ? CURRENCY_ICONS.emeralds : r.stars ? CURRENCY_ICONS.stars : '🎁'
+          let bigIcon = r.diamonds ? '💎' : r.emeralds ? '🟢' : r.stars ? '⭐' : '🎁'
+          const bigTint = r.diamonds ? theme.diamond : r.emeralds ? theme.emerald : r.stars ? theme.star : theme.gold
           if (r.itemId) {
             const item = SHOP_ITEMS.find(i => i.id === r.itemId)
             if (item) bigIcon = item.icon
@@ -163,7 +154,15 @@ export function LuckyWheel({ onCollect }: Props) {
                 animate={{ rotate: [0, -12, 12, -6, 6, 0] }}
                 transition={{ delay: 0.25, duration: 0.55 }}
               >
-                <Icon src={bigIcon} size={72} />
+                <span style={{
+                  fontSize: 40, width: 72, height: 72,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: bigTint, borderRadius: '50%',
+                  border: `3px solid ${theme.cardEdge}`,
+                  boxShadow: 'inset -3px -3px 0 rgba(0,0,0,0.25), inset 3px 3px 0 rgba(255,255,255,0.4)',
+                }}>
+                  {bigIcon.startsWith('/') ? <img src={bigIcon} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} /> : bigIcon}
+                </span>
               </motion.div>
               <motion.p
                 style={{ fontSize: 24, fontWeight: 900, color: theme.ink, textAlign: 'center', letterSpacing: 1 }}
@@ -178,9 +177,9 @@ export function LuckyWheel({ onCollect }: Props) {
                 const x = rect.left + rect.width / 2
                 const y = rect.top + rect.height / 2
                 const { spawnParticles } = useGameStore.getState()
-                if (r.diamonds) spawnParticles(CURRENCY_ICONS.diamonds, Math.min(r.diamonds, 15), x, y)
-                if (r.emeralds) spawnParticles(CURRENCY_ICONS.emeralds, Math.min(r.emeralds, 10), x, y)
-                if (r.stars) spawnParticles(CURRENCY_ICONS.stars, Math.min(r.stars, 5), x, y)
+                if (r.diamonds) spawnParticles('💎', Math.min(r.diamonds, 15), x, y)
+                if (r.emeralds) spawnParticles('🟢', Math.min(r.emeralds, 10), x, y)
+                if (r.stars) spawnParticles('⭐', Math.min(r.stars, 5), x, y)
                 onCollect(r)
               }}>
                 ✓ VZÍT ODMĚNU

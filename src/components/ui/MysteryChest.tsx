@@ -3,8 +3,6 @@ import { useState, useRef } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import { WheelReward } from '../../data/types'
 import { playSound } from '../../audio/sounds'
-import { CURRENCY_ICONS } from '../../data/config'
-import { Icon } from './Icon'
 import { useGameStore } from '../../store/gameStore'
 import { SHOP_ITEMS } from '../../data/shopItems'
 import chestImg from '/assets/items/bauzin.png'
@@ -95,7 +93,7 @@ export function MysteryChest({ onCollect }: Props) {
       let picked = tier.rewards[Math.floor(Math.random() * tier.rewards.length)]
       if (picked.itemId === 'random') {
         const s = useGameStore.getState()
-        const available = SHOP_ITEMS.filter(i => !s.ownedItems.includes(i.id))
+        const available = SHOP_ITEMS.filter(i => !i.shopOnly && !s.ownedItems.includes(i.id))
         if (available.length > 0) {
           const resolved = available[Math.floor(Math.random() * available.length)]
           picked = { ...picked, itemId: resolved.id, label: `🎁 ${resolved.name}` }
@@ -109,7 +107,8 @@ export function MysteryChest({ onCollect }: Props) {
     }
   }
 
-  let bigIcon = reward?.diamonds ? CURRENCY_ICONS.diamonds : reward?.emeralds ? CURRENCY_ICONS.emeralds : reward?.stars ? CURRENCY_ICONS.stars : '🎁'
+  let bigIcon = reward?.diamonds ? '💎' : reward?.emeralds ? '🟢' : reward?.stars ? '⭐' : '🎁'
+  const bigTint = reward?.diamonds ? theme.diamond : reward?.emeralds ? theme.emerald : reward?.stars ? theme.star : theme.gold
   if (reward?.itemId) {
     const item = SHOP_ITEMS.find(i => i.id === reward.itemId)
     if (item) bigIcon = item.icon
@@ -147,7 +146,7 @@ export function MysteryChest({ onCollect }: Props) {
                 onClick={handleTap}
                 style={{
                   cursor: 'pointer',
-                  filter: `drop-shadow(0 0 16px ${tier.color})`,
+                  filter: `drop-shadow(0 0 6px ${tier.color})`,
                   userSelect: 'none',
                   transformOrigin: 'center bottom',
                 }}
@@ -174,11 +173,19 @@ export function MysteryChest({ onCollect }: Props) {
             style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}
           >
             <motion.div
-              style={{ lineHeight: 1, filter: `drop-shadow(0 0 28px ${tier.color})` }}
+              style={{ lineHeight: 1 }}
               animate={{ rotate: [0, -12, 12, -6, 6, 0] }}
               transition={{ delay: 0.15, duration: 0.5 }}
             >
-              <Icon src={bigIcon} size={72} />
+              <span style={{
+                fontSize: 40, width: 72, height: 72,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: bigTint, borderRadius: '50%',
+                border: `3px solid ${theme.cardEdge}`,
+                boxShadow: 'inset -3px -3px 0 rgba(0,0,0,0.25), inset 3px 3px 0 rgba(255,255,255,0.4)',
+              }}>
+                {bigIcon.startsWith('/') ? <img src={bigIcon} alt="" style={{ width: 44, height: 44, objectFit: 'contain' }} /> : bigIcon}
+              </span>
             </motion.div>
             <motion.p
               style={{ fontSize: 24, fontWeight: 900, color: theme.ink, textAlign: 'center', letterSpacing: 1 }}
@@ -193,9 +200,9 @@ export function MysteryChest({ onCollect }: Props) {
               const x = rect.left + rect.width / 2
               const y = rect.top + rect.height / 2
               const { spawnParticles } = useGameStore.getState()
-              if (reward?.diamonds) spawnParticles(CURRENCY_ICONS.diamonds, Math.min(reward.diamonds, 15), x, y)
-              if (reward?.emeralds) spawnParticles(CURRENCY_ICONS.emeralds, Math.min(reward.emeralds, 10), x, y)
-              if (reward?.stars) spawnParticles(CURRENCY_ICONS.stars, Math.min(reward.stars, 5), x, y)
+              if (reward?.diamonds) spawnParticles('💎', Math.min(reward.diamonds, 15), x, y)
+              if (reward?.emeralds) spawnParticles('🟢', Math.min(reward.emeralds, 10), x, y)
+              if (reward?.stars) spawnParticles('⭐', Math.min(reward.stars, 5), x, y)
               onCollect(reward!)
             }}>
               ✓ VZÍT ODMĚNU
