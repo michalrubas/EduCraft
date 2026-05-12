@@ -3,6 +3,7 @@ import { Task } from '../../data/types'
 import { CountingTask } from './CountingTask'
 import { TapNumberTask } from './TapNumberTask'
 import { CompareTask } from './CompareTask'
+import { WhereMoreTask } from './WhereMoreTask'
 import { MultiChoiceTask } from './MultiChoiceTask'
 import { MathTask } from './MathTask'
 import { FindTask } from './FindTask'
@@ -25,6 +26,7 @@ export function TaskRenderer({ task, onAnswer }: Props) {
       case 'counting':    return <CountingTask    task={task} onAnswer={onAnswer} />
       case 'tapNumber':   return <TapNumberTask   task={task} onAnswer={onAnswer} />
       case 'compare':     return <CompareTask     task={task} onAnswer={onAnswer} />
+      case 'whereMore':   return <WhereMoreTask   task={task} onAnswer={onAnswer} />
       case 'multiChoice': return <MultiChoiceTask task={task} onAnswer={onAnswer} />
       case 'math':         return <MathTask        task={task} onAnswer={onAnswer} />
       case 'mathMultiply': return <MathTask        task={task} onAnswer={onAnswer} />

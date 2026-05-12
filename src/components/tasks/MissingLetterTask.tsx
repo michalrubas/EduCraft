@@ -25,6 +25,11 @@ export function MissingLetterTask({ task, onAnswer }: Props) {
   // Split the question into characters — the '_' is the missing slot
   const chars = task.question.split('')
 
+  // Shrink letter tiles for longer words so they fit on narrow phones
+  const tileSize = chars.length <= 4 ? 50 : chars.length <= 6 ? 44 : 38
+  const tileHeight = chars.length <= 4 ? 60 : chars.length <= 6 ? 54 : 48
+  const tileFont = chars.length <= 4 ? 36 : chars.length <= 6 ? 30 : 26
+
   const options = (task.options as string[]).slice(0, 4)
 
   return (
@@ -35,17 +40,17 @@ export function MissingLetterTask({ task, onAnswer }: Props) {
     }}>
       <SignBoard fontSize={22}>Doplň písmenko</SignBoard>
 
-      <div style={{ display: 'flex', gap: 6 }}>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center', maxWidth: '100%' }}>
         {chars.map((ch, i) => {
           const isMissing = ch === '_'
           return (
             <div key={i} style={{
-              width: 50, height: 60, borderRadius: 10,
+              width: tileSize, height: tileHeight, borderRadius: 10,
               background: isMissing ? theme.gold : theme.card,
               border: `4px solid ${isMissing ? theme.goldDeep : theme.cardEdge}`,
               boxShadow: block(4, isMissing ? theme.goldDeep : theme.cardEdge),
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 36, fontWeight: 900, color: theme.ink,
+              fontSize: tileFont, fontWeight: 900, color: theme.ink,
               animation: isMissing ? 'pulse 1.2s ease-in-out infinite' : 'none',
             }}>{isMissing ? '_' : ch}</div>
           )

@@ -41,11 +41,17 @@ function uid(): string {
   return Math.random().toString(36).slice(2, 9)
 }
 
-function threeOptions(correct: number, min: number, max: number): number[] {
-  const w1 = correct < max ? correct + 1 : correct - 1
-  let w2 = correct > min + 1 ? correct - 2 : correct + 2
-  if (w2 === w1) w2 = correct + 3 <= max ? correct + 3 : correct - 3
-  return shuffle([correct, w1, w2])
+function fourOptions(correct: number, min: number, max: number): number[] {
+  const set = new Set<number>([correct])
+  const offsets = [1, -1, 2, -2, 3, -3, 4, -4, 5, -5, 6, -6, 7, -7]
+  for (const off of offsets) {
+    const n = correct + off
+    if (n >= min && n <= max) set.add(n)
+    if (set.size >= 4) break
+  }
+  // Range too narrow — fill from any value in range
+  for (let n = min; n <= max && set.size < 4; n++) set.add(n)
+  return shuffle([...set])
 }
 
 export function generateCountingTask(range: [number, number], biome: string): Task {
@@ -59,7 +65,7 @@ export function generateCountingTask(range: [number, number], biome: string): Ta
     question: 'Kolik věciček vidíš?',
     visualCount: count,
     objects: Array(count).fill(obj),
-    options: threeOptions(count, min, max),
+    options: fourOptions(count, min, max),
     correctAnswer: count,
   }
 }
@@ -94,6 +100,28 @@ export function generateCompareTask(range: [number, number]): Task {
   }
 }
 
+export function generateWhereMoreTask(_range: [number, number], biome: string): Task {
+  const objs = BIOME_OBJECTS[biome as Biome] ?? BIOME_OBJECTS.forest
+  const obj = objs[ri(0, objs.length - 1)]
+  const a = ri(2, 9)
+  let b: number
+  if (Math.random() < 0.25) {
+    b = a
+  } else {
+    do { b = ri(2, 9) } while (b === a)
+  }
+  const correct = a > b ? '>' : a < b ? '<' : '='
+  return {
+    id: uid(),
+    type: 'whereMore',
+    question: 'Kde je víc?',
+    objects: Array(a).fill(obj),
+    objectsB: Array(b).fill(obj),
+    options: ['<', '=', '>'],
+    correctAnswer: correct,
+  }
+}
+
 export function generateMultiChoiceTask(range: [number, number], biome: string): Task {
   const [min, max] = range
   const count = ri(min, max)
@@ -105,7 +133,7 @@ export function generateMultiChoiceTask(range: [number, number], biome: string):
     question: 'Kolik je to?',
     visualCount: count,
     objects: Array(count).fill(obj),
-    options: threeOptions(count, min, max),
+    options: fourOptions(count, min, max),
     correctAnswer: count,
   }
 }
@@ -120,7 +148,7 @@ export function generateMathTask(range: [number, number]): Task {
     return {
       id: uid(), type: 'math',
       question: `${a} + ${b} = ?`,
-      options: threeOptions(ans, 1, max * 2),
+      options: fourOptions(ans, 1, max * 2),
       correctAnswer: ans,
     }
   } else {
@@ -130,7 +158,7 @@ export function generateMathTask(range: [number, number]): Task {
     return {
       id: uid(), type: 'math',
       question: `${a} − ${b} = ?`,
-      options: threeOptions(ans, 0, max),
+      options: fourOptions(ans, 0, max),
       correctAnswer: ans,
     }
   }
@@ -147,10 +175,11 @@ export function generateDragDropTask(range: [number, number], biome: string): Ta
   const objs = BIOME_OBJECTS[biome as Biome] ?? BIOME_OBJECTS.forest
   const obj = objs[ri(0, objs.length - 1)]
   const poolSize = target + 2  // always exactly 2 extras, pool > target guaranteed
+  const isUrl = obj.startsWith('/') || obj.startsWith('http')
   return {
     id: uid(),
     type: 'dragDrop',
-    question: `Přetáhni ${target}× ${obj} do košíku`,
+    question: isUrl ? `Přetáhni ${target} kostek do košíku` : `Přetáhni ${target}× ${obj} do košíku`,
     dragTarget: target,
     visualCount: target,
     objects: Array(poolSize).fill(obj),
@@ -177,7 +206,7 @@ export function generateEngPictureTask(_range: [number, number], _biome: string)
   const idx = ri(0, ENG_POOL.length - 1)
   const word = ENG_POOL[idx]
   const others = ENG_POOL.filter((_, i) => i !== idx)
-  const distractors = shuffle(others).slice(0, 2).map(w => w.english)
+  const distractors = shuffle(others).slice(0, 3).map(w => w.english)
   return {
     id: uid(),
     type: 'engPicture',
@@ -208,6 +237,7 @@ export const TASK_GENERATORS: Record<TaskType, TaskGenerator> = {
   counting:      (r, b) => generateCountingTask(r, b),
   tapNumber:     (r)    => generateTapNumberTask(r),
   compare:       (r)    => generateCompareTask(r),
+  whereMore:     (r, b) => generateWhereMoreTask(r, b),
   multiChoice:   (r, b) => generateMultiChoiceTask(r, b),
   math:          (r)    => generateMathTask(r),
   dragDrop:      (r, b) => generateDragDropTask(r, b),

@@ -30,9 +30,9 @@ describe('generateCountingTask', () => {
     const t = generateCountingTask(RANGE, 'forest')
     expect(t.options).toContain(t.correctAnswer)
   })
-  it('has 3 options', () => {
+  it('has 4 options', () => {
     const t = generateCountingTask(RANGE, 'forest')
-    expect(t.options).toHaveLength(3)
+    expect(t.options).toHaveLength(4)
   })
 })
 
@@ -76,8 +76,8 @@ describe('generateMathTask', () => {
       expect(Number(t.correctAnswer)).toBeLessThanOrEqual(20)
     }
   })
-  it('has 3 options', () => {
-    expect(generateMathTask(RANGE).options).toHaveLength(3)
+  it('has 4 options', () => {
+    expect(generateMathTask(RANGE).options).toHaveLength(4)
   })
 })
 
@@ -105,9 +105,9 @@ describe('generateEngPictureTask', () => {
   it('returns correct type', () => {
     expect(generateEngPictureTask([1, 10], 'library').type).toBe('engPicture')
   })
-  it('has 3 options', () => {
+  it('has 4 options', () => {
     const t = generateEngPictureTask([1, 10], 'library')
-    expect(t.options).toHaveLength(3)
+    expect(t.options).toHaveLength(4)
   })
   it('options contain correctAnswer', () => {
     const t = generateEngPictureTask([1, 10], 'library')
@@ -117,7 +117,7 @@ describe('generateEngPictureTask', () => {
     for (let i = 0; i < 20; i++) {
       const t = generateEngPictureTask([1, 10], 'library')
       const unique = new Set(t.options)
-      expect(unique.size).toBe(3)
+      expect(unique.size).toBe(4)
     }
   })
   it('has objects array with one emoji', () => {

@@ -13,7 +13,7 @@ const COLORS = [
 ]
 
 export function FindTask({ task, onAnswer }: Props) {
-  const options = (task.options ?? []).slice(0, 4)
+  const options = task.options ?? []
 
   return (
     <div style={{
@@ -25,7 +25,7 @@ export function FindTask({ task, onAnswer }: Props) {
 
       <div style={{
         display: 'grid', gridTemplateColumns: `repeat(${options.length <= 3 ? options.length : 2}, 1fr)`,
-        gap: 14, width: '100%', maxWidth: 320,
+        gap: 14, width: '100%', maxWidth: 280,
       }}>
         {options.map((opt, i) => (
           <CubeButton

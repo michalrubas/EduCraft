@@ -35,7 +35,7 @@ export function MathTask({ task, onAnswer }: Props) {
 
       <div style={{
         display: 'grid', gridTemplateColumns: `repeat(${options.length <= 3 ? options.length : 2}, 1fr)`,
-        gap: 14, width: '100%', maxWidth: 320, marginTop: 8,
+        gap: 14, width: '100%', maxWidth: 280, marginTop: 8,
       }}>
         {options.map((opt, i) => (
           <CubeButton

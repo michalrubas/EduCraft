@@ -10,6 +10,7 @@ export const WORLDS: World[] = [
     biome: 'forest',
     taskTypes: [
       'counting', 'tapNumber', 'compare', 'multiChoice',
+      { type: 'whereMore',  weight: 2 },
       { type: 'math',       weight: 2 },
       { type: 'wordOrder',  weight: 2 },
       { type: 'runner',     weight: 2 },
@@ -98,6 +99,7 @@ export const WORLDS: World[] = [
     blockColor: '#6aadcc',
     biome: 'snow',
     taskTypes: ['find', 'compare', 'runner', 'dragDrop', { type: 'math', weight: 5 },
+      { type: 'whereMore',  weight: 2 },
       { type: 'engPicture', weight: 2 },
       { type: 'engWord',    weight: 2 },
     ],

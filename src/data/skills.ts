@@ -303,15 +303,17 @@ function smartDistractors(correct: number, skillId: MathSkillId, a?: number): nu
   cands.delete(correct)
   const arr = [...cands].filter(n => n > 0)
 
-  // Doplnění pokud stále nemáme 2 distraktory
+  // Doplnění pokud stále nemáme 3 distraktory
   let offset = 2
-  while (arr.length < 2 && offset < 15) {
+  while (arr.length < 3 && offset < 15) {
     const c = correct + offset
     if (!arr.includes(c) && c !== correct) arr.push(c)
+    const c2 = correct - offset
+    if (c2 > 0 && !arr.includes(c2) && c2 !== correct) arr.push(c2)
     offset++
   }
 
-  return shuffle(arr).slice(0, 2)
+  return shuffle(arr).slice(0, 3)
 }
 
 export function generateSkillTask(skillId: MathSkillId): Task {

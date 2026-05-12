@@ -11,6 +11,7 @@ export type TaskType =
   | 'counting'
   | 'tapNumber'
   | 'compare'
+  | 'whereMore'
   | 'multiChoice'
   | 'dragDrop'
   | 'find'
@@ -93,6 +94,7 @@ export interface Task {
   options?: (number | string)[]
   correctAnswer: number | string
   objects?: string[]
+  objectsB?: string[]  // pro whereMore: druhá skupina emoji
   dragTarget?: number
   letters?: string[]   // pro wordOrder: scramblovaná písmena
   emoji?: string       // pro wordOrder: emoji nápověda k slovu
